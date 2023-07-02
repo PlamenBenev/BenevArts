@@ -1,6 +1,7 @@
 ﻿using BenevArts.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace BenevArts.Data
 {
@@ -18,6 +19,23 @@ namespace BenevArts.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Comment>()
+                .HasOne(c => c.Asset)
+                .WithMany(a => a.Comments)
+                .HasForeignKey(c => c.AssetID)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Like>()
+                .HasOne(l => l.Asset)
+                .WithMany(l => l.Likes)
+                .HasForeignKey(l => l.AssetID)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Purchase>()
+                .HasOne(p => p.Asset)
+                .WithMany(p => p.Purchases)
+                .HasForeignKey(p => p.AssetID)
+                .OnDelete(DeleteBehavior.NoAction);
 
             base.OnModelCreating(builder);
         }

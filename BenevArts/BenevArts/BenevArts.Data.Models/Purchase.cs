@@ -26,7 +26,7 @@ namespace BenevArts.Data.Models
 
         [Required]
         [Precision(18, 2)]
-        [Range(0.00, 10.00)]
+        [Range(0.00, 10000.00)]
         public decimal Price { get; set; }
     }
 }

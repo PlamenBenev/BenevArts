@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace BenevArts.Data.Models
 {
@@ -23,7 +24,8 @@ namespace BenevArts.Data.Models
 
         //To add binding model
         [Required]
-        [Range(0, double.MaxValue)]
+        [Precision(18, 2)]
+        [Range(0.00, 10000.00)]
         public decimal Price { get; set; }
 
 
