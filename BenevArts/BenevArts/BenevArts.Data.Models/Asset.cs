@@ -15,12 +15,17 @@ namespace BenevArts.Data.Models
         public string Title { get; set; } = null!;
 
         [Required]
+        public string Image { get; set; } = null!;
+
+        [Required]
         public string Description { get; set; } = null!;
 
         [Required]
-        [StringLength(20)]
-        public string Category { get; set; } = null!;
+        [ForeignKey(nameof(CategoryId))]
+        public Category Category { get; set; } = null!;
 
+        [Required]
+        public int CategoryId { get; set; }
 
         //To add binding model
         [Required]
@@ -42,5 +47,6 @@ namespace BenevArts.Data.Models
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
         public ICollection<Like> Likes { get; set; } = new List<Like>();
         public ICollection<Purchase> Purchases { get; set; } = new List<Purchase>();
+
     }
 }

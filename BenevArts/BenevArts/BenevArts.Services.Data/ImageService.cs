@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BenevArts.Services.Data.Interfaces;
+using Microsoft.AspNetCore.Http;
 
 namespace BenevArts.Services.Data
 {
-    public class ImageService
+    public class ImageService : IImageService
     {
         private readonly string uploadFolderPath;
 

@@ -1,4 +1,6 @@
 using BenevArts.Data;
+using BenevArts.Services.Data;
+using BenevArts.Services.Data.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,7 +24,7 @@ builder.Services.Configure<IdentityOptions>(
         options.Password.RequireUppercase = false;
     });
 
-// builder.Services.AddScoped<, >();
+// builder.Services.AddScoped<IImageService,ImageService>();
 
 var app = builder.Build();
 
