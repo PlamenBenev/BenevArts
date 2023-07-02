@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BenevArts.Common\BenevArts.Common.csproj" />
+    <ProjectReference Include="..\BenevArts.Data.Models\BenevArts.Data.Models.csproj" />
   </ItemGroup>
 
 </Project>
