@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BenevArts.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class BenevArtsDbContext : IdentityDbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public BenevArtsDbContext(DbContextOptions<BenevArtsDbContext> options)
             : base(options)
         {
         }

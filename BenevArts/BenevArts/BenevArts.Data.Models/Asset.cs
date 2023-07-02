@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace BenevArts.Data.Models
 {
@@ -21,7 +21,7 @@ namespace BenevArts.Data.Models
         public string Category { get; set; } = null!;
 
 
-        //To fix it
+        //To add binding model
         [Required]
         [Range(0, double.MaxValue)]
         public decimal Price { get; set; }
@@ -30,11 +30,12 @@ namespace BenevArts.Data.Models
         [DataType(DataType.DateTime)]
         public DateTime UploadDate { get; set; }
 
+        // Navigation properties
         [Required]
         public string UploadedByUserID { get; set; } = null!;
-        // Navigation properties
+
         [ForeignKey(nameof(UploadedByUserID))]
-        public IdentityUser UploadedByUser { get; set; }
+        public IdentityUser UploadedByUser { get; set; } = null!;
 
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
         public ICollection<Like> Likes { get; set; } = new List<Like>();
