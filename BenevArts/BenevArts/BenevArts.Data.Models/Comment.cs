@@ -7,7 +7,7 @@ namespace BenevArts.Data.Models
     public class Comment
     {
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public string Content { get; set; } = null!;
@@ -17,10 +17,10 @@ namespace BenevArts.Data.Models
         public DateTime PostedDate { get; set; }
 
         [Required]
-        public string UserID { get; set; } = null!;
+        public Guid UserID { get; set; }
 
         [ForeignKey(nameof(UserID))]
-        public IdentityUser User { get; set; } = null!;
+        public ApplicationUser User { get; set; } = null!;
 
         [Required]
         public Guid AssetID { get; set; }

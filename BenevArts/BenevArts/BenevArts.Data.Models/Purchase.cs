@@ -8,7 +8,7 @@ namespace BenevArts.Data.Models
     public class Purchase
     {
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public Guid AssetID { get; set; }
@@ -16,9 +16,9 @@ namespace BenevArts.Data.Models
         public Asset Asset { get; set; } = null!;
 
         [Required]
-        public string UserID { get; set; } = null!;
+        public Guid UserID { get; set; } 
         [ForeignKey(nameof(UserID))]
-        public IdentityUser User { get; set; } = null!;
+        public ApplicationUser User { get; set; } = null!;
 
         [Required]
         [DataType(DataType.DateTime)]

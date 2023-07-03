@@ -11,6 +11,6 @@ namespace BenevArts.Data.Models
         [StringLength(100)]
         public string Name { get; set; } = null!;
 
-        public ICollection<Asset> Assets { get; set; } = new List<Asset>();
+        public ICollection<Asset> Assets { get; set; } = new HashSet<Asset>();
     }
 }
