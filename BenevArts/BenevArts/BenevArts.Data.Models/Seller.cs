@@ -23,6 +23,6 @@ namespace BenevArts.Data.Models
         public ApplicationUser? User { get; set; }
         public Guid? UserId { get; set; }
 
-        public HashSet<Asset> Assets { get; set; } = new HashSet<Asset>();
+        public ICollection<Asset> Assets { get; set; } = new HashSet<Asset>();
     }
 }

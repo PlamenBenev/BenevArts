@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BenevArts.Data.Migrations
 {
     [DbContext(typeof(BenevArtsDbContext))]
-    [Migration("20230703084753_ADDAU")]
-    partial class ADDAU
+    [Migration("20230703144450_add-migration Database")]
+    partial class addmigrationDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

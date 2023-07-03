@@ -6,7 +6,7 @@ using System.Reflection.Emit;
 
 namespace BenevArts.Data
 {
-    public class BenevArtsDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
+    public class BenevArtsDbContext : IdentityDbContext<ApplicationUser,IdentityRole<Guid>,Guid>
     {
         public BenevArtsDbContext(DbContextOptions<BenevArtsDbContext> options)
             : base(options)
@@ -39,11 +39,6 @@ namespace BenevArts.Data
                 .WithMany(p => p.Purchases)
                 .HasForeignKey(p => p.AssetID)
                 .OnDelete(DeleteBehavior.NoAction);
-
-            builder.Entity<Seller>()
-                .HasOne(s => s.User)
-                .WithMany(u => u.Sellers)
-                .HasForeignKey(s => s.UserId);
 
             base.OnModelCreating(builder);
         }
