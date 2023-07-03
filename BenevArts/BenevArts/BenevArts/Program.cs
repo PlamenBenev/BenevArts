@@ -29,7 +29,12 @@ builder.Services.Configure<IdentityOptions>(
         options.Password.RequireUppercase = false;
     });
 
-// builder.Services.AddScoped<IImageService,ImageService>();
+builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddSingleton(provider =>
+{
+    var configuration = provider.GetRequiredService<IConfiguration>();
+    return configuration.GetValue<string>("UploadFolderPath");
+});
 
 var app = builder.Build();
 
