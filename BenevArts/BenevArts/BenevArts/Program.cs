@@ -30,6 +30,7 @@ builder.Services.Configure<IdentityOptions>(
     });
 
 builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<IAssetService, AssetService>();
 builder.Services.AddSingleton(provider =>
 {
     var configuration = provider.GetRequiredService<IConfiguration>();

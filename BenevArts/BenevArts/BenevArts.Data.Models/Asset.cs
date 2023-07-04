@@ -30,7 +30,7 @@ namespace BenevArts.Data.Models
         //To add binding model
         [Required]
         [Precision(18, 2)]
-        [Range(0.00, 10000.00)]
+        [Range(typeof(decimal), "0.00", "10000.00", ConvertValueInInvariantCulture = true)]
         public decimal Price { get; set; }
 
 

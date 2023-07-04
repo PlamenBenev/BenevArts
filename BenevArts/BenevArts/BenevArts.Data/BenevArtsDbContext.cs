@@ -6,7 +6,7 @@ using System.Reflection.Emit;
 
 namespace BenevArts.Data
 {
-    public class BenevArtsDbContext : IdentityDbContext<ApplicationUser,IdentityRole<Guid>,Guid>
+    public class BenevArtsDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
     {
         public BenevArtsDbContext(DbContextOptions<BenevArtsDbContext> options)
             : base(options)
@@ -39,6 +39,33 @@ namespace BenevArts.Data
                 .WithMany(p => p.Purchases)
                 .HasForeignKey(p => p.AssetID)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            var categories = new[]
+            {
+               new Category { Id = 1, Name = "Aircraft" },
+               new Category { Id = 2, Name = "Animals" },
+               new Category { Id = 3, Name = "Architectural" },
+               new Category { Id = 4, Name = "Exterior" },
+               new Category { Id = 5, Name = "Interior" },
+               new Category { Id = 6, Name = "Car" },
+               new Category { Id = 7, Name = "Character" },
+               new Category { Id = 8, Name = "Food" },
+               new Category { Id = 9, Name = "Furniture" },
+               new Category { Id = 10, Name = "Household" },
+               new Category { Id = 11, Name = "Industrial" },
+               new Category { Id = 12, Name = "Plant" },
+               new Category { Id = 13, Name = "Space" },
+               new Category { Id = 14, Name = "Vehicle" },
+               new Category { Id = 15, Name = "Watercraft" },
+               new Category { Id = 16, Name = "Military" }
+            };
+
+            foreach (var category in categories)
+            {
+                builder.Entity<Category>()
+                    .HasData(category);
+            }
+
 
             base.OnModelCreating(builder);
         }
