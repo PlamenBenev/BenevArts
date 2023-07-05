@@ -19,6 +19,15 @@ namespace BenevArts.Web.ViewModels.Home
         [Required]
         public string Description { get; set; } = null!;
 
+        public bool CGIModel { get; set; }
+        public bool Textures { get; set; }
+        public bool Materials { get; set; }
+        public bool Animated { get; set; }
+        public bool Rigged { get; set; }
+        public bool LowPoly { get; set; }
+        public bool PBR { get; set; }
+        public bool UVUnwrapped { get; set; }
+
         [Required]
         public int CategoryId { get; set; }
 
@@ -26,13 +35,6 @@ namespace BenevArts.Web.ViewModels.Home
         [Required]
         [Range(typeof(decimal), "0.00", "10000.00", ConvertValueInInvariantCulture = true)]
         public decimal Price { get; set; }
-
-        [Required]
-        [DataType(DataType.DateTime)]
-        public DateTime UploadDate { get; set; }
-
-        [Required]
-        public string Seller { get; set; } = null!;
 
         public IEnumerable<Category> Categories { get; set; } = new List<Category>();
     }

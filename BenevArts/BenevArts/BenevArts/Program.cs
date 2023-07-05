@@ -33,7 +33,17 @@ builder.Services.Configure<IdentityOptions>(
 
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IAssetService, AssetService>();
-builder.Services.(typeof(MappingProfile));
+
+var mapperConfig = new MapperConfiguration(mc =>
+{
+    mc.AddProfile(new MappingProfile());
+});
+
+IMapper mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
+
+builder.Services.AddMvc();
+
 builder.Services.AddSingleton(provider =>
 {
     var configuration = provider.GetRequiredService<IConfiguration>();

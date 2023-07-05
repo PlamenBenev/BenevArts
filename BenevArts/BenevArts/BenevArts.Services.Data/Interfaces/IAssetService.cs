@@ -11,7 +11,7 @@ namespace BenevArts.Services.Data.Interfaces
     public interface IAssetService
     {
         Task<IEnumerable<Category>> GetCategoriesAsync();
-        Task AddAssetAsync(AddAssetViewModel model);
-        Task<AssetViewModel> GetAssetByIdAsync(string id);
+        Task AddAssetAsync(AddAssetViewModel model, string SellerId);
+        Task<AssetViewModel> GetAssetByIdAsync(Guid id);
     }
 }

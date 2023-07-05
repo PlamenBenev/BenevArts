@@ -30,15 +30,24 @@ namespace BenevArts.Data.Models
         [Required]
         public int CategoryId { get; set; }
 
-        //To add binding model
         [Required]
-        [Precision(18, 2)]
+        [Precision(18, 2)] //To add binding model
         [Range(typeof(decimal), "0.00", "10000.00", ConvertValueInInvariantCulture = true)]
         public decimal Price { get; set; }
 
 
         [DataType(DataType.DateTime)]
         public DateTime UploadDate { get; set; }
+
+        // Technical Details
+        public bool CGIModel { get; set; }
+        public bool Textures { get; set; }
+        public bool Materials { get; set; }
+        public bool Animated { get; set; }
+        public bool Rigged { get; set; }
+        public bool LowPoly { get; set; }
+        public bool PBR { get; set; }
+        public bool UVUnwrapped { get; set; }
 
         // Navigation properties
         [Required]

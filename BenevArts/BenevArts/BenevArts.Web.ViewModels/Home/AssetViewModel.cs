@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace BenevArts.Web.ViewModels.Home
 {
@@ -16,5 +12,14 @@ namespace BenevArts.Web.ViewModels.Home
         public string Category { get; set; } = null!;
         public string SellerName { get; set; } = null!;
         public DateTime UploadDate { get; set; }
+
+        public bool CGIModel { get; set; }
+        public bool Textures { get; set; }
+        public bool Materials { get; set; }
+        public bool Animated { get; set; }
+        public bool Rigged { get; set; }
+        public bool LowPoly { get; set; }
+        public bool PBR { get; set; }
+        public bool UVUnwrapped { get; set; }
     }
 }

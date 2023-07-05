@@ -1,17 +1,59 @@
 ﻿@model AddAssetViewModel
 
-<h2>Add Asset</h2>
-
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <div class="form-group">
-        <label for="assetName">Asset Name</label>
-        <input type="text" class="form-control" id="assetName" name="AssetName" placeholder="Enter asset name" required>
+        <label for="title">Title</label>
+        <input type="text" class="form-control" id="title" name="Title" required>
     </div>
 
     <div class="form-group">
-        <label for="category">Category</label>
-        <select class="form-control" id="category" name="CategoryId" required>
-            <option value="">-- Select category --</option>
+        <label for="image">Image</label>
+        <input type="file" class="form-control-file" id="image" name="Image" required>
+    </div>
+
+    <div class="form-group">
+        <label for="zipFile">Zip File</label>
+        <input type="file" class="form-control-file" id="zipFile" name="ZipFileName" required>
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description" name="Description" rows="4" required></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Technical Details</label>
+        <div class="btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-secondary">
+                <input type="checkbox" name="CGIModel" autocomplete="off"> CGI Model
+            </label>
+            <label class="btn btn-secondary">
+                <input type="checkbox" name="Textures" autocomplete="off"> Textures
+            </label>
+            <label class="btn btn-secondary">
+                <input type="checkbox" name="Materials" autocomplete="off"> Materials
+            </label>
+            <label class="btn btn-secondary">
+                <input type="checkbox" name="Animated" autocomplete="off"> Animated
+            </label>
+            <label class="btn btn-secondary">
+                <input type="checkbox" name="Rigged" autocomplete="off"> Rigged
+            </label>
+            <label class="btn btn-secondary">
+                <input type="checkbox" name="LowPoly" autocomplete="off"> Low Poly
+            </label>
+            <label class="btn btn-secondary">
+                <input type="checkbox" name="PBR" autocomplete="off"> PBR
+            </label>
+            <label class="btn btn-secondary">
+                <input type="checkbox" name="UVUnwrapped" autocomplete="off"> UV Unwrapped
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="categoryId">Category</label>
+        <select class="form-control" id="categoryId" name="CategoryId" required>
             @foreach (var category in Model.Categories)
             {
                 <option value="@category.Id">@category.Name</option>
@@ -20,19 +62,9 @@
     </div>
 
     <div class="form-group">
-        <label for="description">Description</label>
-        <textarea class="form-control" id="description" name="Description" rows="3" placeholder="Enter asset description" required></textarea>
+        <label for="price">Price</label>
+        <input type="number" class="form-control" id="price" name="Price" step="0.01" required>
     </div>
 
-    <div class="form-group">
-        <label for="image">Image</label>
-        <input type="file" class="form-control-file" id="image" name="Image" accept=".jpg, .jpeg, .png" required>
-    </div>
-
-    <div class="mb-3">
-        <label for="ZipFile" class="form-label">Zip File</label>
-        <input type="file" id="ZipFile" name="ZipFile" class="form-control" required />
-    </div>
-
-    <button type="submit" class="btn btn-primary">Add</button>
+    <button type="submit" class="btn btn-primary">Add Asset</button>
 </form>
