@@ -18,6 +18,9 @@ namespace BenevArts.Data.Models
         public string Image { get; set; } = null!;
 
         [Required]
+        public string ZipFileName { get; set; } = null!;
+
+        [Required]
         public string Description { get; set; } = null!;
 
         [Required]

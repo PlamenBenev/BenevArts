@@ -1,6 +1,7 @@
 ﻿using BenevArts.Services.Data.Interfaces;
 using BenevArts.Web.ViewModels.Home;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BenevArts.Web.Controllers
 {
@@ -13,6 +14,7 @@ namespace BenevArts.Web.Controllers
                assetService = _assetService;
         }
 
+        // Get
         [HttpGet]
         public async Task<IActionResult> Add()
         {
@@ -24,5 +26,39 @@ namespace BenevArts.Web.Controllers
             return View(model);
         }
 
+        // Post
+        [HttpPost]
+        public async Task<IActionResult> Add(AddAssetViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (model.ZipFileName != null && model.ZipFileName.Length > 0)
+                {
+                    await assetService.AddAssetAsync(model);
+
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> Download(string id)
+        {
+            var asset = await assetService.GetAssetByIdAsync(id);
+            if (asset == null)
+            {
+                return NotFound();
+            }
+
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", asset.ZipFileName);
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound();
+            }
+
+            var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            return File(fileStream, "application/zip", asset.ZipFileName);
+        }
     }
 }

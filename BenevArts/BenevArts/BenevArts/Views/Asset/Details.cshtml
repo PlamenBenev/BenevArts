@@ -1,0 +1,19 @@
+﻿@model AssetViewModel
+
+<h1>Asset Details</h1>
+
+<div class="card">
+    <div class="card-body">
+        <h3 class="card-title">Title: @Model.Title</h3>
+        <p class="card-text">Description: @Model.Description</p>
+        <p class="card-text">Price: @Model.Price</p>
+        <p class="card-text">Category: @Model.Category</p>
+        <p class="card-text">Uploaded By: @Model.SellerName</p>
+        <p class="card-text">Uploaded On: @Model.UploadDate.ToString("yyyy-MM-dd HH:mm:ss")</p>
+    </div>
+</div>
+
+<div class="mt-4">
+    <h4>Download Zip File:</h4>
+    <a href="@Url.Action("Download", "Asset", new { id = Model.Id.ToString() })" class="btn btn-primary">Download</a>
+</div>

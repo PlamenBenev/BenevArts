@@ -1,7 +1,9 @@
+using AutoMapper;
 using BenevArts.Data;
 using BenevArts.Data.Models;
 using BenevArts.Services.Data;
 using BenevArts.Services.Data.Interfaces;
+using BenevArts.Web;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,6 +33,7 @@ builder.Services.Configure<IdentityOptions>(
 
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IAssetService, AssetService>();
+builder.Services.(typeof(MappingProfile));
 builder.Services.AddSingleton(provider =>
 {
     var configuration = provider.GetRequiredService<IConfiguration>();
