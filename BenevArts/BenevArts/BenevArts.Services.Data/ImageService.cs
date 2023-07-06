@@ -24,13 +24,5 @@ namespace BenevArts.Services.Data
 
             return fileName;
         }
-
-        public string GetImagePath(string fileName)
-        {
-            return Path.Combine(uploadFolderPath, fileName);
-        }
-
-        // Other methods for image retrieval, deletion, and other file system operations
-        // ...
     }
 }

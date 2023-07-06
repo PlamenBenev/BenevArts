@@ -4,6 +4,7 @@ using BenevArts.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BenevArts.Data.Migrations
 {
     [DbContext(typeof(BenevArtsDbContext))]
-    partial class BenevArtsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230706151333_AddMultipleImages")]
+    partial class AddMultipleImages
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -153,29 +156,6 @@ namespace BenevArts.Data.Migrations
                     b.ToTable("Assets");
                 });
 
-            modelBuilder.Entity("BenevArts.Data.Models.AssetImage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<Guid>("AssetId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ImageName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AssetId");
-
-                    b.ToTable("AssetImages");
-                });
-
             modelBuilder.Entity("BenevArts.Data.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -304,6 +284,29 @@ namespace BenevArts.Data.Migrations
                     b.HasIndex("UserID");
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("BenevArts.Data.Models.Image", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<Guid>("AssetId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssetId");
+
+                    b.ToTable("Image");
                 });
 
             modelBuilder.Entity("BenevArts.Data.Models.Like", b =>
@@ -538,17 +541,6 @@ namespace BenevArts.Data.Migrations
                     b.Navigation("Seller");
                 });
 
-            modelBuilder.Entity("BenevArts.Data.Models.AssetImage", b =>
-                {
-                    b.HasOne("BenevArts.Data.Models.Asset", "Asset")
-                        .WithMany("Images")
-                        .HasForeignKey("AssetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Asset");
-                });
-
             modelBuilder.Entity("BenevArts.Data.Models.Comment", b =>
                 {
                     b.HasOne("BenevArts.Data.Models.Asset", "Asset")
@@ -566,6 +558,17 @@ namespace BenevArts.Data.Migrations
                     b.Navigation("Asset");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BenevArts.Data.Models.Image", b =>
+                {
+                    b.HasOne("BenevArts.Data.Models.Asset", "Asset")
+                        .WithMany("Images")
+                        .HasForeignKey("AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Asset");
                 });
 
             modelBuilder.Entity("BenevArts.Data.Models.Like", b =>

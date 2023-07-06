@@ -9,10 +9,13 @@ namespace BenevArts.Web.Controllers
     public class AssetController : BaseController
     {
         private readonly IAssetService assetService;
+        private readonly IImageService imageService;
 
-        public AssetController(IAssetService _assetService)
+        public AssetController(IAssetService _assetService,
+            IImageService _imageService)
         {
             assetService = _assetService;
+            imageService = _imageService;
         }
 
         // Get
@@ -29,16 +32,13 @@ namespace BenevArts.Web.Controllers
 
         // Post
         [HttpPost]
-        public async Task<IActionResult> Add(AddAssetViewModel model)
+        public async Task<IActionResult> Add( AddAssetViewModel model)
         {
             if (ModelState.IsValid)
             {
-                if (model.ZipFileName != null && model.ZipFileName.Length > 0)
-                {
-                    await assetService.AddAssetAsync(model,GetUserId());
+                await assetService.AddAssetAsync(model, GetUserId(),GetUsername(),GetEmail());
 
-                    return RedirectToAction(nameof(Index));
-                }
+                return RedirectToAction(nameof(Index));
             }
 
             return View(model);

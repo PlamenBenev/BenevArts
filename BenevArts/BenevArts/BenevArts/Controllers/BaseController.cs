@@ -18,7 +18,28 @@ namespace BenevArts.Web.Controllers
 
             return userId;
         }
+        protected string GetUsername()
+        {
+            string username = string.Empty;
 
+            if (username != null)
+            {
+                username = User.FindFirstValue(ClaimTypes.Name);
+            }
+
+            return username;
+        }
+        protected string GetEmail()
+        {
+            string username = string.Empty;
+
+            if (username != null)
+            {
+                username = User.FindFirstValue(ClaimTypes.Email);
+            }
+
+            return username;
+        }
     }
 
 }

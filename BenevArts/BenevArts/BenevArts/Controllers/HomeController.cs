@@ -1,10 +1,11 @@
-﻿using BenevArts.Web.ViewModels.Home;
+﻿using BenevArts.Web.Controllers;
+using BenevArts.Web.ViewModels.Home;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace BenevArts.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
 

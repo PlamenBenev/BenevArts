@@ -15,9 +15,6 @@ namespace BenevArts.Data.Models
         public string Title { get; set; } = null!;
 
         [Required]
-        public string Image { get; set; } = null!;
-
-        [Required]
         public string ZipFileName { get; set; } = null!;
 
         [Required]
@@ -27,7 +24,6 @@ namespace BenevArts.Data.Models
         [ForeignKey(nameof(CategoryId))]
         public Category Category { get; set; } = null!;
 
-        [Required]
         public int CategoryId { get; set; }
 
         [Required]
@@ -59,6 +55,7 @@ namespace BenevArts.Data.Models
         public ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
         public ICollection<Like> Likes { get; set; } = new HashSet<Like>();
         public ICollection<Purchase> Purchases { get; set; } = new HashSet<Purchase>();
+        public ICollection<AssetImage> Images { get; set; } = new List<AssetImage>();
 
     }
 }

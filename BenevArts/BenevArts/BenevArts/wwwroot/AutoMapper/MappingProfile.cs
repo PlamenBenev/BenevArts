@@ -9,7 +9,10 @@ namespace BenevArts.Web
         public MappingProfile()
         {
             CreateMap<Asset, AssetViewModel>();
-            CreateMap<AddAssetViewModel, Asset>();
+            CreateMap<AddAssetViewModel, Asset>()
+                .ForMember(dest => dest.Images,
+                    opt => opt.MapFrom(src => src.Images.Select(image => new AssetImage { ImageName = image.FileName })));
+
         }
     }
 }

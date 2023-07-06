@@ -7,8 +7,8 @@
     </div>
 
     <div class="form-group">
-        <label for="image">Image</label>
-        <input type="file" class="form-control-file" id="image" name="Image" required>
+        <label for="Images">Images</label>
+        <input type="file" id="Images" name="Images" multiple class="form-control-file" />
     </div>
 
     <div class="form-group">
@@ -25,28 +25,36 @@
         <label>Technical Details</label>
         <div class="btn-group-toggle" data-toggle="buttons">
             <label class="btn btn-secondary">
-                <input type="checkbox" name="CGIModel" autocomplete="off"> CGI Model
+                @Html.CheckBoxFor(model => model.CGIModel)
+                CGI Model
             </label>
             <label class="btn btn-secondary">
-                <input type="checkbox" name="Textures" autocomplete="off"> Textures
+                @Html.CheckBoxFor(model => model.Textures)
+                Textures
             </label>
             <label class="btn btn-secondary">
-                <input type="checkbox" name="Materials" autocomplete="off"> Materials
+                @Html.CheckBoxFor(model => model.Materials)
+                Materials
             </label>
             <label class="btn btn-secondary">
-                <input type="checkbox" name="Animated" autocomplete="off"> Animated
+                @Html.CheckBoxFor(model => model.Animated)
+                Animated
             </label>
             <label class="btn btn-secondary">
-                <input type="checkbox" name="Rigged" autocomplete="off"> Rigged
+                @Html.CheckBoxFor(model => model.Rigged)
+                Rigged
             </label>
             <label class="btn btn-secondary">
-                <input type="checkbox" name="LowPoly" autocomplete="off"> Low Poly
+                @Html.CheckBoxFor(model => model.LowPoly)
+                Low Poly
             </label>
             <label class="btn btn-secondary">
-                <input type="checkbox" name="PBR" autocomplete="off"> PBR
+                @Html.CheckBoxFor(model => model.PBR)
+                PBR
             </label>
             <label class="btn btn-secondary">
-                <input type="checkbox" name="UVUnwrapped" autocomplete="off"> UV Unwrapped
+                @Html.CheckBoxFor(model => model.UVUnwrapped)
+                UV Unwrapped
             </label>
         </div>
     </div>

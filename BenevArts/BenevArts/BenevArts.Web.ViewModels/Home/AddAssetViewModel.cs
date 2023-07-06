@@ -11,9 +11,6 @@ namespace BenevArts.Web.ViewModels.Home
         public string Title { get; set; } = null!;
 
         [Required]
-        public string Image { get; set; } = null!;
-
-        [Required]
         public IFormFile ZipFileName { get; set; } = null!;
 
         [Required]
@@ -37,5 +34,7 @@ namespace BenevArts.Web.ViewModels.Home
         public decimal Price { get; set; }
 
         public IEnumerable<Category> Categories { get; set; } = new List<Category>();
+        public IEnumerable<IFormFile> Images { get; set; } = new List<IFormFile>();
+
     }
 }
