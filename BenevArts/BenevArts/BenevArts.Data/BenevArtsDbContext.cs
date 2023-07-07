@@ -31,14 +31,20 @@ namespace BenevArts.Data
 
             builder.Entity<Like>()
                 .HasOne(l => l.Asset)
-                .WithMany(l => l.Likes)
+                .WithMany(a => a.Likes)
                 .HasForeignKey(l => l.AssetID)
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<Purchase>()
                 .HasOne(p => p.Asset)
-                .WithMany(p => p.Purchases)
+                .WithMany(a => a.Purchases)
                 .HasForeignKey(p => p.AssetID)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Asset>()
+                .HasOne(a => a.Seller)
+                .WithMany(s => s.Assets)
+                .HasForeignKey(a => a.SellerId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             var categories = new[]

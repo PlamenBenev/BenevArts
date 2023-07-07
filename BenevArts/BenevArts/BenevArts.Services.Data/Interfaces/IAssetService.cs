@@ -13,5 +13,6 @@ namespace BenevArts.Services.Data.Interfaces
         Task<IEnumerable<Category>> GetCategoriesAsync();
         Task AddAssetAsync(AddAssetViewModel model, string userId, string username, string email);
         Task<AssetViewModel> GetAssetByIdAsync(Guid id);
+        Task<IEnumerable<AssetViewModel>> GetAllAssetsAsync();
     }
 }

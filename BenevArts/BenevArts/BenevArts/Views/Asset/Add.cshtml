@@ -12,6 +12,11 @@
     </div>
 
     <div class="form-group">
+        <label for="thumbnail">Thumbnail</label>
+        <input type="file" class="form-control-file" id="thumbnail" name="Thumbnail" required>
+    </div>
+
+    <div class="form-group">
         <label for="zipFile">Zip File</label>
         <input type="file" class="form-control-file" id="zipFile" name="ZipFileName" required>
     </div>
@@ -76,3 +81,7 @@
 
     <button type="submit" class="btn btn-primary">Add Asset</button>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

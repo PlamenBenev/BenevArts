@@ -17,3 +17,7 @@
     <h4>Download Zip File:</h4>
     <a href="@Url.Action("Download", "Asset", new { id = Model.Id })" class="btn btn-primary">Download</a>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

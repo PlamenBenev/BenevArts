@@ -30,6 +30,13 @@ namespace BenevArts.Web.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> All()
+        {
+            var models = await assetService.GetAllAssetsAsync();
+
+            return View(models);
+        }
+
         // Post
         [HttpPost]
         public async Task<IActionResult> Add( AddAssetViewModel model)

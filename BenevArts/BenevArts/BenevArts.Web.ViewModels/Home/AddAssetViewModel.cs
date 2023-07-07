@@ -14,6 +14,9 @@ namespace BenevArts.Web.ViewModels.Home
         public IFormFile ZipFileName { get; set; } = null!;
 
         [Required]
+        public IFormFile Thumbnail { get; set; } = null!;
+
+        [Required]
         public string Description { get; set; } = null!;
 
         public bool CGIModel { get; set; }

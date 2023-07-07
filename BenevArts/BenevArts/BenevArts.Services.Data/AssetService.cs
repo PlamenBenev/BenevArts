@@ -18,24 +18,10 @@ namespace BenevArts.Services.Data
             mapper = _mapper;
         }
 
-        public async Task<IEnumerable<Category>> GetCategoriesAsync()
-        {
-            return await context.Categories.ToListAsync();
-        }
 
         public async Task AddAssetAsync(AddAssetViewModel model, string userId,string username,string email)
         {
-            var fileName = Path.GetFileName(model.ZipFileName.FileName);
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ZipFiles", fileName);
-
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                await model.ZipFileName.CopyToAsync(fileStream);
-            }
-
-            var uploadFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images");
-            var imageService = new ImageService(uploadFolderPath);
-
+            // Add the Seller in the database
             var seller = new Seller
             {
                 Id = Guid.Parse(userId),
@@ -47,9 +33,29 @@ namespace BenevArts.Services.Data
             await context.Sellers.AddAsync(seller);
             await context.SaveChangesAsync();
 
+            // Uploading the Zip file
+            var fileName = Path.GetFileName(model.ZipFileName.FileName);
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ZipFiles", fileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await model.ZipFileName.CopyToAsync(fileStream);
+            }
+
+            // Map the Asset
             var asset = mapper.Map<Asset>(model);
             asset.SellerId = Guid.Parse(userId);
+            asset.UploadDate = DateTime.UtcNow;
 
+            // Set the path for the images
+            var uploadFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images");
+            var imageService = new ImageService(uploadFolderPath);
+
+            // Add the Thumbnail
+            var thumbName = await imageService.SaveImageAsync(model.Thumbnail);
+            asset.Thumbnail = thumbName;
+
+            // Add all preview images
             foreach (var imageFile in model.Images)
             {
                 var imageName = await imageService.SaveImageAsync(imageFile);
@@ -68,6 +74,21 @@ namespace BenevArts.Services.Data
         }
 
 
+
+        public async Task<IEnumerable<AssetViewModel>> GetAllAssetsAsync()
+        {
+            return await context.Assets
+                .Select(a => new AssetViewModel
+                {
+                    Title = a.Title,
+                    Thumbnail = a.Thumbnail,
+                    Price = a.Price,
+                    UploadDate = a.UploadDate,
+                    SellerName = a.Seller.Name
+                })
+                .ToListAsync();
+        }
+
         public async Task<AssetViewModel> GetAssetByIdAsync(Guid id)
         {
             var asset = await context.Assets.FirstOrDefaultAsync(a => a.Id == id);
@@ -77,6 +98,9 @@ namespace BenevArts.Services.Data
             return viewModel;
 
         }
-
+        public async Task<IEnumerable<Category>> GetCategoriesAsync()
+        {
+            return await context.Categories.ToListAsync();
+        }
     }
 }

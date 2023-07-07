@@ -129,6 +129,10 @@ namespace BenevArts.Data.Migrations
                     b.Property<bool>("Textures")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Thumbnail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -530,7 +534,7 @@ namespace BenevArts.Data.Migrations
                     b.HasOne("BenevArts.Data.Models.Seller", "Seller")
                         .WithMany("Assets")
                         .HasForeignKey("SellerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Category");
