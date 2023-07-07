@@ -4,6 +4,7 @@ using BenevArts.Data.Models;
 using BenevArts.Services.Data.Interfaces;
 using BenevArts.Web.ViewModels.Home;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace BenevArts.Services.Data
@@ -18,8 +19,50 @@ namespace BenevArts.Services.Data
             mapper = _mapper;
         }
 
+        // Get
+        public async Task<IEnumerable<AssetViewModel>> GetAllAssetsAsync()
+        {
+            return await context.Assets
+                .Select(a => new AssetViewModel
+                {
+                    Title = a.Title,
+                    Thumbnail = a.Thumbnail,
+                    Price = a.Price,
+                    UploadDate = a.UploadDate,
+                    SellerName = a.Seller.Name
+                })
+                .ToListAsync();
+        }
+        public async Task<IEnumerable<AssetViewModel>> GetSearchResultAsync(string query)
+        {
+            return await context.Assets
+                .Where(a => a.Title.Contains(query) || a.Description.Contains(query))
+                .Select(a => new AssetViewModel
+                {
+                    Title = a.Title,
+                    Thumbnail = a.Thumbnail,
+                    Price = a.Price,
+                    UploadDate = a.UploadDate,
+                    SellerName = a.Seller.Name
+                })
+                .ToListAsync();
+        }
+        public async Task<IEnumerable<Category>> GetCategoriesAsync()
+        {
+            return await context.Categories.ToListAsync();
+        }
+        public async Task<AssetViewModel> GetAssetByIdAsync(Guid id)
+        {
+            var asset = await context.Assets.FirstOrDefaultAsync(a => a.Id == id);
 
-        public async Task AddAssetAsync(AddAssetViewModel model, string userId,string username,string email)
+            AssetViewModel viewModel = mapper.Map<AssetViewModel>(asset);
+
+            return viewModel;
+
+        }
+
+        // Post
+        public async Task AddAssetAsync(AddAssetViewModel model, string userId, string username, string email)
         {
             // Add the Seller in the database
             var seller = new Seller
@@ -71,36 +114,6 @@ namespace BenevArts.Services.Data
 
             await context.Assets.AddAsync(asset);
             await context.SaveChangesAsync();
-        }
-
-
-
-        public async Task<IEnumerable<AssetViewModel>> GetAllAssetsAsync()
-        {
-            return await context.Assets
-                .Select(a => new AssetViewModel
-                {
-                    Title = a.Title,
-                    Thumbnail = a.Thumbnail,
-                    Price = a.Price,
-                    UploadDate = a.UploadDate,
-                    SellerName = a.Seller.Name
-                })
-                .ToListAsync();
-        }
-
-        public async Task<AssetViewModel> GetAssetByIdAsync(Guid id)
-        {
-            var asset = await context.Assets.FirstOrDefaultAsync(a => a.Id == id);
-
-            AssetViewModel viewModel = mapper.Map<AssetViewModel>(asset);
-
-            return viewModel;
-
-        }
-        public async Task<IEnumerable<Category>> GetCategoriesAsync()
-        {
-            return await context.Categories.ToListAsync();
         }
     }
 }

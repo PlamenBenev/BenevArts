@@ -30,6 +30,7 @@ namespace BenevArts.Web.Controllers
             return View(model);
         }
 
+        [HttpGet]
         public async Task<IActionResult> All()
         {
             var models = await assetService.GetAllAssetsAsync();
@@ -37,20 +38,15 @@ namespace BenevArts.Web.Controllers
             return View(models);
         }
 
-        // Post
-        [HttpPost]
-        public async Task<IActionResult> Add( AddAssetViewModel model)
+        [HttpGet]
+        public async Task<IActionResult> Search(string query)
         {
-            if (ModelState.IsValid)
-            {
-                await assetService.AddAssetAsync(model, GetUserId(),GetUsername(),GetEmail());
+            var models = await assetService.GetSearchResultAsync(query);
 
-                return RedirectToAction(nameof(Index));
-            }
-
-            return View(model);
+            return View(models);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Download(Guid id)
         {
             var asset = await assetService.GetAssetByIdAsync(id);
@@ -68,5 +64,19 @@ namespace BenevArts.Web.Controllers
             var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
             return File(fileStream, "application/zip", asset.ZipFileName);
         }
+
+        // Post
+        [HttpPost]
+        public async Task<IActionResult> Add( AddAssetViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                await assetService.AddAssetAsync(model, GetUserId(),GetUsername(),GetEmail());
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(model);
+        }     
     }
 }
