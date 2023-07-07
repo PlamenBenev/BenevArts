@@ -10,7 +10,7 @@ namespace BenevArts.Web
         {
             CreateMap<Asset, AssetViewModel>()
                  .ForMember(dest => dest.UploadDate, 
-                    opt => opt.MapFrom(src => DateTime.UtcNow)); ;
+                    opt => opt.MapFrom(src => DateTime.UtcNow));
 
             CreateMap<AddAssetViewModel, Asset>()
                 .ForMember(dest => dest.Images,

@@ -1,5 +1,9 @@
 ﻿@model AssetViewModel
 
+@{
+    ViewBag.Title = "Details of the Asset";
+}
+
 <h1>Asset Details</h1>
 
 <div class="card">
@@ -14,8 +18,11 @@
 </div>
 
 <div class="mt-4">
-    <h4>Download Zip File:</h4>
-    <a href="@Url.Action("Download", "Asset", new { id = Model.Id })" class="btn btn-primary">Download</a>
+    <h4>Buy:</h4>
+    <form action="@Url.Action("Download", "Asset")" >
+        <input type="hidden" name="id" value="@Model.Id" />
+        <button type="submit" class="btn btn-primary">Buy</button>
+    </form>
 </div>
 
 @section Scripts {

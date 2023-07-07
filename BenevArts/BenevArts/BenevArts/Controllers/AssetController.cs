@@ -47,6 +47,14 @@ namespace BenevArts.Web.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var model = await assetService.GetAssetByIdAsync(id);
+
+            return View(model);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Download(Guid id)
         {
             var asset = await assetService.GetAssetByIdAsync(id);
@@ -73,7 +81,7 @@ namespace BenevArts.Web.Controllers
             {
                 await assetService.AddAssetAsync(model, GetUserId(),GetUsername(),GetEmail());
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(All));
             }
 
             return View(model);

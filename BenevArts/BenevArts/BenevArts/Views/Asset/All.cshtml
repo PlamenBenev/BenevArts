@@ -1,4 +1,4 @@
-﻿@model List<AssetViewModel>
+﻿@model IEnumerable<AssetViewModel>
 
 @{
     ViewBag.Title = "All of the Assets";
@@ -20,7 +20,9 @@
                         <p class="card-text">Price: @asset.Price</p>
                         <p class="card-text">Uploaded By: @asset.SellerName</p>
                         <p class="card-text">Uploaded On: @asset.UploadDate.ToString("yyyy-MM-dd")</p>
-                        <a href="@Url.Action("Details", "Asset", new { id = asset.Id })" class="btn btn-primary">View Details</a>
+                        <a asp-controller="Asset" asp-action="Details" 
+                           asp-route-id="@asset.Id" class="btn btn-warning mb-2 w-100 p-3 fw-bold">View Details</a>
+
                     </div>
                 </div>
             </div>
