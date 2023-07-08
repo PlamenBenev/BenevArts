@@ -26,6 +26,13 @@
         <p class="card-text">UV Unwrapped: @(Model.UVUnwrapped ? "Yes" : "No")</p>
     </div>
 </div>
+<div class="mt-4">
+    <h4>Images:</h4>
+    @foreach (var image in Model.Images)
+    {
+        <img src="~/Images/@image" alt="Asset Image" class="img-thumbnail">
+    }
+</div>
 
 <div class="mt-4">
     <h4>Buy:</h4>

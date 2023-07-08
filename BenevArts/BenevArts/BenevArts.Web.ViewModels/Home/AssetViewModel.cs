@@ -24,5 +24,7 @@ namespace BenevArts.Web.ViewModels.Home
         public bool LowPoly { get; set; }
         public bool PBR { get; set; }
         public bool UVUnwrapped { get; set; }
+
+        public IEnumerable<string> Images { get; set; } = new List<string>();
     }
 }

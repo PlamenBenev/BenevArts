@@ -57,9 +57,12 @@ namespace BenevArts.Services.Data
             var asset = await context.Assets
                 .Include(a => a.Category)
                 .Include(a => a.Seller)
+                .Include(a => a.Images)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
             AssetViewModel viewModel = mapper.Map<AssetViewModel>(asset);
+
+            viewModel.Images = asset.Images.Select(x => x.ImageName).ToList();
 
             return viewModel;
         }

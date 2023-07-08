@@ -1,7 +1,11 @@
 ﻿@model AddAssetViewModel
+@using System.Globalization
 
 @{
     ViewBag.Title = "Add your art";
+}
+@{
+    var decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
 }
 
 <form method="post" enctype="multipart/form-data">
@@ -80,7 +84,7 @@
 
     <div class="form-group">
         <label for="price">Price</label>
-        <input type="number" class="form-control" id="price" name="Price" step="0.01" required>
+        <input type="number" class="form-control" id="price" name="Price" step="0@decimalSeparator}01" required>
     </div>
 
     <button type="submit" class="btn btn-primary">Add Asset</button>

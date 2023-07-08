@@ -11,7 +11,7 @@ namespace BenevArts.Web
             CreateMap<Asset, AssetViewModel>()
                  .ForMember(dest => dest.UploadDate,
                     opt => opt.MapFrom(src => DateTime.UtcNow))
-                 .ForMember(dest => dest.Category,
+                 .ForMember(dest => dest.Seller,
                     opt => opt.MapFrom(src => src.Seller.Name))
                  .ForMember(dest => dest.Category,
                     opt => opt.MapFrom(src => src.Category.Name));
