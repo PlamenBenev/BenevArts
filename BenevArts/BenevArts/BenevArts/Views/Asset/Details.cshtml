@@ -1,47 +1,60 @@
 ﻿@model AssetViewModel
 
 @{
-    ViewBag.Title = "Details of the Asset";
+	ViewBag.Title = "Details of the Asset";
 }
 
 <h1>Asset Details</h1>
 
 <div class="card">
-    <div class="card-body">
-        <h3 class="card-title">Title: @Model.Title</h3>
-        <img class="card-img-top" style="width: 18rem;"
-             src="~/Images/@Model.Thumbnail" alt="Thumbnail">
-        <p class="card-text">Description: @Model.Description</p>
-        <p class="card-text">Price: @Model.Price</p>
-        <p class="card-text">Category: @Model.Category</p>
-        <p class="card-text">Uploaded By: @Model.Seller</p>
-        <p class="card-text">Uploaded On: @Model.UploadDate.ToString("yyyy-MM-dd HH:mm:ss")</p>
-        <p class="card-text">CGI Model: @(Model.CGIModel ? "Yes" : "No")</p>
-        <p class="card-text">Textures: @(Model.Textures ? "Yes" : "No")</p>
-        <p class="card-text">Materials: @(Model.Materials ? "Yes" : "No")</p>
-        <p class="card-text">Animated: @(Model.Animated ? "Yes" : "No")</p>
-        <p class="card-text">Rigged: @(Model.Rigged ? "Yes" : "No")</p>
-        <p class="card-text">Low Poly: @(Model.LowPoly ? "Yes" : "No")</p>
-        <p class="card-text">PBR: @(Model.PBR ? "Yes" : "No")</p>
-        <p class="card-text">UV Unwrapped: @(Model.UVUnwrapped ? "Yes" : "No")</p>
-    </div>
+	<div class="card-body">
+		<h3 class="card-title">Title: @Model.Title</h3>
+		<img class="card-img-top" style="width: 18rem;"
+			 src="~/Images/@Model.Thumbnail" alt="Thumbnail">
+		<p class="card-text">Description: @Model.Description</p>
+		<p class="card-text">Price: @Model.Price</p>
+		<p class="card-text">Category: @Model.Category</p>
+		<p class="card-text">Uploaded By: @Model.Seller</p>
+		<p class="card-text">Uploaded On: @Model.UploadDate.ToString("yyyy-MM-dd HH:mm:ss")</p>
+		<p class="card-text">CGI Model: @(Model.CGIModel ? "Yes" : "No")</p>
+		<p class="card-text">Textures: @(Model.Textures ? "Yes" : "No")</p>
+		<p class="card-text">Materials: @(Model.Materials ? "Yes" : "No")</p>
+		<p class="card-text">Animated: @(Model.Animated ? "Yes" : "No")</p>
+		<p class="card-text">Rigged: @(Model.Rigged ? "Yes" : "No")</p>
+		<p class="card-text">Low Poly: @(Model.LowPoly ? "Yes" : "No")</p>
+		<p class="card-text">PBR: @(Model.PBR ? "Yes" : "No")</p>
+		<p class="card-text">UV Unwrapped: @(Model.UVUnwrapped ? "Yes" : "No")</p>
+	</div>
 </div>
 <div class="mt-4">
-    <h4>Images:</h4>
-    @foreach (var image in Model.Images)
-    {
-        <img src="~/Images/@image" alt="Asset Image" class="img-thumbnail">
-    }
+	<h4>Images:</h4>
+	@foreach (var image in Model.Images)
+	{
+		<img src="~/Images/@image" alt="Asset Image" class="img-thumbnail">
+	}
 </div>
 
 <div class="mt-4">
-    <h4>Buy:</h4>
-    <form action="@Url.Action("Download", "Asset")" >
-        <input type="hidden" name="id" value="@Model.Id" />
-        <button type="submit" class="btn btn-primary">Buy</button>
-    </form>
+	<h4>Buy:</h4>
+	<form action="@Url.Action("Download", "Asset")">
+		<input type="hidden" name="id" value="@Model.Id" />
+		<button type="submit" class="btn btn-primary">Buy</button>
+	</form>
 </div>
+@if (Model.Seller == User.Identity?.Name)
+{
+	<div class="mt-4">
+		<form asp-action="Remove" method="post">
+			<button type="submit" class="btn btn-warning mb-2 w-100 p-3 fw-bold">Remove</button>
+		</form>
+
+	</div>
+	<div class="mt-4">
+		<a asp-controller="Asset" asp-action="Edit"
+		   asp-route-id="@Model.Id" class="btn btn-warning mb-2 w-100 p-3 fw-bold">Edit</a>
+	</div>
+}
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+	<partial name="_ValidationScriptsPartial" />
 }

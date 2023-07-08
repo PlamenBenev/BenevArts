@@ -1,0 +1,95 @@
+﻿@model AddAssetViewModel
+@using System.Globalization
+
+@{
+    ViewBag.Title = "Edit your art";
+}
+@{
+    var decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+}
+
+<form method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" class="form-control" id="title" name="Title" required>
+    </div>
+
+    <div class="form-group">
+        <label for="Images">Images</label>
+        <input type="file" id="Images" name="Images" multiple class="form-control-file" />
+    </div>
+
+    <div class="form-group">
+        <label for="thumbnail">Thumbnail</label>
+        <input type="file" class="form-control-file" id="thumbnail" name="Thumbnail" required>
+    </div>
+
+    <div class="form-group">
+        <label for="zipFile">Zip File</label>
+        <input type="file" class="form-control-file" id="zipFile" name="ZipFileName" required>
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description" name="Description" rows="4" required></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Technical Details</label>
+        <div class="btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-secondary">
+                @Html.CheckBoxFor(model => model.CGIModel)
+                CGI Model
+            </label>
+            <label class="btn btn-secondary">
+                @Html.CheckBoxFor(model => model.Textures)
+                Textures
+            </label>
+            <label class="btn btn-secondary">
+                @Html.CheckBoxFor(model => model.Materials)
+                Materials
+            </label>
+            <label class="btn btn-secondary">
+                @Html.CheckBoxFor(model => model.Animated)
+                Animated
+            </label>
+            <label class="btn btn-secondary">
+                @Html.CheckBoxFor(model => model.Rigged)
+                Rigged
+            </label>
+            <label class="btn btn-secondary">
+                @Html.CheckBoxFor(model => model.LowPoly)
+                Low Poly
+            </label>
+            <label class="btn btn-secondary">
+                @Html.CheckBoxFor(model => model.PBR)
+                PBR
+            </label>
+            <label class="btn btn-secondary">
+                @Html.CheckBoxFor(model => model.UVUnwrapped)
+                UV Unwrapped
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="categoryId">Category</label>
+        <select class="form-control" id="categoryId" name="CategoryId" required>
+            @foreach (var category in Model.Categories)
+            {
+                <option value="@category.Id">@category.Name</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="price">Price</label>
+        <input type="number" class="form-control" id="price" name="Price" step="0@decimalSeparator}01" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Edit Asset</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -47,7 +47,13 @@ namespace BenevArts.Data
                 .HasForeignKey(a => a.SellerId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            var categories = new[]
+            builder.Entity<Seller>()
+	            .HasMany(a => a.Assets)
+	            .WithOne(s => s.Seller)
+	            .HasForeignKey(a => a.SellerId)
+	            .OnDelete(DeleteBehavior.NoAction);
+
+			var categories = new[]
             {
                new Category { Id = 1, Name = "Aircraft" },
                new Category { Id = 2, Name = "Animals" },

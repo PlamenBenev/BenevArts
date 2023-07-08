@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BenevArts.Data.Migrations
 {
     [DbContext(typeof(BenevArtsDbContext))]
-    [Migration("20230707073002_Initial")]
+    [Migration("20230708124758_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -537,7 +537,7 @@ namespace BenevArts.Data.Migrations
                     b.HasOne("BenevArts.Data.Models.Seller", "Seller")
                         .WithMany("Assets")
                         .HasForeignKey("SellerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Category");

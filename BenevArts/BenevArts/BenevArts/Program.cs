@@ -81,6 +81,11 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapControllerRoute(
+	name: "remove",
+	pattern: "asset/remove/{id}",
+	defaults: new { controller = "Asset", action = "Remove" }
+);
 app.MapRazorPages();
 
 app.Run();
