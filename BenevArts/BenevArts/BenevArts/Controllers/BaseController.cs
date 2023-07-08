@@ -9,14 +9,14 @@ namespace BenevArts.Web.Controllers
     {
         protected string GetUserId()
         {
-            string userId = string.Empty;
+            string? userId = string.Empty;
 
             if (userId != null)
             {
                 userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             }
 
-            return userId;
+            return userId!;
         }
         protected string GetUsername()
         {
@@ -27,18 +27,18 @@ namespace BenevArts.Web.Controllers
                 username = User.FindFirstValue(ClaimTypes.Name);
             }
 
-            return username;
+            return username!;
         }
         protected string GetEmail()
         {
-            string username = string.Empty;
+            string email = string.Empty;
 
-            if (username != null)
+            if (email != null)
             {
-                username = User.FindFirstValue(ClaimTypes.Email);
+				email = User.FindFirstValue(ClaimTypes.Email);
             }
 
-            return username;
+            return email!;
         }
     }
 

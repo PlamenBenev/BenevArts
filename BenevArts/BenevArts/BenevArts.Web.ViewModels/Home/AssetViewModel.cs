@@ -1,6 +1,4 @@
-﻿
-
-using BenevArts.Data.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BenevArts.Web.ViewModels.Home
 {
@@ -26,5 +24,6 @@ namespace BenevArts.Web.ViewModels.Home
         public bool UVUnwrapped { get; set; }
 
         public IEnumerable<string> Images { get; set; } = new List<string>();
-    }
+		public IEnumerable<CommentViewModel> Comments { get; set; } = new List<CommentViewModel>();
+	}
 }

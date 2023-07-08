@@ -18,11 +18,6 @@ namespace BenevArts.Data.Models
         [EmailAddress]
         public string Email { get; set; } = null!;
 
-        // Navigation property
-        [ForeignKey(nameof(UserId))]
-        public ApplicationUser? User { get; set; }
-        public Guid? UserId { get; set; }
-
         public ICollection<Asset> Assets { get; set; } = new HashSet<Asset>();
     }
 }

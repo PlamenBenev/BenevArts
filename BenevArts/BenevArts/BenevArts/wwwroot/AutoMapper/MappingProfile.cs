@@ -17,9 +17,9 @@ namespace BenevArts.Web
                     opt => opt.MapFrom(src => src.Category.Name));
 
 
-            CreateMap<AddAssetViewModel, Asset>()
-                .ForMember(dest => dest.Images,
-                    opt => opt.MapFrom(src => src.Images.Select(image => new AssetImage { ImageName = image.FileName })))
+
+			CreateMap<AddAssetViewModel, Asset>()
+				 .ForMember(dest => dest.Images, opt => opt.Ignore())
                 .ForMember(dest => dest.ZipFileName,
                     opt => opt.MapFrom(src => src.ZipFileName.FileName));
 

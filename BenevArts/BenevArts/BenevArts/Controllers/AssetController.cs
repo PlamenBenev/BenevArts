@@ -1,22 +1,16 @@
-﻿using AutoMapper;
-using BenevArts.Services.Data.Interfaces;
+﻿using BenevArts.Services.Data.Interfaces;
 using BenevArts.Web.ViewModels.Home;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace BenevArts.Web.Controllers
 {
 	public class AssetController : BaseController
 	{
 		private readonly IAssetService assetService;
-		private readonly IImageService imageService;
 
-		public AssetController(IAssetService _assetService,
-			IImageService _imageService)
+		public AssetController(IAssetService _assetService)
 		{
 			assetService = _assetService;
-			imageService = _imageService;
 		}
 
 		// Get

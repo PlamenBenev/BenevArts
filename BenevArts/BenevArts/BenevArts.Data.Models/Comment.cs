@@ -10,6 +10,7 @@ namespace BenevArts.Data.Models
         public int Id { get; set; }
 
         [Required]
+        [StringLength(10000)]
         public string Content { get; set; } = null!;
 
         [Required]

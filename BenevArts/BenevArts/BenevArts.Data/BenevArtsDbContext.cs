@@ -47,7 +47,13 @@ namespace BenevArts.Data
                 .HasForeignKey(a => a.SellerId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            builder.Entity<Seller>()
+			//builder.Entity<Asset>()
+	  //          .HasMany(s => s.Comments)
+	  //          .WithOne(a => a.Asset)
+	  //          .HasForeignKey(a => a.AssetID)
+	  //          .OnDelete(DeleteBehavior.NoAction);
+
+			builder.Entity<Seller>()
 	            .HasMany(a => a.Assets)
 	            .WithOne(s => s.Seller)
 	            .HasForeignKey(a => a.SellerId)

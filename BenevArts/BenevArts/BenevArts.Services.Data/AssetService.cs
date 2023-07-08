@@ -4,8 +4,6 @@ using BenevArts.Data.Models;
 using BenevArts.Services.Data.Interfaces;
 using BenevArts.Web.ViewModels.Home;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace BenevArts.Services.Data
 {
@@ -85,7 +83,6 @@ namespace BenevArts.Services.Data
 					Id = Guid.Parse(userId),
 					Name = username,
 					Email = email,
-					UserId = Guid.Parse(userId),
 				};
 				await context.Sellers.AddAsync(seller);
 				await context.SaveChangesAsync();
@@ -107,18 +104,18 @@ namespace BenevArts.Services.Data
 
 			// Set the path for the images
 			var uploadFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images");
-			var imageService = new ImageService(uploadFolderPath);
+			ImageService imageService = new ImageService(uploadFolderPath);
 
 			// Add the Thumbnail
-			var thumbName = await imageService.SaveImageAsync(model.Thumbnail);
+			string thumbName = await imageService.SaveImageAsync(model.Thumbnail);
 			asset.Thumbnail = thumbName;
 
 			// Add all preview images
 			foreach (var imageFile in model.Images)
 			{
-				var imageName = await imageService.SaveImageAsync(imageFile);
+				string imageName = await imageService.SaveImageAsync(imageFile);
 
-				var image = new AssetImage
+				AssetImage image = new AssetImage
 				{
 					ImageName = imageName,
 					AssetId = asset.Id,
@@ -126,19 +123,34 @@ namespace BenevArts.Services.Data
 
 				asset.Images.Add(image);
 			}
+			//         foreach (var image in asset.Images)
+			//         {
+			//	image.AssetId = Guid.Parse(userId);
+			//	image.Asset = asset;
+			//}
 
 			await context.Assets.AddAsync(asset);
 			await context.SaveChangesAsync();
 		}
 		public async Task RemoveAssetAsync(Guid assetId, string userId)
 		{
-			var user = await context.Users
+			ApplicationUser? user = await context.Users
 				.Where(u => u.Id.ToString() == userId)
 				.FirstOrDefaultAsync();
 
-			var asset = await context.Assets.FirstOrDefaultAsync(a => a.Id == assetId);
+			if (user == null)
+			{
+				return;
+			}
 
-			context.Assets.Remove(asset);
+			Asset? asset = await context.Assets.FirstOrDefaultAsync(a => a.Id == assetId);
+
+			if (asset == null) 
+			{
+				return;
+			}
+
+			context.Assets.Remove(asset!);
 			await context.SaveChangesAsync();
 
 		}
