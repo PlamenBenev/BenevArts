@@ -30,7 +30,7 @@ namespace BenevArts.Services.Data
                     Thumbnail = a.Thumbnail,
                     Price = a.Price,
                     UploadDate = a.UploadDate,
-                    SellerName = a.Seller.Name
+                    Seller = a.Seller.Name
                 })
                 .ToListAsync();
         }
@@ -44,7 +44,7 @@ namespace BenevArts.Services.Data
                     Thumbnail = a.Thumbnail,
                     Price = a.Price,
                     UploadDate = a.UploadDate,
-                    SellerName = a.Seller.Name
+                    Seller = a.Seller.Name
                 })
                 .ToListAsync();
         }
@@ -54,12 +54,14 @@ namespace BenevArts.Services.Data
         }
         public async Task<AssetViewModel> GetAssetByIdAsync(Guid id)
         {
-            var asset = await context.Assets.FirstOrDefaultAsync(a => a.Id == id);
+            var asset = await context.Assets
+                .Include(a => a.Category)
+                .Include(a => a.Seller)
+                .FirstOrDefaultAsync(a => a.Id == id);
 
             AssetViewModel viewModel = mapper.Map<AssetViewModel>(asset);
 
             return viewModel;
-
         }
 
         // Post

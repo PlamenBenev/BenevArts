@@ -1,5 +1,7 @@
 ﻿
 
+using BenevArts.Data.Models;
+
 namespace BenevArts.Web.ViewModels.Home
 {
     public class AssetViewModel
@@ -11,7 +13,7 @@ namespace BenevArts.Web.ViewModels.Home
         public string ZipFileName { get; set; } = null!;
         public decimal Price { get; set; }
         public string Category { get; set; } = null!;
-        public string SellerName { get; set; } = null!;
+        public string Seller { get; set; } = null!;
         public DateTime UploadDate { get; set; }
 
         public bool CGIModel { get; set; }

@@ -63,7 +63,7 @@ namespace BenevArts.Web.Controllers
                 return NotFound();
             }
 
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", asset.ZipFileName);
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ZipFiles", asset.ZipFileName);
             if (!System.IO.File.Exists(filePath))
             {
                 return NotFound();

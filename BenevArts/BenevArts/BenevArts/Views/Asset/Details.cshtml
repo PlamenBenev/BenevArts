@@ -9,11 +9,21 @@
 <div class="card">
     <div class="card-body">
         <h3 class="card-title">Title: @Model.Title</h3>
+        <img class="card-img-top" style="width: 18rem;"
+             src="~/Images/@Model.Thumbnail" alt="Thumbnail">
         <p class="card-text">Description: @Model.Description</p>
         <p class="card-text">Price: @Model.Price</p>
         <p class="card-text">Category: @Model.Category</p>
-        <p class="card-text">Uploaded By: @Model.SellerName</p>
+        <p class="card-text">Uploaded By: @Model.Seller</p>
         <p class="card-text">Uploaded On: @Model.UploadDate.ToString("yyyy-MM-dd HH:mm:ss")</p>
+        <p class="card-text">CGI Model: @(Model.CGIModel ? "Yes" : "No")</p>
+        <p class="card-text">Textures: @(Model.Textures ? "Yes" : "No")</p>
+        <p class="card-text">Materials: @(Model.Materials ? "Yes" : "No")</p>
+        <p class="card-text">Animated: @(Model.Animated ? "Yes" : "No")</p>
+        <p class="card-text">Rigged: @(Model.Rigged ? "Yes" : "No")</p>
+        <p class="card-text">Low Poly: @(Model.LowPoly ? "Yes" : "No")</p>
+        <p class="card-text">PBR: @(Model.PBR ? "Yes" : "No")</p>
+        <p class="card-text">UV Unwrapped: @(Model.UVUnwrapped ? "Yes" : "No")</p>
     </div>
 </div>
 
