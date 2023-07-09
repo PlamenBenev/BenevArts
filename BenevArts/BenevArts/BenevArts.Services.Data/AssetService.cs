@@ -107,7 +107,7 @@ namespace BenevArts.Services.Data
 			ImageService imageService = new ImageService(uploadFolderPath);
 
 			// Add the Thumbnail
-			string thumbName = await imageService.SaveImageAsync(model.Thumbnail);
+			string thumbName = await imageService.SaveThumbnailAsync(model.Thumbnail);
 			asset.Thumbnail = thumbName;
 
 			// Add all preview images
