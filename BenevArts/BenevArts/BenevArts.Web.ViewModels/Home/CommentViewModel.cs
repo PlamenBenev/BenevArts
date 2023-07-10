@@ -22,5 +22,7 @@ namespace BenevArts.Web.ViewModels.Home
 		[Required]
 		public string User { get; set; } = null!;
 
+		[Required]
+		public Guid AssetId { get; set; }
 	}
 }

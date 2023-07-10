@@ -57,17 +57,15 @@
 }
 
 <!-- Comment Form -->
-<div class="mt-4">
-	<h4>Add Comment:</h4>
-	<form action="@Url.Action("AddComment", "Comment")" method="post">
-		<input type="hidden" name="assetId" value="@Model.Id" />
-		<div class="form-group">
-			<label for="commentText">Comment:</label>
-			<textarea class="form-control" id="commentText" name="commentText" rows="3" required></textarea>
-		</div>
-		<button type="submit" class="btn btn-primary">Submit</button>
-	</form>
-</div>
+<form method="post" asp-action="PostComment" asp-controller="Comment">
+	<div class="form-group">
+		<label for="commentText">Comment:</label>
+		<textarea class="form-control" id="commentText" name="Content" rows="3" required></textarea>
+	</div>
+	<input type="hidden" name="AssetId" value="@Model.Id" />
+	<input type="hidden" name="User" value="@User.Identity" />
+	<button type="submit" class="btn btn-primary">Submit</button>
+</form>
 
 <!-- Comments Display -->
 <div class="mt-4">
@@ -93,3 +91,31 @@
 @section Scripts {
 	<partial name="_ValidationScriptsPartial" />
 }
+<script>
+	$(function() {
+	   $('#submitComment').click(function() {
+		  var commentContent = $('#commentText').val();
+
+		  // Create an object to send in the AJAX request
+		  var comment = {
+			 Content: commentContent
+		  };
+
+		  // Send the AJAX request to the controller action
+		  $.ajax({
+			 url: '@Url.Action("PostComment", "Comment")',
+			 type: 'POST',
+			 dataType: 'json',
+			 data: comment,
+			 success: function(response) {
+				// Handle the success response, e.g., update the comments section
+				// You can append the new comment to the comments list or reload the page
+				// to fetch the updated comments from the server
+			 },
+			 error: function(xhr) {
+				// Handle the error response
+			 }
+		  });
+	   });
+	});
+</script>

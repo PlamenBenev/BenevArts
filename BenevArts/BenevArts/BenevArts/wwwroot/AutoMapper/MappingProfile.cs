@@ -16,13 +16,12 @@ namespace BenevArts.Web
                  .ForMember(dest => dest.Category,
                     opt => opt.MapFrom(src => src.Category.Name));
 
-
-
 			CreateMap<AddAssetViewModel, Asset>()
 				 .ForMember(dest => dest.Images, opt => opt.Ignore())
                 .ForMember(dest => dest.ZipFileName,
                     opt => opt.MapFrom(src => src.ZipFileName.FileName));
 
-        }
-    }
+            CreateMap<Comment, CommentViewModel>();
+		}
+	}
 }

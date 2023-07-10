@@ -24,8 +24,8 @@ namespace BenevArts.Data.Models
         public ApplicationUser User { get; set; } = null!;
 
         [Required]
-        public Guid AssetID { get; set; }
-        [ForeignKey(nameof(AssetID))]
+        public Guid AssetId { get; set; }
+        [ForeignKey(nameof(AssetId))]
         public Asset Asset { get; set; } = null!;
     }
 }

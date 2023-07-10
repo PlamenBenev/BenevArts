@@ -4,6 +4,6 @@ namespace BenevArts.Services.Data.Interfaces
 {
 	public interface ICommentService
 	{
-		Task<IEnumerable<AssetViewModel>> GetCommentsAsync();
+		Task<CommentViewModel> AddCommentAsync(Guid assetId, CommentViewModel commentModel);
 	}
 }
