@@ -4,6 +4,7 @@ using BenevArts.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BenevArts.Data.Migrations
 {
     [DbContext(typeof(BenevArtsDbContext))]
-    partial class BenevArtsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230711140351_LikeImprovements")]
+    partial class LikeImprovements
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,6 +109,9 @@ namespace BenevArts.Data.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsLikedByCurrentUser")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("LowPoly")
                         .HasColumnType("bit");
@@ -321,9 +327,6 @@ namespace BenevArts.Data.Migrations
 
                     b.Property<Guid>("AssetId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsLikedByCurrentUser")
-                        .HasColumnType("bit");
 
                     b.Property<Guid>("UserID")
                         .HasColumnType("uniqueidentifier");

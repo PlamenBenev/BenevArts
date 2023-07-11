@@ -7,10 +7,11 @@ namespace BenevArts.Web.Controllers
 	public class AssetController : BaseController
 	{
 		private readonly IAssetService assetService;
-
-		public AssetController(IAssetService _assetService)
+		private readonly ILikeService likeService;
+		public AssetController(IAssetService _assetService, ILikeService _likeService)
 		{
 			assetService = _assetService;
+			likeService = _likeService;
 		}
 
 		// Get
@@ -25,18 +26,18 @@ namespace BenevArts.Web.Controllers
 			return View(model);
 		}
 
-        [HttpGet]
-        public async Task<IActionResult> Edit()
-        {
-            var model = new AddAssetViewModel()
-            {
-                Categories = await assetService.GetCategoriesAsync(),
-            };
+		[HttpGet]
+		public async Task<IActionResult> Edit()
+		{
+			var model = new AddAssetViewModel()
+			{
+				Categories = await assetService.GetCategoriesAsync(),
+			};
 
-            return View(model);
-        }
+			return View(model);
+		}
 
-        [HttpGet]
+		[HttpGet]
 		public async Task<IActionResult> All()
 		{
 			var models = await assetService.GetAllAssetsAsync();
@@ -101,5 +102,13 @@ namespace BenevArts.Web.Controllers
 			return RedirectToAction(nameof(All));
 		}
 
+		[HttpPost]
+		public async Task<IActionResult> AddLike(Guid assetId)
+		{
+			await likeService.AddLikeAsync(assetId, GetUserId());
+
+			return RedirectToAction(nameof(Details),new {id = assetId});
+
+		}
 	}
 }

@@ -32,7 +32,7 @@ namespace BenevArts.Data
             builder.Entity<Like>()
                 .HasOne(l => l.Asset)
                 .WithMany(a => a.Likes)
-                .HasForeignKey(l => l.AssetID)
+                .HasForeignKey(l => l.AssetId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<Purchase>()

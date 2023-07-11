@@ -22,7 +22,7 @@ namespace BenevArts.Web.Controllers
 			{
 				await commentService.AddCommentAsync(assetId,comment);
 
-				return RedirectToAction("Details", new { id = assetId });
+				return RedirectToAction("Details", "Asset", new { id = assetId });
 			}
 
 			return View();

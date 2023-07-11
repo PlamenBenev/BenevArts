@@ -48,8 +48,8 @@ namespace BenevArts.Data.Models
         public bool PBR { get; set; }
         public bool UVUnwrapped { get; set; }
 
-        // Navigation properties
-        [Required]
+		// Navigation properties
+		[Required]
         [ForeignKey(nameof(Seller))]
         public Guid SellerId { get; set; }
 

@@ -22,6 +22,8 @@ namespace BenevArts.Web
                     opt => opt.MapFrom(src => src.ZipFileName.FileName));
 
             CreateMap<Comment, CommentViewModel>();
+
+			CreateMap<Like, LikeViewModel>();
 		}
 	}
 }

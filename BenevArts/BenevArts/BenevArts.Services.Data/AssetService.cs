@@ -56,6 +56,8 @@ namespace BenevArts.Services.Data
 				.Include(a => a.Category)
 				.Include(a => a.Seller)
 				.Include(a => a.Images)
+				.Include(a => a.Comments)
+				.Include(a => a.Likes)
 				.FirstOrDefaultAsync(a => a.Id == id);
 
 			if (asset == null)

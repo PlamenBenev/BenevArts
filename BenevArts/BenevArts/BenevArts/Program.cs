@@ -34,6 +34,8 @@ builder.Services.Configure<IdentityOptions>(
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IAssetService, AssetService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<ILikeService, LikeService>();
+
 
 builder.Services.Configure<IISServerOptions>(options =>
 {

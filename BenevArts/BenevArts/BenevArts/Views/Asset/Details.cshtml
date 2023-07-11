@@ -26,6 +26,21 @@
 		<p class="card-text">UV Unwrapped: @(Model.UVUnwrapped ? "Yes" : "No")</p>
 	</div>
 </div>
+<div>
+	<p>Likes: @Model.Likes.Count()</p>
+	@if (User.Identity.IsAuthenticated)
+	{
+
+			<form asp-action="RemoveLike" asp-route-assetId="@Model.Id">
+				<button type="submit">Unlike</button>
+			</form>
+
+			<form asp-action="AddLike" asp-route-assetId="@Model.Id">
+				<button type="submit">Like</button>
+			</form>
+		
+	}
+</div>
 <div class="mt-4">
 	<h4>Images:</h4>
 	@foreach (var image in Model.Images)
@@ -59,7 +74,7 @@
 <!-- Comment Form -->
 <form method="post" asp-action="PostComment" asp-controller="Comment">
 	<div class="form-group">
-		<label for="commentText">Comment:</label>
+		<label for="commentText">Write a comment:</label>
 		<textarea class="form-control" id="commentText" name="Content" rows="3" required></textarea>
 	</div>
 	<input type="hidden" name="AssetId" value="@Model.Id" />
