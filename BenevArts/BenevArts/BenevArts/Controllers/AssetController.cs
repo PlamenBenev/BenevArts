@@ -18,7 +18,7 @@ namespace BenevArts.Web.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Add()
 		{
-			var model = new AddAssetViewModel()
+			AddAssetViewModel model = new AddAssetViewModel()
 			{
 				Categories = await assetService.GetCategoriesAsync(),
 			};
@@ -29,7 +29,7 @@ namespace BenevArts.Web.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Edit()
 		{
-			var model = new AddAssetViewModel()
+			AddAssetViewModel model = new AddAssetViewModel()
 			{
 				Categories = await assetService.GetCategoriesAsync(),
 			};
@@ -40,7 +40,7 @@ namespace BenevArts.Web.Controllers
 		[HttpGet]
 		public async Task<IActionResult> All()
 		{
-			var models = await assetService.GetAllAssetsAsync();
+			IEnumerable<AssetViewModel> models = await assetService.GetAllAssetsAsync();
 
 			return View(models);
 		}
@@ -48,7 +48,7 @@ namespace BenevArts.Web.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Search(string query)
 		{
-			var models = await assetService.GetSearchResultAsync(query);
+			IEnumerable<AssetViewModel> models = await assetService.GetSearchResultAsync(query);
 
 			return View(models);
 		}
@@ -56,7 +56,7 @@ namespace BenevArts.Web.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Details(Guid id)
 		{
-			var model = await assetService.GetAssetByIdAsync(id);
+			AssetViewModel model = await assetService.GetAssetByIdAsync(id, GetUserId());
 
 			return View(model);
 		}
@@ -64,13 +64,13 @@ namespace BenevArts.Web.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Download(Guid id)
 		{
-			var asset = await assetService.GetAssetByIdAsync(id);
+			AssetViewModel asset = await assetService.GetAssetByIdAsync(id, GetUserId());
 			if (asset == null)
 			{
 				return NotFound();
 			}
 
-			var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ZipFiles", asset.ZipFileName);
+			string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ZipFiles", asset.ZipFileName);
 			if (!System.IO.File.Exists(filePath))
 			{
 				return NotFound();
@@ -103,12 +103,37 @@ namespace BenevArts.Web.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> AddLike(Guid assetId)
+		public async Task<IActionResult> ToggleLike(Guid assetId, bool liked)
 		{
-			await likeService.AddLikeAsync(assetId, GetUserId());
+			// Toggle the like status for the asset
+			if (liked)
+			{
+				await likeService.RemoveLikeAsync(assetId, GetUserId());
+			}
+			else
+			{
+				await likeService.AddLikeAsync(assetId, GetUserId());
+			}
 
-			return RedirectToAction(nameof(Details),new {id = assetId});
-
+			// Return a JSON response indicating the success
+			return Json(new { success = true, liked});
 		}
+
+		//[HttpPost]
+		//public async Task<IActionResult> AddLike(Guid assetId)
+		//{
+		//	await likeService.AddLikeAsync(assetId, GetUserId());
+
+		//	return RedirectToAction(nameof(Details), new { id = assetId });
+		//}
+
+		//[HttpPost]
+		//public async Task<IActionResult> RemoveLike(Guid assetId)
+		//{
+		//	await likeService.RemoveLikeAsync(assetId, GetUserId());
+
+		//	return RedirectToAction(nameof(Details), new { id = assetId });
+		//}
+
 	}
 }

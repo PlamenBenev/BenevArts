@@ -3,6 +3,7 @@ using BenevArts.Data;
 using BenevArts.Data.Models;
 using BenevArts.Services.Data.Interfaces;
 using BenevArts.Web.ViewModels.Home;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BenevArts.Services.Data
@@ -50,7 +51,7 @@ namespace BenevArts.Services.Data
 		{
 			return await context.Categories.ToListAsync();
 		}
-		public async Task<AssetViewModel> GetAssetByIdAsync(Guid id)
+		public async Task<AssetViewModel> GetAssetByIdAsync(Guid id, string userId)
 		{
 			Asset? asset = await context.Assets
 				.Include(a => a.Category)
@@ -68,6 +69,12 @@ namespace BenevArts.Services.Data
 			AssetViewModel viewModel = mapper.Map<AssetViewModel>(asset);
 
 			viewModel.Images = asset!.Images.Select(x => x.ImageName).ToList();
+
+			var userLikes = await context.Likes
+				.Where(l => l.AssetId == id && l.UserID == Guid.Parse(userId))
+				.ToListAsync();
+
+			viewModel.IsLikedByCurrentUser = userLikes.Any();
 
 			return viewModel;
 		}
@@ -156,6 +163,5 @@ namespace BenevArts.Services.Data
 			await context.SaveChangesAsync();
 
 		}
-
 	}
 }

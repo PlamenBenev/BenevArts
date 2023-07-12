@@ -1,6 +1,7 @@
 ﻿using BenevArts.Data;
 using BenevArts.Data.Models;
 using BenevArts.Services.Data.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace BenevArts.Services.Data
 
 		public async Task AddLikeAsync(Guid assetId, string userId)
 		{
-			var user = await context.Users
+			ApplicationUser? user = await context.Users
 				.Where(u => u.Id == Guid.Parse(userId))
 				.FirstOrDefaultAsync();
 
@@ -30,12 +31,7 @@ namespace BenevArts.Services.Data
 				throw new ArgumentException("Invalid User Id");
 			}
 
-			var asset = await context.Assets.FindAsync(assetId);
-			Like likes = await context.Likes.Where(x => x.UserID == Guid.Parse(userId)).FirstOrDefaultAsync();
-			if (asset == null)
-			{
-				throw new ArgumentException("Invalid Movie Id");
-			}
+			Like? likes = await context.Likes.Where(x => x.UserID == Guid.Parse(userId)).FirstOrDefaultAsync();
 
 			if (likes == null)
 			{
@@ -45,14 +41,14 @@ namespace BenevArts.Services.Data
 					UserID = Guid.Parse(userId),
 				};
 
-					context.Likes.Add(like);
+				context.Likes.Add(like);
 				await context.SaveChangesAsync();
 			}
 		}
 
 		public async Task RemoveLikeAsync(Guid assetId, string userId)
 		{
-			var like = await context.Likes
+			Like like = await context.Likes
 				.FirstOrDefaultAsync(l => l.AssetId == assetId && l.UserID == Guid.Parse(userId));
 
 			if (like != null)
@@ -68,5 +64,7 @@ namespace BenevArts.Services.Data
 				.Where(l => l.AssetId == assetId)
 				.CountAsync();
 		}
+
+
 	}
 }

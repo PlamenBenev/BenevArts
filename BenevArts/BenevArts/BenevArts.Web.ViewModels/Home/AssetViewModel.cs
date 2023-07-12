@@ -23,6 +23,8 @@ namespace BenevArts.Web.ViewModels.Home
         public bool PBR { get; set; }
         public bool UVUnwrapped { get; set; }
 
+		public bool IsLikedByCurrentUser { get; set; }
+
 		public IEnumerable<LikeViewModel> Likes { get; set; } = new List<LikeViewModel>();
 		public IEnumerable<CommentViewModel> Comments { get; set; } = new List<CommentViewModel>();
 		public IEnumerable<string> Images { get; set; } = new List<string>();
