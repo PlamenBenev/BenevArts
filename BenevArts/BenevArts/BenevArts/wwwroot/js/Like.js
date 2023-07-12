@@ -1,12 +1,11 @@
-﻿
-$(document).ready(function () {
+﻿$(document).ready(function () {
     $('#likeButton').on('click', function () {
         var assetId = $(this).data('asset-id');
         var isLiked = $(this).data('liked');
 
         // Send AJAX request to toggle the like status
         $.ajax({
-            url: '/Like/ToggleLike',
+            url: '/Asset/ToggleLike',
             type: 'POST',
             data: {
                 assetId: assetId,

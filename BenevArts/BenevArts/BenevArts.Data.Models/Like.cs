@@ -9,9 +9,6 @@ namespace BenevArts.Data.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
-		public bool IsLikedByCurrentUser { get; set; }
-
 		[Required]
         public Guid AssetId { get; set; }
         [ForeignKey(nameof(AssetId))]

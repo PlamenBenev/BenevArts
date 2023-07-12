@@ -5,6 +5,7 @@
 		Task AddLikeAsync(Guid assetId, string userId);
 		Task RemoveLikeAsync(Guid assetId, string userId);
 		Task<int> GetLikeCountAsync(Guid assetId);
+		Task<bool> IsLikedByUserAsync(Guid assetId, string v);
 	}
 
 }

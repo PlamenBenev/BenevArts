@@ -1,5 +1,7 @@
-﻿using BenevArts.Services.Data.Interfaces;
+﻿using BenevArts.Data.Models;
+using BenevArts.Services.Data.Interfaces;
 using BenevArts.Web.ViewModels.Home;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BenevArts.Web.Controllers
@@ -103,21 +105,26 @@ namespace BenevArts.Web.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> ToggleLike(Guid assetId, bool liked)
+		public async Task<IActionResult> ToggleLike(Guid assetId, bool isLiked)
 		{
 			// Toggle the like status for the asset
-			if (liked)
+			if (isLiked)
 			{
+				// Unlike the asset
 				await likeService.RemoveLikeAsync(assetId, GetUserId());
 			}
 			else
 			{
+				// Like the asset
 				await likeService.AddLikeAsync(assetId, GetUserId());
 			}
 
-			// Return a JSON response indicating the success
-			return Json(new { success = true, liked});
+			bool updatedIsLiked = await likeService.IsLikedByUserAsync(assetId, GetUserId());
+
+			// Return a JSON response indicating success and the updated like status
+			return Json(new { success = true, isLiked = updatedIsLiked });
 		}
+
 
 		//[HttpPost]
 		//public async Task<IActionResult> AddLike(Guid assetId)

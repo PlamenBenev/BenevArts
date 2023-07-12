@@ -31,26 +31,20 @@ namespace BenevArts.Services.Data
 				throw new ArgumentException("Invalid User Id");
 			}
 
-			Like? likes = await context.Likes.Where(x => x.UserID == Guid.Parse(userId)).FirstOrDefaultAsync();
-
-			if (likes == null)
+			Like like = new Like
 			{
-				var like = new Like
-				{
-					AssetId = assetId,
-					UserID = Guid.Parse(userId),
-				};
+				AssetId = assetId,
+				UserID = Guid.Parse(userId),
+			};
 
-				context.Likes.Add(like);
-				await context.SaveChangesAsync();
-			}
+			context.Likes.Add(like);
+			await context.SaveChangesAsync();
+
 		}
 
 		public async Task RemoveLikeAsync(Guid assetId, string userId)
 		{
-			Like like = await context.Likes
-				.FirstOrDefaultAsync(l => l.AssetId == assetId && l.UserID == Guid.Parse(userId));
-
+			var like = context.Likes.FirstOrDefault(l => l.AssetId == assetId && l.UserID == Guid.Parse(userId));
 			if (like != null)
 			{
 				context.Likes.Remove(like);
@@ -65,6 +59,13 @@ namespace BenevArts.Services.Data
 				.CountAsync();
 		}
 
+		public async Task<bool> IsLikedByUserAsync(Guid assetId, string v)
+		{
+			var userLikes = await context.Likes
+				.Where(l => l.AssetId == assetId && l.UserID == Guid.Parse(v))
+				.ToListAsync();
 
+			return userLikes.Any();
+		}
 	}
 }

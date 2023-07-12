@@ -30,22 +30,20 @@
 	<p>Likes: @Model.Likes.Count()</p>
 	@if (User.Identity.IsAuthenticated)
 	{
-		<form asp-action="ToggleLike" asp-route-assetId="@Model.Id">
-			<button id="likeButton" data-asset-id="@Model.Id" data-liked="@Model.IsLikedByCurrentUser">Like</button>
-		</form>
+		<button id="likeButton" data-asset-id="@Model.Id" data-liked="@Model.IsLikedByCurrentUser">Like</button>
 
-		@*		if (Model.IsLikedByCurrentUser)
-	{
-	<form asp-action="RemoveLike" asp-route-assetId="@Model.Id">
-	<button type="submit">Unlike</button>
-	</form>
-	}
-	else
-	{
-	<form asp-action="AddLike" asp-route-assetId="@Model.Id">
-	<button type="submit">Like</button>
-	</form>
-	}*@
+@*		if (Model.IsLikedByCurrentUser)
+		{
+			<form asp-action="ToggleLike" asp-route-assetId="@Model.Id">
+				<button id="likeButton" type="submit">Unlike</button>
+			</form>
+		}
+		else
+		{
+			<form asp-action="ToggleLike" asp-route-assetId="@Model.Id">
+				<button id="likeButton" type="submit">Like</button>
+			</form>
+		}*@
 	}
 </div>
 <div class="mt-4">
@@ -111,41 +109,7 @@
 </div>
 
 @section Scripts {
-	<script>
-		$(document).ready(function () {
-			$('#likeButton').on('click', function () {
-				var assetId = $(this).data('asset-id');
-				var isLiked = $(this).data('liked');
-
-				// Send AJAX request to toggle the like status
-				$.ajax({
-					url: '/Like/ToggleLike',
-					type: 'POST',
-					data: {
-						assetId: assetId,
-						isLiked: isLiked
-					},
-					success: function (response) {
-						// Handle the response and update the UI accordingly
-						if (response.success) {
-							if (response.isLiked) {
-								// User unliked the asset, update the button text and UI
-								$('#likeButton').text('Like');
-								$('#likeButton').data('liked', false);
-							} else {
-								// User liked the asset, update the button text and UI
-								$('#likeButton').text('Unlike');
-								$('#likeButton').data('liked', true);
-							}
-						}
-					},
-					error: function (xhr, status, error) {
-						// Handle error if any
-						console.error(error);
-					}
-				});
-			});
-		});
-
-	</script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="~/js/like.js"></script>
+	<script src="~/js/comment.js"></script>
 }
