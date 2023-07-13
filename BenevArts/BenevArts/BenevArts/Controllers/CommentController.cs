@@ -1,4 +1,5 @@
-﻿using BenevArts.Services.Data.Interfaces;
+﻿using BenevArts.Data.Models;
+using BenevArts.Services.Data.Interfaces;
 using BenevArts.Web.ViewModels.Home;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,9 +18,8 @@ namespace BenevArts.Web.Controllers
 		[HttpPost]
 		public async Task<IActionResult> PostComment(Guid assetId, string content)
 		{
-
-			await commentService.AddCommentAsync(assetId,GetUserId(),content);
-			return Ok(content);
+			CommentViewModel comment = await commentService.AddCommentAsync(assetId,GetUserId(),content);
+			return PartialView("~/Views/Asset/_CommentItem.cshtml", comment);
 		}
 
 		[HttpPost]

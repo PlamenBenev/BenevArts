@@ -18,7 +18,7 @@ namespace BenevArts.Services.Data
 			mapper = _mapper;
 		}
 
-		public async Task AddCommentAsync(Guid assetId, string userId, string content)
+		public async Task<CommentViewModel> AddCommentAsync(Guid assetId, string userId, string content)
 		{
 			ApplicationUser? user = await context.Users
 				.Where(u => u.Id == Guid.Parse(userId))
@@ -39,6 +39,9 @@ namespace BenevArts.Services.Data
 
 			context.Comments.Add(comment);
 			await context.SaveChangesAsync();
+
+			CommentViewModel model = mapper.Map<CommentViewModel>(comment);
+			return model;
 		}
 		public async Task RemoveCommentAsync(Guid assetId, string userId)
 		{

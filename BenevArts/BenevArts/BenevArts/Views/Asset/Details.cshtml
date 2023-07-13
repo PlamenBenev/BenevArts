@@ -38,7 +38,6 @@
 				data-liked="@Model.IsLikedByCurrentUser">
 			@(Model.IsLikedByCurrentUser ? "Unlike" : "Like")
 		</button>
-
 	}
 </div>
 
@@ -75,8 +74,8 @@
 	</div>
 }
 
+<!-- Comment Form -->
 <div class="mt-4">
-	<!-- Comment Form -->
 	<div class="form-group">
 		<label for="commentText">Write a comment:</label>
 		<textarea class="form-control" id="commentContent" name="Content" rows="3" required></textarea>
@@ -92,22 +91,24 @@
 <!-- Comments Display -->
 <div class="mt-4">
 	<h4>Comments:</h4>
-	@if (Model.Comments != null && Model.Comments.Any())
-	{
-		foreach (var comment in Model.Comments)
+	<div id="commentsContainer">
+		@if (Model.Comments != null && Model.Comments.Any())
 		{
-			<div class="card mt-2">
-				<div class="card-body">
-					<h5 class="card-title">User: @comment.User</h5>
-					<p class="card-text">Comment: @comment.Content</p>
+			foreach (var comment in Model.Comments)
+			{
+				<div class="card mt-2">
+					<div class="card-body">
+						<h5 class="card-title">User: @comment.User</h5>
+						<p class="card-text">Comment: @comment.Content</p>
+					</div>
 				</div>
-			</div>
+			}
 		}
-	}
-	else
-	{
-		<p>Write the first comment!</p>
-	}
+		else
+		{
+			<p id="writeComment">Write the first comment!</p>
+		}
+	</div>
 </div>
 
 @section Scripts {

@@ -4,6 +4,7 @@ $(document).ready(function () {
         // Get the comment content from the input field
         var commentContent = $("#commentContent").val();
         var assetId = $(this).data('asset-id');
+        var writeComment = $("#writeComment");
 
         // Send AJAX request to add the comment
         $.ajax({
@@ -14,12 +15,21 @@ $(document).ready(function () {
                 assetId: assetId
             },
             success: function (data) {
-                // Update the comment list on the page
-                $("#commentsList").append(`<li>${data.content}</li>`);
+                // Clear the comment input field
+                $("#commentContent").val("");
+
+                if ($("#commentsContainer").has("p").length) {
+
+                    writeComment.remove();
+                }
+
+                // Append the new comment to the comments container
+                $("#commentsContainer").append(data);
             },
             error: function (error) {
                 console.log(error);
             },
+            dataType: "html" // Set the data type as HTML
         });
     });
 });
