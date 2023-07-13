@@ -18,9 +18,9 @@ namespace BenevArts.Data.Models
         public DateTime PostedDate { get; set; }
 
         [Required]
-        public Guid UserID { get; set; }
+        public Guid UserId { get; set; }
 
-        [ForeignKey(nameof(UserID))]
+        [ForeignKey(nameof(UserId))]
         public ApplicationUser User { get; set; } = null!;
 
         [Required]

@@ -6,6 +6,7 @@
 
 <h1>Asset Details</h1>
 
+@*Information about the Asset*@
 <div class="card">
 	<div class="card-body">
 		<h3 class="card-title">Title: @Model.Title</h3>
@@ -26,17 +27,22 @@
 		<p class="card-text">UV Unwrapped: @(Model.UVUnwrapped ? "Yes" : "No")</p>
 	</div>
 </div>
+
+@*Likes*@
 <div>
 	<p>Likes: <span id="likeCount">@Model.Likes.Count()</span></p>
 	@if (User.Identity.IsAuthenticated)
 	{
-		<button id="likeButton" 
-			data-asset-id="@Model.Id" 
-			data-count="@Model.Likes.Count()"
-			data-liked="@Model.IsLikedByCurrentUser">
-			Like</button>
+		<button id="likeButton"
+				data-asset-id="@Model.Id"
+				data-liked="@Model.IsLikedByCurrentUser">
+			@(Model.IsLikedByCurrentUser ? "Unlike" : "Like")
+		</button>
+
 	}
 </div>
+
+@*Images*@
 <div class="mt-4">
 	<h4>Images:</h4>
 	@foreach (var image in Model.Images)
@@ -45,6 +51,7 @@
 	}
 </div>
 
+@*Download*@
 <div class="mt-4">
 	<h4>Buy:</h4>
 	<form action="@Url.Action("Download", "Asset")">
@@ -53,6 +60,7 @@
 	</form>
 </div>
 
+@*Remove and Edit*@
 @if (Model.Seller == User.Identity?.Name)
 {
 	<div class="mt-4">
@@ -67,16 +75,19 @@
 	</div>
 }
 
-<!-- Comment Form -->
-<form method="post" asp-action="PostComment" asp-controller="Comment">
+<div class="mt-4">
+	<!-- Comment Form -->
 	<div class="form-group">
 		<label for="commentText">Write a comment:</label>
-		<textarea class="form-control" id="commentText" name="Content" rows="3" required></textarea>
+		<textarea class="form-control" id="commentContent" name="Content" rows="3" required></textarea>
 	</div>
-	<input type="hidden" name="AssetId" value="@Model.Id" />
-	<input type="hidden" name="User" value="@User.Identity" />
-	<button type="submit" class="btn btn-primary">Submit</button>
-</form>
+	<button type="button"
+			data-asset-id="@Model.Id"
+			id="addCommentButton"
+			class="btn btn-primary">
+		Submit
+	</button>
+</div>
 
 <!-- Comments Display -->
 <div class="mt-4">
@@ -102,5 +113,5 @@
 @section Scripts {
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="~/js/like.js"></script>
-	<script src="~/js/comment.js"></script>
+	<script src="~/js/Comment.js"></script>
 }

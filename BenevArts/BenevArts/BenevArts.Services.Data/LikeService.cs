@@ -28,12 +28,12 @@ namespace BenevArts.Services.Data
 
 			if (user == null)
 			{
-				throw new ArgumentException("Invalid User Id");
+				throw new ArgumentException("Invalid User Id.");
 			}
 
 			if (await IsLikedByUserAsync(assetId, userId))
 			{
-				throw new InvalidOperationException("The user already liked the asset");
+				throw new InvalidOperationException("The user already liked the asset.");
 			}
 
 			Like like = new Like
@@ -53,7 +53,7 @@ namespace BenevArts.Services.Data
 
 			if (!await IsLikedByUserAsync(assetId, userId))
 			{
-				throw new InvalidOperationException("The user has not liked the asset");
+				throw new InvalidOperationException("The user has not liked the asset.");
 			}
 
 			if (like != null)

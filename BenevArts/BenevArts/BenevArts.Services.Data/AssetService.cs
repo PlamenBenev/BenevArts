@@ -63,7 +63,7 @@ namespace BenevArts.Services.Data
 
 			if (asset == null)
 			{
-
+				throw new ArgumentException("Asset Not Found.");
 			}
 
 			AssetViewModel viewModel = mapper.Map<AssetViewModel>(asset);

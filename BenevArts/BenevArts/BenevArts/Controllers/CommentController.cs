@@ -15,17 +15,19 @@ namespace BenevArts.Web.Controllers
 		// Post
 
 		[HttpPost]
-		public async Task<IActionResult> PostComment(Guid assetId,CommentViewModel comment)
+		public async Task<IActionResult> PostComment(Guid assetId, string content)
 		{
-			comment.User = GetUserId();
-			if (ModelState.IsValid)
-			{
-				await commentService.AddCommentAsync(assetId,comment);
 
-				return RedirectToAction("Details", "Asset", new { id = assetId });
-			}
+			await commentService.AddCommentAsync(assetId,GetUserId(),content);
+			return Ok(content);
+		}
 
-			return View();
+		[HttpPost]
+		public async Task<IActionResult> RemoveComment(Guid assetId)
+		{
+			await commentService.RemoveCommentAsync(assetId, GetUserId());
+
+			return RedirectToAction("Details", "Asset", new { id = assetId });
 		}
 	}
 }
