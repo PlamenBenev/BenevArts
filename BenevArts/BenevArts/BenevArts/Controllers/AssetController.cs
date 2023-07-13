@@ -110,37 +110,17 @@ namespace BenevArts.Web.Controllers
 			// Toggle the like status for the asset
 			if (isLiked)
 			{
-				// Unlike the asset
 				await likeService.RemoveLikeAsync(assetId, GetUserId());
 			}
 			else
 			{
-				// Like the asset
 				await likeService.AddLikeAsync(assetId, GetUserId());
 			}
 
 			bool updatedIsLiked = await likeService.IsLikedByUserAsync(assetId, GetUserId());
+			int updatedLikeCount = await likeService.GetLikeCountAsync(assetId);
 
-			// Return a JSON response indicating success and the updated like status
-			return Json(new { success = true, isLiked = updatedIsLiked });
+			return Json(new { success = true, isLiked = updatedIsLiked, likeCount = updatedLikeCount });
 		}
-
-
-		//[HttpPost]
-		//public async Task<IActionResult> AddLike(Guid assetId)
-		//{
-		//	await likeService.AddLikeAsync(assetId, GetUserId());
-
-		//	return RedirectToAction(nameof(Details), new { id = assetId });
-		//}
-
-		//[HttpPost]
-		//public async Task<IActionResult> RemoveLike(Guid assetId)
-		//{
-		//	await likeService.RemoveLikeAsync(assetId, GetUserId());
-
-		//	return RedirectToAction(nameof(Details), new { id = assetId });
-		//}
-
 	}
 }

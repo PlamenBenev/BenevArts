@@ -15,15 +15,16 @@
                 // Handle the response and update the UI accordingly
                 if (response.success) {
                     if (response.isLiked) {
-                        // User unliked the asset, update the button text and UI
-                        $('#likeButton').text('Like');
-                        $('#likeButton').data('liked', false);
-                    } else {
                         // User liked the asset, update the button text and UI
                         $('#likeButton').text('Unlike');
                         $('#likeButton').data('liked', true);
+                    } else {
+                        // User unliked the asset, update the button text and UI
+                        $('#likeButton').text('Like');
+                        $('#likeButton').data('liked', false);
                     }
                 }
+                $('#likeCount').text(response.likeCount);
             },
             error: function (xhr, status, error) {
                 // Handle error if any

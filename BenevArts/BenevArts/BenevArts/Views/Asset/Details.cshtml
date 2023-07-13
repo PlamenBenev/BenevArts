@@ -27,23 +27,14 @@
 	</div>
 </div>
 <div>
-	<p>Likes: @Model.Likes.Count()</p>
+	<p>Likes: <span id="likeCount">@Model.Likes.Count()</span></p>
 	@if (User.Identity.IsAuthenticated)
 	{
-		<button id="likeButton" data-asset-id="@Model.Id" data-liked="@Model.IsLikedByCurrentUser">Like</button>
-
-@*		if (Model.IsLikedByCurrentUser)
-		{
-			<form asp-action="ToggleLike" asp-route-assetId="@Model.Id">
-				<button id="likeButton" type="submit">Unlike</button>
-			</form>
-		}
-		else
-		{
-			<form asp-action="ToggleLike" asp-route-assetId="@Model.Id">
-				<button id="likeButton" type="submit">Like</button>
-			</form>
-		}*@
+		<button id="likeButton" 
+			data-asset-id="@Model.Id" 
+			data-count="@Model.Likes.Count()"
+			data-liked="@Model.IsLikedByCurrentUser">
+			Like</button>
 	}
 </div>
 <div class="mt-4">

@@ -31,6 +31,11 @@ namespace BenevArts.Services.Data
 				throw new ArgumentException("Invalid User Id");
 			}
 
+			if (await IsLikedByUserAsync(assetId, userId))
+			{
+				throw new InvalidOperationException("The user already liked the asset");
+			}
+
 			Like like = new Like
 			{
 				AssetId = assetId,
@@ -45,6 +50,12 @@ namespace BenevArts.Services.Data
 		public async Task RemoveLikeAsync(Guid assetId, string userId)
 		{
 			var like = context.Likes.FirstOrDefault(l => l.AssetId == assetId && l.UserID == Guid.Parse(userId));
+
+			if (!await IsLikedByUserAsync(assetId, userId))
+			{
+				throw new InvalidOperationException("The user has not liked the asset");
+			}
+
 			if (like != null)
 			{
 				context.Likes.Remove(like);
@@ -59,10 +70,10 @@ namespace BenevArts.Services.Data
 				.CountAsync();
 		}
 
-		public async Task<bool> IsLikedByUserAsync(Guid assetId, string v)
+		public async Task<bool> IsLikedByUserAsync(Guid assetId, string userId)
 		{
 			var userLikes = await context.Likes
-				.Where(l => l.AssetId == assetId && l.UserID == Guid.Parse(v))
+				.Where(l => l.AssetId == assetId && l.UserID == Guid.Parse(userId))
 				.ToListAsync();
 
 			return userLikes.Any();
