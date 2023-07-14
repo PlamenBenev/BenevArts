@@ -22,19 +22,13 @@ namespace BenevArts.Services.Data
 
 		public async Task AddLikeAsync(Guid assetId, string userId)
 		{
-			ApplicationUser? user = await context.Users
+			ApplicationUser user = await context.Users
 				.Where(u => u.Id == Guid.Parse(userId))
-				.FirstOrDefaultAsync();
+				.FirstOrDefaultAsync()
+				?? throw new ArgumentException("Invalid User Id.");
 
-			if (user == null)
-			{
-				throw new ArgumentException("Invalid User Id.");
-			}
-
-			if (await IsLikedByUserAsync(assetId, userId))
-			{
-				throw new InvalidOperationException("The user already liked the asset.");
-			}
+			Asset asset = await context.Assets.Where(a => a.Id == assetId).FirstOrDefaultAsync()
+				?? throw new InvalidOperationException("Invalid asset id");
 
 			Like like = new Like
 			{
@@ -49,18 +43,11 @@ namespace BenevArts.Services.Data
 
 		public async Task RemoveLikeAsync(Guid assetId, string userId)
 		{
-			var like = context.Likes.FirstOrDefault(l => l.AssetId == assetId && l.UserID == Guid.Parse(userId));
+			Like like = await GetLikeByUserAsync(assetId, userId)
+				?? throw new InvalidOperationException("The user has not liked the asset.");
 
-			if (!await IsLikedByUserAsync(assetId, userId))
-			{
-				throw new InvalidOperationException("The user has not liked the asset.");
-			}
-
-			if (like != null)
-			{
-				context.Likes.Remove(like);
-				await context.SaveChangesAsync();
-			}
+			context.Likes.Remove(like);
+			await context.SaveChangesAsync();
 		}
 
 		public async Task<int> GetLikeCountAsync(Guid assetId)
@@ -72,11 +59,21 @@ namespace BenevArts.Services.Data
 
 		public async Task<bool> IsLikedByUserAsync(Guid assetId, string userId)
 		{
-			var userLikes = await context.Likes
+			bool userLike = await context.Likes
 				.Where(l => l.AssetId == assetId && l.UserID == Guid.Parse(userId))
-				.ToListAsync();
+				.FirstOrDefaultAsync() != null;
 
-			return userLikes.Any();
+			return userLike;
+		}
+
+		public async Task<Like> GetLikeByUserAsync(Guid assetId, string userId)
+		{
+			Like userLike = await context.Likes
+				.Where(l => l.AssetId == assetId && l.UserID == Guid.Parse(userId))
+				.FirstOrDefaultAsync()
+				?? throw new InvalidOperationException("The user has not liked the asset.");
+
+			return userLike;
 		}
 	}
 }

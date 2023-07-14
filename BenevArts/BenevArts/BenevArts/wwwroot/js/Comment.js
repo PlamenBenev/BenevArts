@@ -18,7 +18,7 @@ $(document).ready(function () {
                 // Clear the comment input field
                 $("#commentContent").val("");
 
-                if ($("#commentsContainer").has("p").length) {
+                if ($("#commentsContainer").has(writeComment)) {
 
                     writeComment.remove();
                 }

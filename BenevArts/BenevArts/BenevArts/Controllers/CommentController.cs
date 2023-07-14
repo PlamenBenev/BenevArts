@@ -19,6 +19,7 @@ namespace BenevArts.Web.Controllers
 		public async Task<IActionResult> PostComment(Guid assetId, string content)
 		{
 			CommentViewModel comment = await commentService.AddCommentAsync(assetId,GetUserId(),content);
+
 			return PartialView("~/Views/Asset/_CommentItem.cshtml", comment);
 		}
 

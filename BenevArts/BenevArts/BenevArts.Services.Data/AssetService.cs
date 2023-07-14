@@ -3,7 +3,6 @@ using BenevArts.Data;
 using BenevArts.Data.Models;
 using BenevArts.Services.Data.Interfaces;
 using BenevArts.Web.ViewModels.Home;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BenevArts.Services.Data
@@ -58,6 +57,7 @@ namespace BenevArts.Services.Data
 				.Include(a => a.Seller)
 				.Include(a => a.Images)
 				.Include(a => a.Comments)
+				 .ThenInclude(c => c.User)
 				.Include(a => a.Likes)
 				.FirstOrDefaultAsync(a => a.Id == id);
 
@@ -72,9 +72,9 @@ namespace BenevArts.Services.Data
 
 			var userLikes = await context.Likes
 				.Where(l => l.AssetId == id && l.UserID == Guid.Parse(userId))
-				.ToListAsync();
+				.FirstOrDefaultAsync();
 
-			viewModel.IsLikedByCurrentUser = userLikes.Any();
+			viewModel.IsLikedByCurrentUser = userLikes != null;
 
 			return viewModel;
 		}
@@ -132,11 +132,6 @@ namespace BenevArts.Services.Data
 
 				asset.Images.Add(image);
 			}
-			//         foreach (var image in asset.Images)
-			//         {
-			//	image.AssetId = Guid.Parse(userId);
-			//	image.Asset = asset;
-			//}
 
 			await context.Assets.AddAsync(asset);
 			await context.SaveChangesAsync();
@@ -154,7 +149,7 @@ namespace BenevArts.Services.Data
 
 			Asset? asset = await context.Assets.FirstOrDefaultAsync(a => a.Id == assetId);
 
-			if (asset == null) 
+			if (asset == null)
 			{
 				return;
 			}
