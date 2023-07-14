@@ -9,12 +9,12 @@ namespace BenevArts.Web.Controllers
     {
         protected string GetUserId()
         {
-            string? userId = string.Empty;
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
 
-            if (userId != null)
-            {
-                userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            }
+            //if (userId != null)
+            //{
+            //    userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //}
 
             return userId!;
         }

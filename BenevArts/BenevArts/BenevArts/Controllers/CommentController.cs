@@ -24,11 +24,11 @@ namespace BenevArts.Web.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> RemoveComment(Guid assetId)
+		public async Task<IActionResult> RemoveComment(int commentId)
 		{
-			await commentService.RemoveCommentAsync(assetId, GetUserId());
+			await commentService.RemoveCommentAsync(commentId, GetUserId());
 
-			return RedirectToAction("Details", "Asset", new { id = assetId });
-		}
-	}
+            return Json(new { success = true});
+        }
+    }
 }

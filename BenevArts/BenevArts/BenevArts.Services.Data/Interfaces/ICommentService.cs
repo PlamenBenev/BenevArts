@@ -5,6 +5,6 @@ namespace BenevArts.Services.Data.Interfaces
 	public interface ICommentService
 	{
 		Task<CommentViewModel> AddCommentAsync(Guid assetId, string userId, string content);
-		Task RemoveCommentAsync(Guid assetId, string userId);
+		Task RemoveCommentAsync(int commentId, string userId);
 	}
 }

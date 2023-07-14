@@ -29,11 +29,12 @@
 </div>
 
 @*Likes*@
-<div>
+<div class="mt-4">
 	<p>Likes: <span id="likeCount">@Model.Likes.Count()</span></p>
 	@if (User.Identity.IsAuthenticated)
 	{
-		<button id="likeButton"
+		<button class="btn btn-outline-primary"
+			id="likeButton"
 				data-asset-id="@Model.Id"
 				data-liked="@Model.IsLikedByCurrentUser">
 			@(Model.IsLikedByCurrentUser ? "Unlike" : "Like")
@@ -97,10 +98,14 @@
 			foreach (var comment in Model.Comments)
 			{
 				<div class="card mt-2">
-					<div class="card-body">
+					<div data-comment-id="@comment.Id">
 						<h5 class="card-title">User: @comment.User</h5>
 						<p class="card-text">Comment: @comment.Content</p>
 						<p class="card-text">Posted on: @comment.PostedDate</p>
+						@if (User.Identity.IsAuthenticated && User.Identity.Name == comment.User)
+						{
+							<button type="button" class="btn btn-danger btn-sm" onclick="removeComment('@comment.Id')">Remove</button>
+						}
 					</div>
 				</div>
 			}
@@ -116,4 +121,5 @@
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="~/js/like.js"></script>
 	<script src="~/js/Comment.js"></script>
+	<script src="~/js/RemoveComment.js"></script>
 }

@@ -20,14 +20,10 @@ namespace BenevArts.Services.Data
 
 		public async Task<CommentViewModel> AddCommentAsync(Guid assetId, string userId, string content)
 		{
-			ApplicationUser? user = await context.Users
+			ApplicationUser user = await context.Users
 				.Where(u => u.Id == Guid.Parse(userId))
-				.FirstOrDefaultAsync();
-
-			if (user == null)
-			{
-				throw new ArgumentException("Invalid User");
-			}
+				.FirstOrDefaultAsync()
+				?? throw new ArgumentException("Invalid User");
 
 			Comment comment = new Comment
 			{
@@ -43,14 +39,11 @@ namespace BenevArts.Services.Data
 			CommentViewModel model = mapper.Map<CommentViewModel>(comment);
 			return model;
 		}
-		public async Task RemoveCommentAsync(Guid assetId, string userId)
+		public async Task RemoveCommentAsync(int commntId, string userId)
 		{
-			Comment? comment = context.Comments.FirstOrDefault(l => l.AssetId == assetId && l.UserId == Guid.Parse(userId));
-
-			if (comment == null)
-			{
-				throw new ArgumentException("Comment not found");
-			}
+			Comment comment = context.Comments
+				.FirstOrDefault(c => c.Id == commntId && c.UserId == Guid.Parse(userId))
+				?? throw new ArgumentException("Comment not found");
 
 			context.Comments.Remove(comment);
 			await context.SaveChangesAsync();
