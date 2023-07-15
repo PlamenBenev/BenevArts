@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BenevArts.Data.Migrations
 {
     [DbContext(typeof(BenevArtsDbContext))]
-    [Migration("20230708141732_RemovedUserSellerKey")]
-    partial class RemovedUserSellerKey
+    [Migration("20230715071256_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -291,24 +291,25 @@ namespace BenevArts.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid>("AssetID")
+                    b.Property<Guid>("AssetId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
                         .IsRequired()
+                        .HasMaxLength(10000)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("PostedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserID")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssetID");
+                    b.HasIndex("AssetId");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
@@ -321,7 +322,7 @@ namespace BenevArts.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid>("AssetID")
+                    b.Property<Guid>("AssetId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UserID")
@@ -329,7 +330,7 @@ namespace BenevArts.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssetID");
+                    b.HasIndex("AssetId");
 
                     b.HasIndex("UserID");
 
@@ -560,13 +561,13 @@ namespace BenevArts.Data.Migrations
                 {
                     b.HasOne("BenevArts.Data.Models.Asset", "Asset")
                         .WithMany("Comments")
-                        .HasForeignKey("AssetID")
+                        .HasForeignKey("AssetId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("BenevArts.Data.Models.ApplicationUser", "User")
                         .WithMany("Comments")
-                        .HasForeignKey("UserID")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -579,7 +580,7 @@ namespace BenevArts.Data.Migrations
                 {
                     b.HasOne("BenevArts.Data.Models.Asset", "Asset")
                         .WithMany("Likes")
-                        .HasForeignKey("AssetID")
+                        .HasForeignKey("AssetId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 

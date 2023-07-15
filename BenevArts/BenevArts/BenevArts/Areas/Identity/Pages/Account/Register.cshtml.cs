@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace BenevArts.Web.Areas.Identity.Pages.Account
@@ -115,6 +116,16 @@ namespace BenevArts.Web.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+            if (await IsEmailExists(Input.Email))
+            {
+                ModelState.AddModelError("Input.Email", "Email already exists.");
+            }
+            if (await IsUsernameExists(Input.Username))
+            {
+                ModelState.AddModelError("Input.Username", "Username already exists.");
+            }
+
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
@@ -180,6 +191,15 @@ namespace BenevArts.Web.Areas.Identity.Pages.Account
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
             return (IUserEmailStore<ApplicationUser>)_userStore;
+        }
+        private async Task<bool> IsEmailExists(string email)
+        {
+            return await _userManager.Users.AnyAsync(u => u.Email == email);
+        }
+
+        private async Task<bool> IsUsernameExists(string username)
+        {
+            return await _userManager.Users.AnyAsync(u => u.UserName == username);
         }
     }
 }

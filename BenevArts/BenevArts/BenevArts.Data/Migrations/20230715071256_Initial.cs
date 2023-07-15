@@ -178,14 +178,14 @@ namespace BenevArts.Data.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    ApplicationUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Sellers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Sellers_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Sellers_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                 });
@@ -254,23 +254,23 @@ namespace BenevArts.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", maxLength: 10000, nullable: false),
                     PostedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AssetID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AssetId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Comments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Comments_AspNetUsers_UserID",
-                        column: x => x.UserID,
+                        name: "FK_Comments_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Comments_Assets_AssetID",
-                        column: x => x.AssetID,
+                        name: "FK_Comments_Assets_AssetId",
+                        column: x => x.AssetId,
                         principalTable: "Assets",
                         principalColumn: "Id");
                 });
@@ -281,7 +281,7 @@ namespace BenevArts.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AssetID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AssetId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -294,8 +294,8 @@ namespace BenevArts.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Likes_Assets_AssetID",
-                        column: x => x.AssetID,
+                        name: "FK_Likes_Assets_AssetId",
+                        column: x => x.AssetId,
                         principalTable: "Assets",
                         principalColumn: "Id");
                 });
@@ -405,19 +405,19 @@ namespace BenevArts.Data.Migrations
                 column: "SellerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_AssetID",
+                name: "IX_Comments_AssetId",
                 table: "Comments",
-                column: "AssetID");
+                column: "AssetId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_UserID",
+                name: "IX_Comments_UserId",
                 table: "Comments",
-                column: "UserID");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Likes_AssetID",
+                name: "IX_Likes_AssetId",
                 table: "Likes",
-                column: "AssetID");
+                column: "AssetId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Likes_UserID",
@@ -435,9 +435,9 @@ namespace BenevArts.Data.Migrations
                 column: "UserID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Sellers_UserId",
+                name: "IX_Sellers_ApplicationUserId",
                 table: "Sellers",
-                column: "UserId");
+                column: "ApplicationUserId");
         }
 
         /// <inheritdoc />

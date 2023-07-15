@@ -6,6 +6,7 @@ using BenevArts.Services.Data.Interfaces;
 using BenevArts.Web;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +19,10 @@ builder.Services.AddDbContext<BenevArtsDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
-	options.SignIn.RequireConfirmedAccount = false)
+	{ 
+		options.SignIn.RequireConfirmedAccount = false;
+		options.Lockout.AllowedForNewUsers = false;
+	})
 	.AddEntityFrameworkStores<BenevArtsDbContext>();
 
 builder.Services.AddControllersWithViews();
@@ -41,6 +45,12 @@ builder.Services.Configure<IISServerOptions>(options =>
 {
 	options.MaxRequestBodySize = int.MaxValue;
 });
+
+builder.Services.AddAuthentication()
+    .AddCookie(options =>
+    {
+        options.ExpireTimeSpan = TimeSpan.FromDays(7);
+    });
 
 
 var mapperConfig = new MapperConfiguration(mc =>
