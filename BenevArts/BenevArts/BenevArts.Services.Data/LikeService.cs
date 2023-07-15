@@ -1,13 +1,9 @@
-﻿using BenevArts.Data;
+﻿using BenevArts.Common.Exeptions;
+using BenevArts.Data;
 using BenevArts.Data.Models;
 using BenevArts.Services.Data.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace BenevArts.Services.Data
 {
@@ -25,10 +21,10 @@ namespace BenevArts.Services.Data
 			ApplicationUser user = await context.Users
 				.Where(u => u.Id == Guid.Parse(userId))
 				.FirstOrDefaultAsync()
-				?? throw new ArgumentNullException("Invalid User Id.");
+				?? throw new UserNullException();
 
 			Asset asset = await context.Assets.Where(a => a.Id == assetId).FirstOrDefaultAsync()
-				?? throw new InvalidOperationException("Invalid asset id");
+				?? throw new AssetNullException();
 
 			Like like = new Like
 			{

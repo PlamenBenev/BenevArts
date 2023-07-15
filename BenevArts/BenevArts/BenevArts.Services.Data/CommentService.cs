@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BenevArts.Common.Exeptions;
 using BenevArts.Data;
 using BenevArts.Data.Models;
 using BenevArts.Services.Data.Interfaces;
@@ -23,7 +24,7 @@ namespace BenevArts.Services.Data
 			ApplicationUser user = await context.Users
 				.Where(u => u.Id == Guid.Parse(userId))
 				.FirstOrDefaultAsync()
-				?? throw new ArgumentNullException("Invalid User");
+				?? throw new UserNullException();
 
 			Comment comment = new Comment
 			{

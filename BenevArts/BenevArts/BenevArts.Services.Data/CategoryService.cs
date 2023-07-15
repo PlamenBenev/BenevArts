@@ -21,6 +21,7 @@ namespace BenevArts.Services.Data
             context = _context;
         }
 
+        // Get
         public async Task<IEnumerable<AssetViewModel>> GetAssetsByCategoryIdAsync(int categoryId)
         {
             return await context.Assets
@@ -37,7 +38,7 @@ namespace BenevArts.Services.Data
                   .ToListAsync();
         }
 
-        public async Task<IEnumerable<CategoryViewModel>> GetCategoriesAsync()
+        public async Task<IEnumerable<CategoryViewModel>> GetCategoriesViewAsync()
         {
             return await context.Categories
                 .Select(ct => new CategoryViewModel
@@ -47,6 +48,15 @@ namespace BenevArts.Services.Data
                 })
                 .ToListAsync();
         }
-
+        public async Task<IEnumerable<Category>> GetCategoriesAsync()
+        {
+            return await context.Categories
+                .Select(ct => new Category
+                {
+                    Id = ct.Id,
+                    Name = ct.Name,
+                })
+                .ToListAsync();
+        }
     }
 }

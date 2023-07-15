@@ -1,4 +1,4 @@
-﻿@model AddAssetViewModel
+﻿@model AssetViewModel
 @using System.Globalization
 
 @{
@@ -11,7 +11,7 @@
 <form method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label for="title">Title</label>
-        <input type="text" class="form-control" id="title" name="Title" required>
+        <input type="text" class="form-control" id="title" name="Title" value="@Model.Title" required>
     </div>
 
     <div class="form-group">
@@ -31,43 +31,35 @@
 
     <div class="form-group">
         <label for="description">Description</label>
-        <textarea class="form-control" id="description" name="Description" rows="4" required></textarea>
+        <textarea class="form-control" id="description" name="Description" rows="4" required>@Model.Description</textarea>
     </div>
 
     <div class="form-group">
         <label>Technical Details</label>
         <div class="btn-group-toggle" data-toggle="buttons">
             <label class="btn btn-secondary">
-                @Html.CheckBoxFor(model => model.CGIModel)
-                CGI Model
+                <input type="checkbox" name="CGIModel" value="true" @(Model.CGIModel ? "checked" : "")> CGI Model
             </label>
             <label class="btn btn-secondary">
-                @Html.CheckBoxFor(model => model.Textures)
-                Textures
+                <input type="checkbox" name="Textures" value="true" @(Model.Textures ? "checked" : "")> Textures
             </label>
             <label class="btn btn-secondary">
-                @Html.CheckBoxFor(model => model.Materials)
-                Materials
+                <input type="checkbox" name="Materials" value="true" @(Model.Materials ? "checked" : "")> Materials
             </label>
             <label class="btn btn-secondary">
-                @Html.CheckBoxFor(model => model.Animated)
-                Animated
+                <input type="checkbox" name="Animated" value="true" @(Model.Animated ? "checked" : "")> Animated
             </label>
             <label class="btn btn-secondary">
-                @Html.CheckBoxFor(model => model.Rigged)
-                Rigged
+                <input type="checkbox" name="Rigged" value="true" @(Model.Rigged ? "checked" : "")> Rigged
             </label>
             <label class="btn btn-secondary">
-                @Html.CheckBoxFor(model => model.LowPoly)
-                Low Poly
+                <input type="checkbox" name="LowPoly" value="true" @(Model.LowPoly ? "checked" : "")> Low Poly
             </label>
             <label class="btn btn-secondary">
-                @Html.CheckBoxFor(model => model.PBR)
-                PBR
+                <input type="checkbox" name="PBR" value="true" @(Model.PBR ? "checked" : "")> PBR
             </label>
             <label class="btn btn-secondary">
-                @Html.CheckBoxFor(model => model.UVUnwrapped)
-                UV Unwrapped
+                <input type="checkbox" name="UVUnwrapped" value="true" @(Model.UVUnwrapped ? "checked" : "")> UV Unwrapped
             </label>
         </div>
     </div>
@@ -77,17 +69,17 @@
         <select class="form-control" id="categoryId" name="CategoryId" required>
             @foreach (var category in Model.Categories)
             {
-                <option value="@category.Id">@category.Name</option>
+                <option value="@category.Id" selected="@(category.Id == Model.CategoryId)">@category.Name</option>
             }
         </select>
     </div>
 
     <div class="form-group">
         <label for="price">Price</label>
-        <input type="number" class="form-control" id="price" name="Price" step="0@decimalSeparator}01" required>
+        <input type="number" class="form-control" id="price" name="Price" step="0@decimalSeparator}01" value="@Model.Price" required>
     </div>
 
-    <button type="submit" class="btn btn-primary">Edit Asset</button>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
 </form>
 
 @section Scripts {

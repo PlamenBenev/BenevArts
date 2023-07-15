@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BenevArts.Common.Exeptions;
 using BenevArts.Data;
 using BenevArts.Data.Models;
 using BenevArts.Services.Data.Interfaces;
@@ -72,18 +73,22 @@ namespace BenevArts.Services.Data
                 .Include(a => a.Likes)
                 .Include(a => a.UserFavorites)
                 .FirstOrDefaultAsync(a => a.Id == id)
-                ?? throw new ArgumentNullException("Asset Not Found."); ;
+                ?? throw new AssetNullException();
 
+            // Mapping the model
             AssetViewModel viewModel = mapper.Map<AssetViewModel>(asset);
 
+            // Mapping the images
             viewModel.Images = asset!.Images.Select(x => x.ImageName).ToList();
 
+            // Check if the user liked the model
             List<Like> userLikes = await context.Likes
                 .Where(l => l.AssetId == id && l.UserId == Guid.Parse(userId))
                 .ToListAsync();
 
             viewModel.IsLikedByCurrentUser = userLikes.Any();
 
+            // Check if the user added the model to Favorites
 			List<UserFavorites> userFavorites = await context.UserFavorites
 				.Where(l => l.AssetId == id && l.UserId == Guid.Parse(userId))
 	            .ToListAsync();
@@ -150,15 +155,26 @@ namespace BenevArts.Services.Data
             await context.Assets.AddAsync(asset);
             await context.SaveChangesAsync();
         }
+        public async Task<bool> EditAssetAsync(EditAssetViewModel modelInputs)
+        {
+            Asset model = await context.Assets.FindAsync(modelInputs.Id)
+                ?? throw new AssetNullException();
+
+            mapper.Map(modelInputs,model);
+
+            await context.SaveChangesAsync();
+
+            return true;
+        }
         public async Task RemoveAssetAsync(Guid assetId, string userId)
         {
             ApplicationUser user = await context.Users
                 .Where(u => u.Id.ToString() == userId)
                 .FirstOrDefaultAsync()
-                ?? throw new ArgumentNullException("Invalid User");
+                ?? throw new UserNullException();
 
             Asset asset = await context.Assets.FirstOrDefaultAsync(a => a.Id == assetId)
-                ?? throw new ArgumentNullException("Invalid Asset");
+                ?? throw new AssetNullException();
 
             context.Assets.Remove(asset!);
             await context.SaveChangesAsync();

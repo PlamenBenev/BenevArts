@@ -28,24 +28,23 @@ namespace BenevArts.Web.Controllers
 		{
 			AddAssetViewModel model = new AddAssetViewModel()
 			{
-                Categories = (IEnumerable<Category>)await categoryService.GetCategoriesAsync(),
+                Categories = await categoryService.GetCategoriesAsync(),
 			};
 
 			return View(model);
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Edit()
+		public async Task<IActionResult> Edit(Guid assetId)
 		{
-			AddAssetViewModel model = new AddAssetViewModel()
-			{
-				Categories = (IEnumerable<Category>)await categoryService.GetCategoriesAsync(),
-			};
+			AssetViewModel model = await assetService.GetAssetByIdAsync(assetId,GetUserId());
+			model.Categories = await categoryService.GetCategoriesViewAsync();
+			model.Id = assetId;
 
-			return View(model);
-		}
+            return View(model);
+        }
 
-		[HttpGet]
+        [HttpGet]
 		[AllowAnonymous]
 		public async Task<IActionResult> All()
 		{
@@ -60,6 +59,12 @@ namespace BenevArts.Web.Controllers
             IEnumerable<AssetViewModel> models = await assetService.GetFavoritesAsync(GetUserId());
 
             return View("~/Views/Asset/All.cshtml", models);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> MyStore()
+        {
+            throw new NotImplementedException();
         }
 
         [HttpGet]
@@ -107,13 +112,27 @@ namespace BenevArts.Web.Controllers
 			{
 				await assetService.AddAssetAsync(model, GetUserId(), GetUsername(), GetEmail());
 
-				return RedirectToAction(nameof(All));
+				return RedirectToAction(nameof(MyStore));
 			}
 
 			return View(model);
 		}
 
-		[HttpPost]
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditAssetViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            await assetService.EditAssetAsync(model);
+
+            return RedirectToAction(nameof(MyStore));
+        }
+
+
+        [HttpPost]
 		public async Task<IActionResult> Remove(Guid id)
 		{
 			await assetService.RemoveAssetAsync(id, GetUserId());

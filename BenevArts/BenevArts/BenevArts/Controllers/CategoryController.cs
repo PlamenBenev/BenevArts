@@ -18,7 +18,7 @@ namespace BenevArts.Web.Controllers
 		[AllowAnonymous]
 		public async Task<IActionResult> Index()
 		{
-			IEnumerable<CategoryViewModel> categories = await categoryService.GetCategoriesAsync();
+			IEnumerable<CategoryViewModel> categories = await categoryService.GetCategoriesViewAsync();
 
             return View(categories);
 		}

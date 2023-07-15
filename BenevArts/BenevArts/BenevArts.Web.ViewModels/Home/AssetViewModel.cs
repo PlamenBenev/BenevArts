@@ -11,6 +11,7 @@ namespace BenevArts.Web.ViewModels.Home
         public string ZipFileName { get; set; } = null!;
         public decimal Price { get; set; }
         public string Category { get; set; } = null!;
+        public int CategoryId { get; set; }
         public string Seller { get; set; } = null!;
         public DateTime UploadDate { get; set; }
 
@@ -26,7 +27,8 @@ namespace BenevArts.Web.ViewModels.Home
 		public bool IsLikedByCurrentUser { get; set; }
 		public bool IsFavoritedByCurrentUser { get; set; }
 
-		public IEnumerable<LikeViewModel> Likes { get; set; } = new List<LikeViewModel>();
+        public IEnumerable<CategoryViewModel> Categories { get; set; } = new List<CategoryViewModel>();
+        public IEnumerable<LikeViewModel> Likes { get; set; } = new List<LikeViewModel>();
 		public IEnumerable<CommentViewModel> Comments { get; set; } = new List<CommentViewModel>();
 		public IEnumerable<string> Images { get; set; } = new List<string>();
 
