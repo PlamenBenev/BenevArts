@@ -23,7 +23,7 @@ namespace BenevArts.Services.Data
 			ApplicationUser user = await context.Users
 				.Where(u => u.Id == Guid.Parse(userId))
 				.FirstOrDefaultAsync()
-				?? throw new ArgumentException("Invalid User");
+				?? throw new ArgumentNullException("Invalid User");
 
 			Comment comment = new Comment
 			{
@@ -43,7 +43,7 @@ namespace BenevArts.Services.Data
 		{
 			Comment comment = context.Comments
 				.FirstOrDefault(c => c.Id == commntId && c.UserId == Guid.Parse(userId))
-				?? throw new ArgumentException("Comment not found");
+				?? throw new ArgumentNullException("Comment not found");
 
 			context.Comments.Remove(comment);
 			await context.SaveChangesAsync();

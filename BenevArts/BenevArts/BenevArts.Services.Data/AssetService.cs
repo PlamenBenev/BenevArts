@@ -7,156 +7,162 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BenevArts.Services.Data
 {
-	public class AssetService : IAssetService
-	{
-		private readonly BenevArtsDbContext context;
-		private readonly IMapper mapper;
-		public AssetService(BenevArtsDbContext _context, IMapper _mapper)
-		{
-			context = _context;
-			mapper = _mapper;
-		}
+    public class AssetService : IAssetService
+    {
+        private readonly BenevArtsDbContext context;
+        private readonly IMapper mapper;
+        public AssetService(BenevArtsDbContext _context, IMapper _mapper)
+        {
+            context = _context;
+            mapper = _mapper;
+        }
 
-		// Get
-		public async Task<IEnumerable<AssetViewModel>> GetAllAssetsAsync()
-		{
-			return await context.Assets
+        // Get
+        public async Task<IEnumerable<AssetViewModel>> GetAllAssetsAsync()
+        {
+            return await context.Assets
+                .Select(a => new AssetViewModel
+                {
+                    Id = a.Id,
+                    Title = a.Title,
+                    Thumbnail = a.Thumbnail,
+                    Price = a.Price,
+                    UploadDate = a.UploadDate,
+                    Seller = a.Seller.Name
+                })
+                .ToListAsync();
+        }
+        public async Task<IEnumerable<AssetViewModel>> GetFavoritesAsync(string userId)
+        {
+			return await context.UserFavorites
+                .Where(f => f.UserId == Guid.Parse(userId))
 				.Select(a => new AssetViewModel
 				{
-					Id = a.Id,
-					Title = a.Title,
-					Thumbnail = a.Thumbnail,
-					Price = a.Price,
-					UploadDate = a.UploadDate,
-					Seller = a.Seller.Name
+					Id = a.Asset.Id,
+					Title = a.Asset.Title,
+					Thumbnail = a.Asset.Thumbnail,
+					Price = a.Asset.Price,
+					UploadDate = a.Asset.UploadDate,
+					Seller = a.Asset.Seller.Name
 				})
 				.ToListAsync();
 		}
-		public async Task<IEnumerable<AssetViewModel>> GetSearchResultAsync(string query)
-		{
-			return await context.Assets
-				.Where(a => a.Title.Contains(query) || a.Description.Contains(query))
-				.Select(a => new AssetViewModel
-				{
-					Title = a.Title,
-					Thumbnail = a.Thumbnail,
-					Price = a.Price,
-					UploadDate = a.UploadDate,
-					Seller = a.Seller.Name
-				})
-				.ToListAsync();
-		}
-		public async Task<IEnumerable<Category>> GetCategoriesAsync()
-		{
-			return await context.Categories.ToListAsync();
-		}
-		public async Task<AssetViewModel> GetAssetByIdAsync(Guid id, string userId)
-		{
-			Asset? asset = await context.Assets
-				.Include(a => a.Category)
-				.Include(a => a.Seller)
-				.Include(a => a.Images)
-				.Include(a => a.Comments)
-				 .ThenInclude(c => c.User)
-				.Include(a => a.Likes)
-				.FirstOrDefaultAsync(a => a.Id == id);
+        public async Task<IEnumerable<AssetViewModel>> GetSearchResultAsync(string query)
+        {
+            return await context.Assets
+                .Where(a => a.Title.Contains(query) || a.Description.Contains(query))
+                .Select(a => new AssetViewModel
+                {
+                    Title = a.Title,
+                    Thumbnail = a.Thumbnail,
+                    Price = a.Price,
+                    UploadDate = a.UploadDate,
+                    Seller = a.Seller.Name
+                })
+                .ToListAsync();
+        }
+        public async Task<AssetViewModel> GetAssetByIdAsync(Guid id, string userId)
+        {
+            Asset asset = await context.Assets
+                .Include(a => a.Category)
+                .Include(a => a.Seller)
+                .Include(a => a.Images)
+                .Include(a => a.Comments)
+                 .ThenInclude(c => c.User)
+                .Include(a => a.Likes)
+                .Include(a => a.UserFavorites)
+                .FirstOrDefaultAsync(a => a.Id == id)
+                ?? throw new ArgumentNullException("Asset Not Found."); ;
 
-			if (asset == null)
-			{
-				throw new ArgumentException("Asset Not Found.");
-			}
+            AssetViewModel viewModel = mapper.Map<AssetViewModel>(asset);
 
-			AssetViewModel viewModel = mapper.Map<AssetViewModel>(asset);
+            viewModel.Images = asset!.Images.Select(x => x.ImageName).ToList();
 
-			viewModel.Images = asset!.Images.Select(x => x.ImageName).ToList();
+            List<Like> userLikes = await context.Likes
+                .Where(l => l.AssetId == id && l.UserId == Guid.Parse(userId))
+                .ToListAsync();
 
-			var userLikes = await context.Likes
-				.Where(l => l.AssetId == id && l.UserID == Guid.Parse(userId))
-				.FirstOrDefaultAsync();
+            viewModel.IsLikedByCurrentUser = userLikes.Any();
 
-			viewModel.IsLikedByCurrentUser = userLikes != null;
+			List<UserFavorites> userFavorites = await context.UserFavorites
+				.Where(l => l.AssetId == id && l.UserId == Guid.Parse(userId))
+	            .ToListAsync();
+
+			viewModel.IsFavoritedByCurrentUser = userFavorites.Any();
 
 			return viewModel;
-		}
+        }
 
-		// Post
-		public async Task AddAssetAsync(AddAssetViewModel model, string userId, string username, string email)
-		{
-			Seller? seller = await context.Sellers.FindAsync(Guid.Parse(userId));
+        // Post
+        public async Task AddAssetAsync(AddAssetViewModel model, string userId, string username, string email)
+        {
+            Seller? seller = await context.Sellers.FindAsync(Guid.Parse(userId));
 
-			// Add the Seller in the database if it's not already added
-			if (seller == null)
-			{
-				seller = new Seller
-				{
-					Id = Guid.Parse(userId),
-					Name = username,
-					Email = email,
-				};
-				await context.Sellers.AddAsync(seller);
-				await context.SaveChangesAsync();
-			}
+            // Add the Seller in the database if it's not already added
+            if (seller == null)
+            {
+                seller = new Seller
+                {
+                    Id = Guid.Parse(userId),
+                    Name = username,
+                    Email = email,
+                };
+                await context.Sellers.AddAsync(seller);
+                await context.SaveChangesAsync();
+            }
 
-			// Uploading the Zip file
-			var fileName = Path.GetFileName(model.ZipFileName.FileName);
-			var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ZipFiles", fileName);
+            // Uploading the Zip file
+            var fileName = Path.GetFileName(model.ZipFileName.FileName);
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ZipFiles", fileName);
 
-			using (var fileStream = new FileStream(filePath, FileMode.Create))
-			{
-				await model.ZipFileName.CopyToAsync(fileStream);
-			}
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await model.ZipFileName.CopyToAsync(fileStream);
+            }
 
-			// Map the Asset
-			Asset asset = mapper.Map<Asset>(model);
-			asset.SellerId = Guid.Parse(userId);
-			asset.UploadDate = DateTime.UtcNow;
+            // Map the Asset
+            Asset asset = mapper.Map<Asset>(model);
+            asset.SellerId = Guid.Parse(userId);
+            asset.UploadDate = DateTime.UtcNow;
 
-			// Set the path for the images
-			var uploadFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images");
-			ImageService imageService = new ImageService(uploadFolderPath);
+            // Set the path for the images
+            var uploadFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images");
+            ImageService imageService = new ImageService(uploadFolderPath);
 
-			// Add the Thumbnail
-			string thumbName = await imageService.SaveThumbnailAsync(model.Thumbnail);
-			asset.Thumbnail = thumbName;
+            // Add the Thumbnail
+            string thumbName = await imageService.SaveThumbnailAsync(model.Thumbnail);
+            asset.Thumbnail = thumbName;
 
-			// Add all preview images
-			foreach (var imageFile in model.Images)
-			{
-				string imageName = await imageService.SaveImageAsync(imageFile);
+            // Add all preview images
+            foreach (var imageFile in model.Images)
+            {
+                string imageName = await imageService.SaveImageAsync(imageFile);
 
-				AssetImage image = new AssetImage
-				{
-					ImageName = imageName,
-					AssetId = asset.Id,
-				};
+                AssetImage image = new AssetImage
+                {
+                    ImageName = imageName,
+                    AssetId = asset.Id,
+                };
 
-				asset.Images.Add(image);
-			}
+                asset.Images.Add(image);
+            }
 
-			await context.Assets.AddAsync(asset);
-			await context.SaveChangesAsync();
-		}
-		public async Task RemoveAssetAsync(Guid assetId, string userId)
-		{
-			ApplicationUser? user = await context.Users
-				.Where(u => u.Id.ToString() == userId)
-				.FirstOrDefaultAsync();
+            await context.Assets.AddAsync(asset);
+            await context.SaveChangesAsync();
+        }
+        public async Task RemoveAssetAsync(Guid assetId, string userId)
+        {
+            ApplicationUser user = await context.Users
+                .Where(u => u.Id.ToString() == userId)
+                .FirstOrDefaultAsync()
+                ?? throw new ArgumentNullException("Invalid User");
 
-			if (user == null)
-			{
-				return;
-			}
+            Asset asset = await context.Assets.FirstOrDefaultAsync(a => a.Id == assetId)
+                ?? throw new ArgumentNullException("Invalid Asset");
 
-			Asset? asset = await context.Assets.FirstOrDefaultAsync(a => a.Id == assetId);
+            context.Assets.Remove(asset!);
+            await context.SaveChangesAsync();
 
-			if (asset == null)
-			{
-				return;
-			}
-
-			context.Assets.Remove(asset!);
-			await context.SaveChangesAsync();
-
-		}
-	}
+        }
+    }
 }

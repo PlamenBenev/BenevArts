@@ -59,6 +59,7 @@ namespace BenevArts.Data.Models
         public ICollection<Like> Likes { get; set; } = new HashSet<Like>();
         public ICollection<Purchase> Purchases { get; set; } = new HashSet<Purchase>();
 		public ICollection<AssetImage> Images { get; set; } = new HashSet<AssetImage>();
+        public ICollection<UserFavorites> UserFavorites { get; set; } = new HashSet<UserFavorites>();
 
     }
 }

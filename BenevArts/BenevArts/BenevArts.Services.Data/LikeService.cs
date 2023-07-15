@@ -25,7 +25,7 @@ namespace BenevArts.Services.Data
 			ApplicationUser user = await context.Users
 				.Where(u => u.Id == Guid.Parse(userId))
 				.FirstOrDefaultAsync()
-				?? throw new ArgumentException("Invalid User Id.");
+				?? throw new ArgumentNullException("Invalid User Id.");
 
 			Asset asset = await context.Assets.Where(a => a.Id == assetId).FirstOrDefaultAsync()
 				?? throw new InvalidOperationException("Invalid asset id");
@@ -33,7 +33,7 @@ namespace BenevArts.Services.Data
 			Like like = new Like
 			{
 				AssetId = assetId,
-				UserID = Guid.Parse(userId),
+				UserId = Guid.Parse(userId),
 			};
 
 			context.Likes.Add(like);
@@ -44,7 +44,7 @@ namespace BenevArts.Services.Data
 		public async Task RemoveLikeAsync(Guid assetId, string userId)
 		{
 			Like like = await GetLikeByUserAsync(assetId, userId)
-				?? throw new InvalidOperationException("The user has not liked the asset.");
+				?? throw new ArgumentNullException("Like not found");
 
 			context.Likes.Remove(like);
 			await context.SaveChangesAsync();
@@ -60,7 +60,7 @@ namespace BenevArts.Services.Data
 		public async Task<bool> IsLikedByUserAsync(Guid assetId, string userId)
 		{
 			bool userLike = await context.Likes
-				.Where(l => l.AssetId == assetId && l.UserID == Guid.Parse(userId))
+				.Where(l => l.AssetId == assetId && l.UserId == Guid.Parse(userId))
 				.FirstOrDefaultAsync() != null;
 
 			return userLike;
@@ -69,9 +69,9 @@ namespace BenevArts.Services.Data
 		public async Task<Like> GetLikeByUserAsync(Guid assetId, string userId)
 		{
 			Like userLike = await context.Likes
-				.Where(l => l.AssetId == assetId && l.UserID == Guid.Parse(userId))
+				.Where(l => l.AssetId == assetId && l.UserId == Guid.Parse(userId))
 				.FirstOrDefaultAsync()
-				?? throw new InvalidOperationException("The user has not liked the asset.");
+				?? throw new ArgumentNullException("Like not found");
 
 			return userLike;
 		}

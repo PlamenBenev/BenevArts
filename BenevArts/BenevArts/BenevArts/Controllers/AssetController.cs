@@ -1,8 +1,9 @@
 ﻿using BenevArts.Data.Models;
 using BenevArts.Services.Data.Interfaces;
 using BenevArts.Web.ViewModels.Home;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.ContentModel;
 
 namespace BenevArts.Web.Controllers
 {
@@ -10,10 +11,15 @@ namespace BenevArts.Web.Controllers
 	{
 		private readonly IAssetService assetService;
 		private readonly ILikeService likeService;
-		public AssetController(IAssetService _assetService, ILikeService _likeService)
+		private readonly ICategoryService categoryService;
+
+		public AssetController(IAssetService _assetService,
+			ILikeService _likeService,
+			ICategoryService _categoryService)
 		{
 			assetService = _assetService;
 			likeService = _likeService;
+			categoryService = _categoryService;
 		}
 
 		// Get
@@ -22,7 +28,7 @@ namespace BenevArts.Web.Controllers
 		{
 			AddAssetViewModel model = new AddAssetViewModel()
 			{
-				Categories = await assetService.GetCategoriesAsync(),
+                Categories = (IEnumerable<Category>)await categoryService.GetCategoriesAsync(),
 			};
 
 			return View(model);
@@ -33,13 +39,14 @@ namespace BenevArts.Web.Controllers
 		{
 			AddAssetViewModel model = new AddAssetViewModel()
 			{
-				Categories = await assetService.GetCategoriesAsync(),
+				Categories = (IEnumerable<Category>)await categoryService.GetCategoriesAsync(),
 			};
 
 			return View(model);
 		}
 
 		[HttpGet]
+		[AllowAnonymous]
 		public async Task<IActionResult> All()
 		{
 			IEnumerable<AssetViewModel> models = await assetService.GetAllAssetsAsync();
@@ -47,15 +54,25 @@ namespace BenevArts.Web.Controllers
 			return View(models);
 		}
 
-		[HttpGet]
+        [HttpGet]
+        public async Task<IActionResult> Favorites()
+        {
+            IEnumerable<AssetViewModel> models = await assetService.GetFavoritesAsync(GetUserId());
+
+            return View("~/Views/Asset/All.cshtml", models);
+        }
+
+        [HttpGet]
+		[AllowAnonymous]
 		public async Task<IActionResult> Search(string query)
 		{
 			IEnumerable<AssetViewModel> models = await assetService.GetSearchResultAsync(query);
 
-			return View(models);
-		}
+            return View("~/Views/Asset/All.cshtml", models);
+        }
 
-		[HttpGet]
+        [HttpGet]
+		[AllowAnonymous]
 		public async Task<IActionResult> Details(Guid id)
 		{
 			AssetViewModel model = await assetService.GetAssetByIdAsync(id, GetUserId());

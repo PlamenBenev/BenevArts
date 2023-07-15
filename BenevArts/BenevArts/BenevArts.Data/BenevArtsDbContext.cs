@@ -20,6 +20,8 @@ namespace BenevArts.Data
         public DbSet<Seller> Sellers { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<AssetImage> AssetImages { get; set; }
+        public DbSet<UserFavorites> UserFavorites { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

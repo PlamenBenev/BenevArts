@@ -9,7 +9,6 @@ namespace BenevArts.Services.Data.Interfaces
 		Task<int> GetLikeCountAsync(Guid assetId);
 		Task<bool> IsLikedByUserAsync(Guid assetId, string userId);
 		Task<Like> GetLikeByUserAsync(Guid assetId, string userId);
-
 	}
 
 }

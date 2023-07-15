@@ -60,7 +60,7 @@
 	</form>
 </div>
 
-@*Remove and Edit*@
+@*Remove,Edit or Favorites*@
 @if (Model.Seller == User.Identity?.Name)
 {
 	<div class="mt-4">
@@ -73,6 +73,15 @@
 		<a asp-controller="Asset" asp-action="Edit"
 		   asp-route-id="@Model.Id" class="btn btn-warning mb-2 w-100 p-3 fw-bold">Edit</a>
 	</div>
+}
+else
+{
+	<button class="btn btn-outline-primary"
+			id="favoriteButton"
+			data-asset-id="@Model.Id"
+			data-liked="@Model.IsFavoritedByCurrentUser">
+		@(Model.IsFavoritedByCurrentUser ? "Remove from Favorites" : "Add to Favorites")
+	</button>
 }
 
 <!-- Comment Form -->
@@ -122,4 +131,6 @@
 	<script src="~/js/like.js"></script>
 	<script src="~/js/Comment.js"></script>
 	<script src="~/js/RemoveComment.js"></script>
+	<script src="~/js/Favorite.js"></script>
+
 }

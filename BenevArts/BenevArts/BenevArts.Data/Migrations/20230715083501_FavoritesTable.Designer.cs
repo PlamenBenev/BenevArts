@@ -4,6 +4,7 @@ using BenevArts.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BenevArts.Data.Migrations
 {
     [DbContext(typeof(BenevArtsDbContext))]
-    partial class BenevArtsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230715083501_FavoritesTable")]
+    partial class FavoritesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,7 +157,7 @@ namespace BenevArts.Data.Migrations
 
                     b.HasIndex("SellerId");
 
-                    b.ToTable("Assets", (string)null);
+                    b.ToTable("Assets");
                 });
 
             modelBuilder.Entity("BenevArts.Data.Models.AssetImage", b =>
@@ -177,7 +180,7 @@ namespace BenevArts.Data.Migrations
 
                     b.HasIndex("AssetId");
 
-                    b.ToTable("AssetImages", (string)null);
+                    b.ToTable("AssetImages");
                 });
 
             modelBuilder.Entity("BenevArts.Data.Models.Category", b =>
@@ -195,7 +198,7 @@ namespace BenevArts.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
 
                     b.HasData(
                         new
@@ -308,7 +311,7 @@ namespace BenevArts.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("BenevArts.Data.Models.Like", b =>
@@ -331,7 +334,7 @@ namespace BenevArts.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Likes", (string)null);
+                    b.ToTable("Likes");
                 });
 
             modelBuilder.Entity("BenevArts.Data.Models.Purchase", b =>
@@ -361,7 +364,7 @@ namespace BenevArts.Data.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Purchases", (string)null);
+                    b.ToTable("Purchases");
                 });
 
             modelBuilder.Entity("BenevArts.Data.Models.Seller", b =>
@@ -386,7 +389,7 @@ namespace BenevArts.Data.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Sellers", (string)null);
+                    b.ToTable("Sellers");
                 });
 
             modelBuilder.Entity("BenevArts.Data.Models.UserFavorites", b =>
@@ -409,7 +412,7 @@ namespace BenevArts.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserFavorites", (string)null);
+                    b.ToTable("UserFavorites");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
