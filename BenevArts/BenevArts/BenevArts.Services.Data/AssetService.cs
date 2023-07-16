@@ -97,6 +97,23 @@ namespace BenevArts.Services.Data
 
 			return viewModel;
         }
+        public async Task<EditAssetViewModel> GetEditByIdAsync(Guid id)
+        {
+
+            Asset asset = await context.Assets.Where(a => a.Id == id).FirstOrDefaultAsync()
+                ?? throw new AssetNullException();
+
+            IEnumerable<CategoryViewModel> categories = await context.Categories
+                .Select(ct => new CategoryViewModel
+                {
+                    Id = ct.Id,
+                    Name = ct.Name,
+                }).ToListAsync();
+
+            EditAssetViewModel model = mapper.Map<EditAssetViewModel>(asset);
+            model.Categories = categories;
+            return model;
+        }
 
         // Post
         public async Task AddAssetAsync(AddAssetViewModel model, string userId, string username, string email)

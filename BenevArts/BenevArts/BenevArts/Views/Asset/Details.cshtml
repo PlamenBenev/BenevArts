@@ -52,13 +52,16 @@
 </div>
 
 @*Download*@
-<div class="mt-4">
-	<h4>Buy:</h4>
-	<form action="@Url.Action("Download", "Asset")">
-		<input type="hidden" name="id" value="@Model.Id" />
-		<button type="submit" class="btn btn-primary">Buy</button>
-	</form>
-</div>
+@if (Model.Seller != User.Identity?.Name)
+{
+	<div class="mt-4">
+		<h4>Buy:</h4>
+		<form action="@Url.Action("Download", "Asset")">
+			<input type="hidden" name="id" value="@Model.Id" />
+			<button type="submit" class="btn btn-primary">Buy</button>
+		</form>
+	</div>
+}
 
 @*Remove,Edit or Favorites*@
 @if (Model.Seller == User.Identity?.Name)

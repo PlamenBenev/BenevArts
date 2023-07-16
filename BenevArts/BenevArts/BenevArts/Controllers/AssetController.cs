@@ -37,9 +37,7 @@ namespace BenevArts.Web.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Edit(Guid assetId)
 		{
-			AssetViewModel model = await assetService.GetAssetByIdAsync(assetId,GetUserId());
-			model.Categories = await categoryService.GetCategoriesViewAsync();
-			model.Id = assetId;
+			EditAssetViewModel model = await assetService.GetEditByIdAsync(assetId);
 
             return View(model);
         }
@@ -119,8 +117,9 @@ namespace BenevArts.Web.Controllers
 		}
 
         [HttpPost]
-        public async Task<IActionResult> Edit(EditAssetViewModel model)
+        public async Task<IActionResult> Edit(EditAssetViewModel model,Guid assetId)
         {
+			model.Id = assetId;
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -128,7 +127,7 @@ namespace BenevArts.Web.Controllers
 
             await assetService.EditAssetAsync(model);
 
-            return RedirectToAction(nameof(MyStore));
+            return RedirectToAction(nameof(Details), new {id = assetId});
         }
 
 

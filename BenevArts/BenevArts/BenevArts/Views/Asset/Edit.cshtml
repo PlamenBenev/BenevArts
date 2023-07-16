@@ -1,4 +1,4 @@
-﻿@model AssetViewModel
+﻿@model EditAssetViewModel
 @using System.Globalization
 
 @{
@@ -9,6 +9,7 @@
 }
 
 <form method="post" enctype="multipart/form-data">
+    <input type="hidden" name="Id" value="@Model.Id" />
     <div class="form-group">
         <label for="title">Title</label>
         <input type="text" class="form-control" id="title" name="Title" value="@Model.Title" required>
@@ -16,17 +17,17 @@
 
     <div class="form-group">
         <label for="Images">Images</label>
-        <input type="file" id="Images" name="Images" multiple class="form-control-file" />
+        <input type="file" id="Images" name="ImagesFiles" multiple class="form-control-file" />
     </div>
 
     <div class="form-group">
         <label for="thumbnail">Thumbnail</label>
-        <input type="file" class="form-control-file" id="thumbnail" name="Thumbnail" required>
+        <input type="file" class="form-control-file" id="thumbnail" name="ThumbnailFile" required>
     </div>
 
     <div class="form-group">
         <label for="zipFile">Zip File</label>
-        <input type="file" class="form-control-file" id="zipFile" name="ZipFileName" required>
+        <input type="file" class="form-control-file" id="zipFile" name="ZipFile" required>
     </div>
 
     <div class="form-group">
@@ -63,7 +64,6 @@
             </label>
         </div>
     </div>
-
     <div class="form-group">
         <label for="categoryId">Category</label>
         <select class="form-control" id="categoryId" name="CategoryId" required>
@@ -73,6 +73,9 @@
             }
         </select>
     </div>
+
+
+
 
     <div class="form-group">
         <label for="price">Price</label>

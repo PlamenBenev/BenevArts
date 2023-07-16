@@ -13,10 +13,11 @@ namespace BenevArts.Web.ViewModels.Home
         public string Title { get; set; } = null!;
 
         [Required]
-        public IFormFile ZipFileName { get; set; } = null!;
+        public IFormFile ZipFile { get; set; } = null!;
 
         [Required]
-        public IFormFile Thumbnail { get; set; } = null!;
+        [Display(Name = "Thumbnail")]
+        public IFormFile ThumbnailFile { get; set; } = null!;
 
         [Required]
         public string Description { get; set; } = null!;
@@ -38,8 +39,8 @@ namespace BenevArts.Web.ViewModels.Home
         [Range(typeof(decimal), "0.00", "10000.00", ConvertValueInInvariantCulture = true)]
         public decimal Price { get; set; }
 
-        public IEnumerable<Category> Categories { get; set; } = new List<Category>();
-        public IEnumerable<IFormFile> Images { get; set; } = new List<IFormFile>();
+        public IEnumerable<CategoryViewModel> Categories { get; set; } = new List<CategoryViewModel>();
+        public IEnumerable<IFormFile> ImagesFiles { get; set; } = new List<IFormFile>();
 
     }
 }
