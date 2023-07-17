@@ -1,5 +1,6 @@
 ﻿using BenevArts.Web.Controllers;
 using BenevArts.Web.ViewModels.Home;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -14,6 +15,7 @@ namespace BenevArts.Controllers
             _logger = logger;
         }
 
+        [AllowAnonymous]
         public IActionResult Privacy()
         {
             return View();

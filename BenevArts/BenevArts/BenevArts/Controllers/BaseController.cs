@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -39,6 +40,23 @@ namespace BenevArts.Web.Controllers
             }
 
             return email!;
+        }
+        protected async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
+        {
+            if (!await roleManager.RoleExistsAsync("Admin"))
+            {
+                await roleManager.CreateAsync(new IdentityRole("Admin"));
+            }
+
+            if (!await roleManager.RoleExistsAsync("Seller"))
+            {
+                await roleManager.CreateAsync(new IdentityRole("Seller"));
+            }
+
+            if (!await roleManager.RoleExistsAsync("ApplicationUser"))
+            {
+                await roleManager.CreateAsync(new IdentityRole("ApplicationUser"));
+            }
         }
     }
 

@@ -1,12 +1,10 @@
 using AutoMapper;
 using BenevArts.Data;
 using BenevArts.Data.Models;
-using BenevArts.Services.Data;
-using BenevArts.Services.Data.Interfaces;
 using BenevArts.Web;
+using BenevArts.Web.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,12 +32,7 @@ builder.Services.Configure<IdentityOptions>(
         options.Password.RequireUppercase = false;
     });
 
-builder.Services.AddScoped<IImageService, ImageService>();
-builder.Services.AddScoped<IAssetService, AssetService>();
-builder.Services.AddScoped<ICommentService, CommentService>();
-builder.Services.AddScoped<ILikeService, LikeService>();
-builder.Services.AddScoped<IFavoriteService, FavoriteService>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddApplicationService();
 
 builder.Services.Configure<IISServerOptions>(options =>
 {
@@ -70,7 +63,6 @@ builder.Services.AddSingleton(provider =>
 });
 
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -106,3 +98,4 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
+

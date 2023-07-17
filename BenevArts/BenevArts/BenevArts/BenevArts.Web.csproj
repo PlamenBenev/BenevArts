@@ -35,6 +35,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BenevArts.Data\BenevArts.Data.csproj" />
     <ProjectReference Include="..\BenevArts.Services.Data\BenevArts.Services.Data.csproj" />
+    <ProjectReference Include="..\BenevArts.Web.Infrastructure\BenevArts.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\BenevArts.Web.ViewModels\BenevArts.Web.ViewModels.csproj" />
   </ItemGroup>
 

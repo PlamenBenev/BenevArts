@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BenevArts.Web.ViewModels", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{20909A24-8CB1-43C7-BAE7-AB86911C7EED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenevArts.Services.Data", "BenevArts.Services.Data\BenevArts.Services.Data.csproj", "{F6D426E7-833F-4E4E-8AC0-31F9EA20537E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BenevArts.Services.Data", "BenevArts.Services.Data\BenevArts.Services.Data.csproj", "{F6D426E7-833F-4E4E-8AC0-31F9EA20537E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenevArts.Web.Infrastructure", "BenevArts.Web.Infrastructure\BenevArts.Web.Infrastructure.csproj", "{8184B300-2BC1-4443-95D0-B1E334B5C765}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{F6D426E7-833F-4E4E-8AC0-31F9EA20537E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6D426E7-833F-4E4E-8AC0-31F9EA20537E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6D426E7-833F-4E4E-8AC0-31F9EA20537E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8184B300-2BC1-4443-95D0-B1E334B5C765}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8184B300-2BC1-4443-95D0-B1E334B5C765}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8184B300-2BC1-4443-95D0-B1E334B5C765}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8184B300-2BC1-4443-95D0-B1E334B5C765}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,6 +67,7 @@ Global
 		{A476D8D4-DEB4-40B0-9FF0-68CC73F5185D} = {EC4D4822-1285-47A2-86E5-77265D24FDE6}
 		{7F990DF4-43C2-4E75-BA80-29D010B9B041} = {4A40A99E-9AB6-4EBF-AF27-B3CDAA0080D2}
 		{F6D426E7-833F-4E4E-8AC0-31F9EA20537E} = {20909A24-8CB1-43C7-BAE7-AB86911C7EED}
+		{8184B300-2BC1-4443-95D0-B1E334B5C765} = {4A40A99E-9AB6-4EBF-AF27-B3CDAA0080D2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9AE9CF80-CB25-4AD3-9452-02739F179322}

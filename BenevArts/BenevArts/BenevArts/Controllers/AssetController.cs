@@ -43,8 +43,8 @@ namespace BenevArts.Web.Controllers
         }
 
         [HttpGet]
-		[AllowAnonymous]
-		public async Task<IActionResult> All()
+        [AllowAnonymous]
+        public async Task<IActionResult> All()
 		{
 			IEnumerable<AssetViewModel> models = await assetService.GetAllAssetsAsync();
 
