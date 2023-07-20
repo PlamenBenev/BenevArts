@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace BenevArts.Web.ViewModels.Home
+﻿namespace BenevArts.Web.ViewModels.Home
 {
     public class AssetViewModel
     {

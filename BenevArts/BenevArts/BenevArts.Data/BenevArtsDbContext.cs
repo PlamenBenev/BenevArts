@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 
 namespace BenevArts.Data
 {
@@ -21,8 +20,7 @@ namespace BenevArts.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<AssetImage> AssetImages { get; set; }
         public DbSet<UserFavorites> UserFavorites { get; set; }
-
-
+        public DbSet<SellerApplication> SellersApplications { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Comment>()

@@ -23,14 +23,29 @@
 					<li class="nav-item">
 						<a class="nav-link text-dark" asp-area="" asp-controller="Asset" asp-action="All">Find Assets</a>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link text-dark" asp-area="" asp-controller="Asset" asp-action="Add">Sell Asset</a>
-					</li>
+					@if (User.IsInRole("Seller") || User.IsInRole("Admin"))
+					{
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Asset" asp-action="Add">Sell Asset</a>
+						</li>
+					}
+					@if (User.IsInRole("Admin"))
+					{
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Seller" asp-action="AllApplications">List Of Applications</a>
+						</li>
+					}
+					@if (User.IsInRole("User"))
+					{
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Seller" asp-action="Apply">Become a Seller</a>
+						</li>
+					}
 					<li class="nav-item">
 						<a class="nav-link text-dark" asp-area="" asp-controller="Asset" asp-action="Favorites">My Favorites</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
 					</li>
 					<li class="nav-item">
 						<form action="@Url.Action("Search", "Asset")" method="get" class="form-inline d-flex">

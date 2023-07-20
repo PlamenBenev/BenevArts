@@ -36,28 +36,10 @@ namespace BenevArts.Web.Controllers
 
             if (email != null)
             {
-				email = User.FindFirstValue(ClaimTypes.Email);
+                email = User.FindFirstValue(ClaimTypes.Email);
             }
 
             return email!;
         }
-        protected async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
-        {
-            if (!await roleManager.RoleExistsAsync("Admin"))
-            {
-                await roleManager.CreateAsync(new IdentityRole("Admin"));
-            }
-
-            if (!await roleManager.RoleExistsAsync("Seller"))
-            {
-                await roleManager.CreateAsync(new IdentityRole("Seller"));
-            }
-
-            if (!await roleManager.RoleExistsAsync("ApplicationUser"))
-            {
-                await roleManager.CreateAsync(new IdentityRole("ApplicationUser"));
-            }
-        }
     }
-
 }

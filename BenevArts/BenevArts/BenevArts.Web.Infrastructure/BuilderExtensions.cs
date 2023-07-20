@@ -16,35 +16,32 @@ namespace BenevArts.Web.Infrastructure
             services.AddScoped<ILikeService, LikeService>();
             services.AddScoped<IFavoriteService, FavoriteService>();
             services.AddScoped<ICategoryService, CategoryService>();
-        }
-        public static void Configure(IApplicationBuilder app)
+			services.AddScoped<ISellerService, SellerService>();
+		}
+		public static void Configure(IApplicationBuilder app)
         {
-            // ... other middleware configurations ...
-
             using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
                 SeedRolesAsync(roleManager).Wait();
             }
-
-            // ... other middleware configurations ...
         }
 
-        private static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
+        private static async Task SeedRolesAsync(RoleManager<IdentityRole<Guid>> roleManager)
         {
             if (!await roleManager.RoleExistsAsync("Admin"))
             {
-                await roleManager.CreateAsync(new IdentityRole("Admin"));
+                await roleManager.CreateAsync(new IdentityRole<Guid>("Admin"));
             }
 
             if (!await roleManager.RoleExistsAsync("Seller"))
             {
-                await roleManager.CreateAsync(new IdentityRole("Seller"));
+                await roleManager.CreateAsync(new IdentityRole<Guid>("Seller"));
             }
 
-            if (!await roleManager.RoleExistsAsync("ApplicationUser"))
+            if (!await roleManager.RoleExistsAsync("User"))
             {
-                await roleManager.CreateAsync(new IdentityRole("ApplicationUser"));
+                await roleManager.CreateAsync(new IdentityRole<Guid>("User"));
             }
         }
     }

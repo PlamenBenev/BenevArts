@@ -4,6 +4,7 @@ using BenevArts.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BenevArts.Data.Migrations
 {
     [DbContext(typeof(BenevArtsDbContext))]
-    partial class BenevArtsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230720143418_AddSellerApplication")]
+    partial class AddSellerApplication
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -397,9 +400,6 @@ namespace BenevArts.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid>("ApplicationUserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -419,8 +419,6 @@ namespace BenevArts.Data.Migrations
                         .HasColumnType("nvarchar(1000)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("SellersApplications");
                 });
@@ -671,17 +669,6 @@ namespace BenevArts.Data.Migrations
                     b.HasOne("BenevArts.Data.Models.ApplicationUser", null)
                         .WithMany("Sellers")
                         .HasForeignKey("ApplicationUserId");
-                });
-
-            modelBuilder.Entity("BenevArts.Data.Models.SellerApplication", b =>
-                {
-                    b.HasOne("BenevArts.Data.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("BenevArts.Data.Models.UserFavorites", b =>

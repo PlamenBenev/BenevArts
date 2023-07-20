@@ -1,6 +1,8 @@
 ﻿using BenevArts.Services.Data;
 using BenevArts.Services.Data.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace BenevArts.Web.Controllers
 {
@@ -14,6 +16,7 @@ namespace BenevArts.Web.Controllers
         }
 
         [HttpPost]
+		[Authorize(Roles = "User,Seller,Admin")]
 		public async Task<IActionResult> ToggleFavorite(Guid assetId, bool isFavorited)
 		{
 			if (isFavorited)

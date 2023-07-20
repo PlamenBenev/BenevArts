@@ -17,7 +17,7 @@ namespace BenevArts.Data.Models
         [Required]
         [EmailAddress]
         public string Email { get; set; } = null!;
-
-        public ICollection<Asset> Assets { get; set; } = new HashSet<Asset>();
+        
+		public ICollection<Asset> Assets { get; set; } = new HashSet<Asset>();
     }
 }

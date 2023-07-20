@@ -35,19 +35,19 @@ namespace BenevArts.Services.Data
         }
         public async Task<IEnumerable<AssetViewModel>> GetFavoritesAsync(string userId)
         {
-			return await context.UserFavorites
+            return await context.UserFavorites
                 .Where(f => f.UserId == Guid.Parse(userId))
-				.Select(a => new AssetViewModel
-				{
-					Id = a.Asset.Id,
-					Title = a.Asset.Title,
-					Thumbnail = a.Asset.Thumbnail,
-					Price = a.Asset.Price,
-					UploadDate = a.Asset.UploadDate,
-					Seller = a.Asset.Seller.Name
-				})
-				.ToListAsync();
-		}
+                .Select(a => new AssetViewModel
+                {
+                    Id = a.Asset.Id,
+                    Title = a.Asset.Title,
+                    Thumbnail = a.Asset.Thumbnail,
+                    Price = a.Asset.Price,
+                    UploadDate = a.Asset.UploadDate,
+                    Seller = a.Asset.Seller.Name
+                })
+                .ToListAsync();
+        }
         public async Task<IEnumerable<AssetViewModel>> GetSearchResultAsync(string query)
         {
             return await context.Assets
@@ -81,21 +81,24 @@ namespace BenevArts.Services.Data
             // Mapping the images
             viewModel.Images = asset!.Images.Select(x => x.ImageName).ToList();
 
-            // Check if the user liked the model
-            List<Like> userLikes = await context.Likes
-                .Where(l => l.AssetId == id && l.UserId == Guid.Parse(userId))
-                .ToListAsync();
+            if (userId != null)
+            {
+                // Check if the user liked the model
+                List<Like> userLikes = await context.Likes
+                    .Where(l => l.AssetId == id && l.UserId == Guid.Parse(userId))
+                    .ToListAsync();
 
-            viewModel.IsLikedByCurrentUser = userLikes.Any();
+                viewModel.IsLikedByCurrentUser = userLikes.Any();
 
-            // Check if the user added the model to Favorites
-			List<UserFavorites> userFavorites = await context.UserFavorites
-				.Where(l => l.AssetId == id && l.UserId == Guid.Parse(userId))
-	            .ToListAsync();
+                // Check if the user added the model to Favorites
+                List<UserFavorites> userFavorites = await context.UserFavorites
+                    .Where(l => l.AssetId == id && l.UserId == Guid.Parse(userId))
+                    .ToListAsync();
 
-			viewModel.IsFavoritedByCurrentUser = userFavorites.Any();
+                viewModel.IsFavoritedByCurrentUser = userFavorites.Any();
+            }
 
-			return viewModel;
+            return viewModel;
         }
         public async Task<EditAssetViewModel> GetEditByIdAsync(Guid id)
         {
@@ -116,23 +119,8 @@ namespace BenevArts.Services.Data
         }
 
         // Post
-        public async Task AddAssetAsync(AddAssetViewModel model, string userId, string username, string email)
+        public async Task AddAssetAsync(AddAssetViewModel model, string userId)
         {
-            Seller? seller = await context.Sellers.FindAsync(Guid.Parse(userId));
-
-            // Add the Seller in the database if it's not already added
-            if (seller == null)
-            {
-                seller = new Seller
-                {
-                    Id = Guid.Parse(userId),
-                    Name = username,
-                    Email = email,
-                };
-                await context.Sellers.AddAsync(seller);
-                await context.SaveChangesAsync();
-            }
-
             // Uploading the Zip file
             var fileName = Path.GetFileName(model.ZipFileName.FileName);
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ZipFiles", fileName);
@@ -177,7 +165,7 @@ namespace BenevArts.Services.Data
             Asset model = await context.Assets.FindAsync(modelInputs.Id)
                 ?? throw new AssetNullException();
 
-            mapper.Map(modelInputs,model);
+            mapper.Map(modelInputs, model);
 
             await context.SaveChangesAsync();
 

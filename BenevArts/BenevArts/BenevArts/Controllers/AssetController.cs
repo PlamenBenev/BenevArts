@@ -24,6 +24,7 @@ namespace BenevArts.Web.Controllers
 
 		// Get
 		[HttpGet]
+		[Authorize(Roles = "Seller,Admin")]
 		public async Task<IActionResult> Add()
 		{
 			AddAssetViewModel model = new AddAssetViewModel()
@@ -35,6 +36,7 @@ namespace BenevArts.Web.Controllers
 		}
 
 		[HttpGet]
+		[Authorize(Roles = "Seller,Admin")]
 		public async Task<IActionResult> Edit(Guid assetId)
 		{
 			EditAssetViewModel model = await assetService.GetEditByIdAsync(assetId);
@@ -52,7 +54,8 @@ namespace BenevArts.Web.Controllers
 		}
 
         [HttpGet]
-        public async Task<IActionResult> Favorites()
+		[Authorize(Roles = "User,Seller,Admin")]
+		public async Task<IActionResult> Favorites()
         {
             IEnumerable<AssetViewModel> models = await assetService.GetFavoritesAsync(GetUserId());
 
@@ -60,7 +63,8 @@ namespace BenevArts.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> MyStore()
+		[Authorize(Roles = "Seller,Admin")]
+		public async Task<IActionResult> MyStore()
         {
             throw new NotImplementedException();
         }
@@ -84,9 +88,10 @@ namespace BenevArts.Web.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Download(Guid id)
+		[Authorize(Roles = "User,Seller,Admin")]
+		public async Task<IActionResult> Download(Guid assetId)
 		{
-			AssetViewModel asset = await assetService.GetAssetByIdAsync(id, GetUserId());
+			AssetViewModel asset = await assetService.GetAssetByIdAsync(assetId, GetUserId());
 			if (asset == null)
 			{
 				return NotFound();
@@ -104,11 +109,12 @@ namespace BenevArts.Web.Controllers
 
 		// Post
 		[HttpPost]
+		[Authorize(Roles = "Seller,Admin")]
 		public async Task<IActionResult> Add(AddAssetViewModel model)
 		{
 			if (ModelState.IsValid)
 			{
-				await assetService.AddAssetAsync(model, GetUserId(), GetUsername(), GetEmail());
+				await assetService.AddAssetAsync(model, GetUserId());
 
 				return RedirectToAction(nameof(MyStore));
 			}
@@ -117,7 +123,8 @@ namespace BenevArts.Web.Controllers
 		}
 
         [HttpPost]
-        public async Task<IActionResult> Edit(EditAssetViewModel model,Guid assetId)
+		[Authorize(Roles = "Seller,Admin")]
+		public async Task<IActionResult> Edit(EditAssetViewModel model,Guid assetId)
         {
 			model.Id = assetId;
             if (!ModelState.IsValid)
@@ -132,6 +139,7 @@ namespace BenevArts.Web.Controllers
 
 
         [HttpPost]
+		[Authorize(Roles = "Seller,Admin")]
 		public async Task<IActionResult> Remove(Guid id)
 		{
 			await assetService.RemoveAssetAsync(id, GetUserId());
@@ -140,6 +148,7 @@ namespace BenevArts.Web.Controllers
 		}
 
 		[HttpPost]
+		[Authorize(Roles = "User,Seller,Admin")]
 		public async Task<IActionResult> ToggleLike(Guid assetId, bool isLiked)
 		{
 			// Toggle the like status for the asset
