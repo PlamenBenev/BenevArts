@@ -25,28 +25,29 @@ namespace BenevArts.Services.Data
 		public async Task<IEnumerable<SellerApplicationViewModel>> GetAllApplicationsAsync()
 		{
 			return await context.SellersApplications
-				.Where(ap => ap.State == "Pending")
 				.Select(ap => new SellerApplicationViewModel
 				{
 					Id = ap.Id,
-					Name = ap.Name,
-					Email = ap.Email,
-					Phone = ap.Phone,
+					Name = ap.StoreName,
+					Email = ap.StoreEmail,
+					Phone = ap.StorePhone,
 					StoreDescription = ap.StoreDescription,
+					State = ap.State,
 				})
 				.ToListAsync();
 		}
 		public async Task<SellerApplicationViewModel> GetSingleApplicationAsync(int id)
 		{
 			return await context.SellersApplications
-				.Where(ap => ap.Id == id && ap.State == "Pending")
+				.Where(ap => ap.Id == id)
 				.Select(ap => new SellerApplicationViewModel
 				{
 					Id = ap.Id,
-					Name = ap.Name,
-					Email = ap.Email,
-					Phone = ap.Phone,
+					Name = ap.StoreName,
+					Email = ap.StoreEmail,
+					Phone = ap.StorePhone,
 					StoreDescription = ap.StoreDescription,
+					State = ap.State,
 				}).FirstOrDefaultAsync()
 				?? throw new ArgumentNullException("Application Not Found!");
 		}
@@ -72,9 +73,9 @@ namespace BenevArts.Services.Data
 			{
 				SellerApplication createApplication = new SellerApplication
 				{
-					Name = application.Name,
-					Email = application.Email,
-					Phone = application.Phone,
+					StoreName = application.Name,
+					StoreEmail = application.Email,
+					StorePhone = application.Phone,
 					StoreDescription = application.StoreDescription,
 					ApplicationUserId = Guid.Parse(userId)
 				};
@@ -85,7 +86,6 @@ namespace BenevArts.Services.Data
 				await context.SaveChangesAsync();
 			}
 		}
-
 
 		public async Task ApproveApplicationAsync(int id)
 		{
@@ -106,8 +106,8 @@ namespace BenevArts.Services.Data
 				seller = new Seller
 				{
 					Id = application.ApplicationUserId,
-					Name = application.Name,
-					Email = application.Email,
+					Name = application.StoreName,
+					Email = application.StoreEmail,
 				};
 
 				application.State = "Approved";

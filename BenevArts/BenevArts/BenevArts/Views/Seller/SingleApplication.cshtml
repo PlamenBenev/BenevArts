@@ -5,22 +5,23 @@
 
 	<div class="row">
 		<div class="col-md-6">
-			<h4>Name: @Model.Name</h4>
-			<p>Email: @Model.Email</p>
-			<p>Phone: @Model.Phone</p>
+			<h4>Store Name: @Model.Name</h4>
+			<p>Store Email: @Model.Email</p>
+			<p>Store Phone: @Model.Phone</p>
 			<p>Store Description: @Model.StoreDescription</p>
-			<p>
-				<a 
-				   asp-controller="Seller"
-				   asp-action="ApproveApplication"
-				   asp-route-id="@Model.Id">Approve Application</a>
-			</p>
-			<p>
-				<a 
-				   asp-controller="Seller"
-				   asp-action="DeclineApplication"
-				   asp-route-id="@Model.Id">Decline Application</a>
-			</p>
+			@if (Model.State == "Pending")
+			{
+				<p>
+					<a asp-controller="Seller"
+					   asp-action="ApproveApplication"
+					   asp-route-id="@Model.Id">Approve Application</a>
+				</p>
+				<p>
+					<a asp-controller="Seller"
+					   asp-action="DeclineApplication"
+					   asp-route-id="@Model.Id">Decline Application</a>
+				</p>
+			}
 		</div>
 	</div>
 </div>

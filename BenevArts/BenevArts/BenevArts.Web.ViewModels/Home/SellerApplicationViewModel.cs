@@ -6,19 +6,22 @@ namespace BenevArts.Web.ViewModels.Home
 	{
 		public int Id { get; set; }
 
+		[Required]
 		[StringLength(20)]
 		public string Name { get; set; } = null!;
 
+		[Required]
 		[EmailAddress]
 		public string Email { get; set; } = null!;
 
 		[Phone]
 		public string Phone { get; set; } = null!;
 
+		[Required]
 		[StringLength(1000)]
 		public string StoreDescription { get; set; } = null!;
 
-		public string State { get; set; } = "Pending";
+		public string State { get; set; } = null!;
 
 		public Guid ApplicationUserId { get; set; }
 	}
