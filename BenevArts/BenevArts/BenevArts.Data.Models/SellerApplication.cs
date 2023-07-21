@@ -23,6 +23,8 @@ namespace BenevArts.Data.Models
 		[StringLength(1000)]
 		public string StoreDescription { get; set; } = null!;
 
+		public string State { get; set; } = "Pending";
+
 		[Required]
 		[ForeignKey(nameof(ApplicationUser))]
 		public Guid ApplicationUserId { get; set; }

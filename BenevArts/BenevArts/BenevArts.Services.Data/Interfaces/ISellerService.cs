@@ -9,9 +9,13 @@ namespace BenevArts.Services.Data.Interfaces
 {
 	public interface ISellerService
 	{
-		Task ApplyAsync(SellerApplicationViewModel application, string userId);
-		Task ApproveApplicationAsync(SellerApplicationViewModel application, string userId);
-		Task<IEnumerable<SellerApplicationViewModel>> GetAllApplicationsAsync();
+		// GET
+        Task<bool> CheckIfUserAppliedAsync(Guid appliedUserId);
+        Task<IEnumerable<SellerApplicationViewModel>> GetAllApplicationsAsync();
 		Task<SellerApplicationViewModel> GetSingleApplicationAsync(int id);
+		Task ApproveApplicationAsync(int id, string userId);
+
+		// POST
+		Task ApplyAsync(SellerApplicationViewModel application, string userId);
 	}
 }

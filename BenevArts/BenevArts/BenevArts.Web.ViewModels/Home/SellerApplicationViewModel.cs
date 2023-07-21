@@ -17,5 +17,9 @@ namespace BenevArts.Web.ViewModels.Home
 
 		[StringLength(1000)]
 		public string StoreDescription { get; set; } = null!;
+
+		public string State { get; set; } = "Pending";
+
+		public Guid ApplicationUserId { get; set; }
 	}
 }
