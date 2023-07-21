@@ -13,9 +13,10 @@ namespace BenevArts.Services.Data.Interfaces
         Task<bool> CheckIfUserAppliedAsync(Guid appliedUserId);
         Task<IEnumerable<SellerApplicationViewModel>> GetAllApplicationsAsync();
 		Task<SellerApplicationViewModel> GetSingleApplicationAsync(int id);
-		Task ApproveApplicationAsync(int id, string userId);
+		Task ApproveApplicationAsync(int id);
 
 		// POST
 		Task ApplyAsync(SellerApplicationViewModel application, string userId);
+		Task DeclineApplicationAsync(int id);
 	}
 }
