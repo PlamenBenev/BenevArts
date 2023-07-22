@@ -36,6 +36,21 @@ namespace BenevArts.Services.Data
 				})
 				.ToListAsync();
 		}
+		public async Task<IEnumerable<SellerApplicationViewModel>> GetApplicationsByStateAsync(string state)
+		{
+			return await context.SellersApplications
+				.Where(ap => ap.State == state)
+				.Select(ap => new SellerApplicationViewModel
+				{
+					Id = ap.Id,
+					Name = ap.StoreName,
+					Email = ap.StoreEmail,
+					Phone = ap.StorePhone,
+					StoreDescription = ap.StoreDescription,
+					State = ap.State,
+				})
+				.ToListAsync();
+		}
 		public async Task<SellerApplicationViewModel> GetSingleApplicationAsync(int id)
 		{
 			return await context.SellersApplications

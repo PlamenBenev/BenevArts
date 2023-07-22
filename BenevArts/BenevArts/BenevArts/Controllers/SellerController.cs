@@ -43,14 +43,34 @@ namespace BenevArts.Web.Controllers
 		{
 			return View();
 		}
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AllApplications()
+        {
+            IEnumerable<SellerApplicationViewModel> models = await sellerService.GetAllApplicationsAsync();
 
-		[HttpGet]
+            return View("~/Views/Seller/AllApplications.cshtml", models);
+        }
+        [HttpGet]
 		[Authorize(Roles = "Admin")]
-		public async Task<IActionResult> AllApplications()
+		public async Task<IActionResult> GetApplicationsByState(string state)
 		{
-			IEnumerable<SellerApplicationViewModel> models = await sellerService.GetAllApplicationsAsync();
+			IEnumerable<SellerApplicationViewModel> applications;
 
-			return View("~/Views/Seller/AllApplications.cshtml", models);
+			// Retrieve applications based on the selected state
+			if (string.IsNullOrEmpty(state))
+			{
+				applications = await sellerService.GetAllApplicationsAsync();
+
+			}
+			else
+			{
+				applications = await sellerService.GetApplicationsByStateAsync(state);
+
+			}
+
+			// Return a partial view with the filtered applications data
+			return PartialView("_ApplicationsTable", applications);
 		}
 
 		[HttpGet]
@@ -70,7 +90,7 @@ namespace BenevArts.Web.Controllers
 
 			// TO DO: Send Notification to the user
 
-			return RedirectToAction(nameof(AllApplications));
+			return RedirectToAction(nameof(GetApplicationsByState));
 		}
 
 		[HttpGet]
@@ -81,7 +101,7 @@ namespace BenevArts.Web.Controllers
 
 			// TO DO: Send Notification to the user
 
-			return RedirectToAction(nameof(AllApplications));
+			return RedirectToAction(nameof(GetApplicationsByState));
 		}
 
 		// POST
