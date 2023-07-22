@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BenevArts.Services.Data
 {
-    public class AssetService : IAssetService
+	public class AssetService : IAssetService
     {
         private readonly BenevArtsDbContext context;
         private readonly IMapper mapper;
@@ -62,6 +62,21 @@ namespace BenevArts.Services.Data
                 })
                 .ToListAsync();
         }
+		public async Task<IEnumerable<AssetViewModel>> GetMyStoreAsync(string userId)
+		{
+			return await context.Assets
+				.Where(f => f.SellerId == Guid.Parse(userId))
+				.Select(a => new AssetViewModel
+				{
+					Id = a.Id,
+					Title = a.Title,
+					Thumbnail = a.Thumbnail,
+					Price = a.Price,
+					UploadDate = a.UploadDate,
+					Seller = a.Seller.Name
+				})
+				.ToListAsync();
+		}
         public async Task<AssetViewModel> GetAssetByIdAsync(Guid id, string userId)
         {
             Asset asset = await context.Assets
@@ -185,5 +200,5 @@ namespace BenevArts.Services.Data
             await context.SaveChangesAsync();
 
         }
-    }
+	}
 }

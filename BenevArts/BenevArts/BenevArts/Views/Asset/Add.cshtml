@@ -16,17 +16,17 @@
 
     <div class="form-group">
         <label for="Images">Images</label>
-        <input type="file" id="Images" name="Images" multiple class="form-control-file" />
+        <input type="file" id="Images" name="Images" multiple class="form-control-file" accept=".png, .jpeg, .jpg" />
     </div>
 
     <div class="form-group">
         <label for="thumbnail">Thumbnail</label>
-        <input type="file" class="form-control-file" id="thumbnail" name="Thumbnail" required>
+        <input type="file" class="form-control-file" id="thumbnail" name="Thumbnail" accept=".png, .jpeg, .jpg">
     </div>
 
     <div class="form-group">
         <label for="zipFile">Zip File</label>
-        <input type="file" class="form-control-file" id="zipFile" name="ZipFileName" required>
+        <input type="file" class="form-control-file" id="zipFile" name="ZipFileName" accept=".zip">
     </div>
 
     <div class="form-group">
@@ -37,38 +37,35 @@
     <div class="form-group">
         <label>Technical Details</label>
         <div class="btn-group-toggle" data-toggle="buttons">
-            <label class="btn btn-secondary">
-                @Html.CheckBoxFor(model => model.CGIModel)
-                CGI Model
-            </label>
-            <label class="btn btn-secondary">
-                @Html.CheckBoxFor(model => model.Textures)
-                Textures
-            </label>
-            <label class="btn btn-secondary">
-                @Html.CheckBoxFor(model => model.Materials)
-                Materials
-            </label>
-            <label class="btn btn-secondary">
-                @Html.CheckBoxFor(model => model.Animated)
-                Animated
-            </label>
-            <label class="btn btn-secondary">
-                @Html.CheckBoxFor(model => model.Rigged)
-                Rigged
-            </label>
-            <label class="btn btn-secondary">
-                @Html.CheckBoxFor(model => model.LowPoly)
-                Low Poly
-            </label>
-            <label class="btn btn-secondary">
-                @Html.CheckBoxFor(model => model.PBR)
-                PBR
-            </label>
-            <label class="btn btn-secondary">
-                @Html.CheckBoxFor(model => model.UVUnwrapped)
-                UV Unwrapped
-            </label>
+            <div class="form-group">
+                <label>Technical Details</label>
+                <div class="btn-group-toggle" data-toggle="buttons">
+                    <input type="checkbox" class="btn-check" id="CGIModel" @(Model.CGIModel ? "checked" : "") autocomplete="off">
+                    <label class="btn @(Model.CGIModel ? "btn btn-outline-primary" : "btn btn-outline-secondary")" for="CGIModel">CGI Model</label>
+
+                    <input type="checkbox" class="btn-check" id="Textures" @(Model.Textures ? "checked" : "") autocomplete="off">
+                    <label class="btn @(Model.Textures ? "btn btn-outline-primary active" : "btn btn-outline-secondary")" for="Textures">Textures</label>
+
+                    <input type="checkbox" class="btn-check" id="Materials" @(Model.Materials ? "checked" : "") autocomplete="off">
+                    <label class="btn @(Model.Materials ? "btn btn-outline-primary active" : "btn btn-outline-secondary")" for="Materials">Materials</label>
+
+                    <input type="checkbox" class="btn-check" id="Animated" @(Model.Animated ? "checked" : "") autocomplete="off">
+                    <label class="btn @(Model.Animated ? "btn btn-outline-primary active" : "btn btn-outline-secondary")" for="Animated">Animated</label>
+
+                    <input type="checkbox" class="btn-check" id="Rigged" @(Model.Rigged ? "checked" : "") autocomplete="off">
+                    <label class="btn @(Model.Rigged ? "btn btn-outline-primary active" : "btn btn-outline-secondary")" for="Rigged">Rigged</label>
+
+                    <input type="checkbox" class="btn-check" id="LowPoly" @(Model.LowPoly ? "checked" : "") autocomplete="off">
+                    <label class="btn @(Model.LowPoly ? "btn btn-outline-primary active" : "btn btn-outline-secondary")" for="LowPoly">Low Poly</label>
+
+                    <input type="checkbox" class="btn-check" id="PBR" @(Model.PBR ? "checked" : "") autocomplete="off">
+                    <label class="btn @(Model.PBR ? "btn btn-outline-primary active" : "btn btn-outline-secondary")" for="PBR">PBR</label>
+
+                    <input type="checkbox" class="btn-check" id="UVUnwrapped" @(Model.UVUnwrapped ? "checked" : "") autocomplete="off">
+                    <label class="btn @(Model.UVUnwrapped ? "btn btn-outline-primary active" : "btn btn-outline-secondary")" for="UVUnwrapped">UV Unwrapped</label>
+                </div>
+            </div>
+
         </div>
     </div>
 

@@ -1,7 +1,6 @@
 ﻿using BenevArts.Services.Data.Interfaces;
 using Microsoft.AspNetCore.Http;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
+
 
 namespace BenevArts.Services.Data
 {
@@ -16,7 +15,7 @@ namespace BenevArts.Services.Data
 
 		public async Task<string> SaveImageAsync(IFormFile imageFile)
 		{
-			var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
 			var filePath = Path.Combine(uploadFolderPath, fileName);
 
 			using (var stream = new FileStream(filePath, FileMode.Create))

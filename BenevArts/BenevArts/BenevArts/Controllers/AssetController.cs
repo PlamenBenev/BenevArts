@@ -66,9 +66,9 @@ namespace BenevArts.Web.Controllers
         [Authorize(Roles = "Seller,Admin")]
         public async Task<IActionResult> MyStore(int page = 1, int itemsPerPage = 1)
         {
-            IEnumerable<AssetViewModel> models = await assetService.GetFavoritesAsync(GetUserId());
+            IEnumerable<AssetViewModel> models = await assetService.GetMyStoreAsync(GetUserId());
 
-            return View("~/Views/Asset/All.cshtml",Paginator(models, page, itemsPerPage));
+            return View("~/Views/Asset/All.cshtml", Paginator(models, page, itemsPerPage));
         }
 
         [HttpGet]
@@ -114,6 +114,8 @@ namespace BenevArts.Web.Controllers
         [Authorize(Roles = "Seller,Admin")]
         public async Task<IActionResult> Add(AddAssetViewModel model)
         {
+            CheckFormat(model);
+
             if (ModelState.IsValid)
             {
                 await assetService.AddAssetAsync(model, GetUserId());
@@ -169,7 +171,7 @@ namespace BenevArts.Web.Controllers
             return Json(new { success = true, isLiked = updatedIsLiked, likeCount = updatedLikeCount });
         }
 
-        private PaginatedAssetViewModel Paginator(IEnumerable<AssetViewModel> models,int page,int itemsPerPage)
+        private PaginatedAssetViewModel Paginator(IEnumerable<AssetViewModel> models, int page, int itemsPerPage)
         {
             int totalItems = models.Count();
 
@@ -189,6 +191,69 @@ namespace BenevArts.Web.Controllers
             };
 
             return paginatedViewModel;
+        }
+
+        private IActionResult CheckFormat(AddAssetViewModel model)
+        {
+            // Check if the thumbnail is in valid format
+            if (model.Thumbnail == null || model.Thumbnail.Length == 0)
+            {
+                ModelState.AddModelError("Thumbnail", "Please select an image file to upload.");
+                return View();
+            }
+
+            string[] allowedExtensions = { ".jpg", ".jpeg", ".jpg" };
+            string fileExtension = Path.GetExtension(model.Thumbnail.FileName);
+
+            if (!allowedExtensions.Contains(fileExtension.ToLowerInvariant()))
+            {
+                ModelState.AddModelError("Thumbnail", "Invalid file format! Please choose a PNG or JPEG image.");
+                return View();
+            }
+
+            // Check if the Zip file is in valid format
+            if (model.ZipFileName == null || model.ZipFileName.Length == 0)
+            {
+                ModelState.AddModelError("ZipFile", "Please select zip file to upload.");
+                return View();
+            }
+
+            allowedExtensions = new string[] { ".zip", ".rar" };
+            fileExtension = Path.GetExtension(model.ZipFileName.FileName);
+
+            if (!allowedExtensions.Contains(fileExtension.ToLowerInvariant()))
+            {
+                ModelState.AddModelError("ZipFile", "Invalid file format! Please choose a zip or rar image.");
+                return View();
+            }
+
+            // Check if all images are in valid format
+            if (model.Images == null || model.Images.Count() == 0)
+            {
+                ModelState.AddModelError("ImageFiles", "Please select at least one image file to upload.");
+                return View();
+            }
+
+            allowedExtensions = new string[] { ".png", ".jpeg", ".jpg" };
+
+            foreach (var imageFile in model.Images)
+            {
+                if (imageFile.Length == 0)
+                {
+                    ModelState.AddModelError("ImageFiles", "Please select a valid image file to upload.");
+                    return View();
+                }
+
+                fileExtension = Path.GetExtension(imageFile.FileName);
+
+                if (!allowedExtensions.Contains(fileExtension.ToLowerInvariant()))
+                {
+                    ModelState.AddModelError("ImageFiles", "Invalid file format! Please choose PNG or JPEG images only.");
+                    return View();
+                }
+
+            }
+                return View(model);
         }
     }
 }

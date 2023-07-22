@@ -29,10 +29,10 @@
 							<a class="nav-link text-dark" asp-area="" asp-controller="Asset" asp-action="Add">Sell Asset</a>
 						</li>
 					}
-					@if (User.IsInRole("Admin"))
+					@if (User.IsInRole("Seller") || User.IsInRole("Admin"))
 					{
 						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Seller" asp-action="AllApplications">List Of Applications</a>
+							<a class="nav-link text-dark" asp-area="" asp-controller="Asset" asp-action="MyStore">My Store</a>
 						</li>
 					}
 					@if (User.IsInRole("User"))
@@ -47,6 +47,12 @@
 					<li class="nav-item">
 						<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
 					</li>
+					@if (User.IsInRole("Admin"))
+					{
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="Seller" asp-action="AllApplications">List Of Applications</a>
+						</li>
+					}
 				</ul>
 
 				<partial name="_LoginPartial" />
