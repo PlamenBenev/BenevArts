@@ -1,5 +1,6 @@
 ﻿using BenevArts.Common;
 using BenevArts.Services.Data.Interfaces;
+using BenevArts.Web.Infrastructure;
 using BenevArts.Web.ViewModels.Home;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -47,10 +48,8 @@ namespace BenevArts.Web.Controllers
         {
             IEnumerable<AssetViewModel> models = await assetService.GetAllAssetsAsync();
 
-            return View(Paginator(models, page, itemsPerPage));
-
+            return View(Pagination.Paginator(models, page, itemsPerPage));
         }
-
 
         [HttpGet]
         [Authorize(Roles = "User,Seller,Admin")]
@@ -58,7 +57,7 @@ namespace BenevArts.Web.Controllers
         {
             IEnumerable<AssetViewModel> models = await assetService.GetFavoritesAsync(GetUserId());
 
-            return View("~/Views/Asset/All.cshtml", Paginator(models, page, itemsPerPage));
+            return View("~/Views/Asset/All.cshtml", Pagination.Paginator(models, page, itemsPerPage));
 
         }
 
@@ -68,7 +67,7 @@ namespace BenevArts.Web.Controllers
         {
             IEnumerable<AssetViewModel> models = await assetService.GetMyStoreAsync(GetUserId());
 
-            return View("~/Views/Asset/All.cshtml", Paginator(models, page, itemsPerPage));
+            return View("~/Views/Asset/All.cshtml", Pagination.Paginator(models, page, itemsPerPage));
         }
 
         [HttpGet]
@@ -77,7 +76,7 @@ namespace BenevArts.Web.Controllers
         {
             IEnumerable<AssetViewModel> models = await assetService.GetSearchResultAsync(query);
 
-            return View("~/Views/Asset/All.cshtml", Paginator(models, page, itemsPerPage));
+            return View("~/Views/Asset/All.cshtml", Pagination.Paginator(models, page, itemsPerPage));
         }
 
         [HttpGet]
@@ -114,7 +113,7 @@ namespace BenevArts.Web.Controllers
         [Authorize(Roles = "Seller,Admin")]
         public async Task<IActionResult> Add(AddAssetViewModel model)
         {
-            CheckFormat(model);
+            CheckFormats(model);
 
             if (ModelState.IsValid)
             {
@@ -171,29 +170,29 @@ namespace BenevArts.Web.Controllers
             return Json(new { success = true, isLiked = updatedIsLiked, likeCount = updatedLikeCount });
         }
 
-        private PaginatedAssetViewModel Paginator(IEnumerable<AssetViewModel> models, int page, int itemsPerPage)
-        {
-            int totalItems = models.Count();
+        //public PaginatedAssetViewModel Paginator(IEnumerable<AssetViewModel> models, int page, int itemsPerPage)
+        //{
+        //    int totalItems = models.Count();
 
-            // Calculate the number of assets to skip based on the current page and items per page
-            int skip = (page - 1) * itemsPerPage;
+        //    // Calculate the number of assets to skip based on the current page and items per page
+        //    int skip = (page - 1) * itemsPerPage;
 
-            // Get the assets for the current page using Skip and Take LINQ methods
-            var assetsForPage = models.Skip(skip).Take(itemsPerPage).ToList();
+        //    // Get the assets for the current page using Skip and Take LINQ methods
+        //    var assetsForPage = models.Skip(skip).Take(itemsPerPage).ToList();
 
-            // Create the view model for the current page of assets
-            var paginatedViewModel = new PaginatedAssetViewModel
-            {
-                Assets = assetsForPage,
-                CurrentPage = page,
-                ItemsPerPage = itemsPerPage,
-                TotalItems = totalItems
-            };
+        //    // Create the view model for the current page of assets
+        //    var paginatedViewModel = new PaginatedAssetViewModel
+        //    {
+        //        Assets = assetsForPage,
+        //        CurrentPage = page,
+        //        ItemsPerPage = itemsPerPage,
+        //        TotalItems = totalItems
+        //    };
 
-            return paginatedViewModel;
-        }
+        //    return paginatedViewModel;
+        //}
 
-        private IActionResult CheckFormat(AddAssetViewModel model)
+        private IActionResult CheckFormats(AddAssetViewModel model)
         {
             // Check if the thumbnail is in valid format
             if (model.Thumbnail == null || model.Thumbnail.Length == 0)
@@ -202,7 +201,7 @@ namespace BenevArts.Web.Controllers
                 return View();
             }
 
-            string[] allowedExtensions = { ".jpg", ".jpeg", ".jpg" };
+            string[] allowedExtensions = { ".png", ".jpeg", ".jpg" };
             string fileExtension = Path.GetExtension(model.Thumbnail.FileName);
 
             if (!allowedExtensions.Contains(fileExtension.ToLowerInvariant()))

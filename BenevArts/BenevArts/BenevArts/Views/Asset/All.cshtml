@@ -8,7 +8,7 @@
     <h1>Assets</h1>
 
     <div class="row">
-        @foreach (var asset in Model.Assets)
+        @foreach (var asset in Model.Items)
         {
             <div class="card" style="width: 18rem;">
                 <img class="card-img-top" src="~/Images/@asset.Thumbnail" alt="Thumbnail">
@@ -36,11 +36,13 @@
                     @if (Model.CurrentPage > 1)
                     {
                         <li class="page-item">
-                            <a class="page-link" asp-controller="Asset" asp-action="All"
+                            <a class="page-link" asp-controller="@ViewContext.RouteData.Values["controller"]"
+                               asp-action="@ViewContext.RouteData.Values["action"]"
                                asp-route-page="1" asp-route-itemsPerPage="@Model.ItemsPerPage">First</a>
                         </li>
                         <li class="page-item">
-                            <a class="page-link" asp-controller="Asset" asp-action="All"
+                            <a class="page-link" asp-controller="@ViewContext.RouteData.Values["controller"]"
+                               asp-action="@ViewContext.RouteData.Values["action"]"
                                asp-route-page="@Model.CurrentPage - 1" asp-route-itemsPerPage="@Model.ItemsPerPage">Previous</a>
                         </li>
                     }
@@ -48,7 +50,8 @@
                     @for (int i = 1; i <= Math.Ceiling((double)Model.TotalItems / Model.ItemsPerPage); i++)
                     {
                         <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
-                            <a class="page-link" asp-controller="Asset" asp-action="All"
+                            <a class="page-link" asp-controller="@ViewContext.RouteData.Values["controller"]"
+                               asp-action="@ViewContext.RouteData.Values["action"]"
                                asp-route-page="@i" asp-route-itemsPerPage="@Model.ItemsPerPage">@i</a>
                         </li>
                     }
@@ -56,11 +59,13 @@
                     @if (Model.CurrentPage < Math.Ceiling((double)Model.TotalItems / Model.ItemsPerPage))
                     {
                         <li class="page-item">
-                            <a class="page-link" asp-controller="Asset" asp-action="All"
+                            <a class="page-link" asp-controller="@ViewContext.RouteData.Values["controller"]"
+                               asp-action="@ViewContext.RouteData.Values["action"]"
                                asp-route-page="@Model.CurrentPage + 1" asp-route-itemsPerPage="@Model.ItemsPerPage">Next</a>
                         </li>
                         <li class="page-item">
-                            <a class="page-link" asp-controller="Asset" asp-action="All"
+                            <a class="page-link" asp-controller="@ViewContext.RouteData.Values["controller"]"
+                               asp-action="@ViewContext.RouteData.Values["action"]"
                                asp-route-page="@Math.Ceiling((double)Model.TotalItems / Model.ItemsPerPage)"
                                asp-route-itemsPerPage="@Model.ItemsPerPage">Last</a>
                         </li>

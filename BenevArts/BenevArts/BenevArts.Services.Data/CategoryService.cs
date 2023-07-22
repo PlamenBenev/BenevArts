@@ -45,6 +45,7 @@ namespace BenevArts.Services.Data
                 {
                     Id = ct.Id,
                     Name = ct.Name,
+                    Image = ct.Image,
                 })
                 .ToListAsync();
         }
@@ -55,6 +56,7 @@ namespace BenevArts.Services.Data
                 {
                     Id = ct.Id,
                     Name = ct.Name,
+                    Image = ct.Image,
                 })
                 .ToListAsync();
         }

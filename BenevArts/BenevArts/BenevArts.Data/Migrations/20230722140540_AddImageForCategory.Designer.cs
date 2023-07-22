@@ -4,6 +4,7 @@ using BenevArts.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BenevArts.Data.Migrations
 {
     [DbContext(typeof(BenevArtsDbContext))]
-    partial class BenevArtsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230722140540_AddImageForCategory")]
+    partial class AddImageForCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -211,91 +214,91 @@ namespace BenevArts.Data.Migrations
                         new
                         {
                             Id = 2,
-                            Image = "https://360view.hum3d.com/zoom/Animals/Allosaurus_1000_0001.jpg",
+                            Image = "https://i.pinimg.com/originals/0b/82/60/0b8260c6a692955a75d048cf12e20164.jpg",
                             Name = "Animals"
                         },
                         new
                         {
                             Id = 3,
-                            Image = "https://www.renderhub.com/zyed/container-office-building/container-office-building.jpg",
+                            Image = "https://i.pinimg.com/originals/0b/82/60/0b8260c6a692955a75d048cf12e20164.jpg",
                             Name = "Architectural"
                         },
                         new
                         {
                             Id = 4,
-                            Image = "https://www.renderhub.com/mm2endra/complete-house-exterior/complete-house-exterior.jpg",
+                            Image = "https://i.pinimg.com/originals/0b/82/60/0b8260c6a692955a75d048cf12e20164.jpg",
                             Name = "Exterior"
                         },
                         new
                         {
                             Id = 5,
-                            Image = "https://mir-s3-cdn-cf.behance.net/project_modules/1400/4eddca30402501.56210b527c788.jpg",
+                            Image = "https://i.pinimg.com/originals/0b/82/60/0b8260c6a692955a75d048cf12e20164.jpg",
                             Name = "Interior"
                         },
                         new
                         {
                             Id = 6,
-                            Image = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fget.wallhere.com%2Fphoto%2F1500x1500-px-GT1-LE-lemans-mans-Nissan-R390-race-racing-supercar-1672607.jpg&f=1&nofb=1&ipt=62e16a3e4f3cfcf3ab999db9b598e17e6ce3a49cea0cbf88e375afbbba3206c1&ipo=images",
+                            Image = "https://i.pinimg.com/originals/0b/82/60/0b8260c6a692955a75d048cf12e20164.jpg",
                             Name = "Car"
                         },
                         new
                         {
                             Id = 7,
-                            Image = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.zerochan.net%2FHrothgar.full.2600742.png&f=1&nofb=1&ipt=f36ae45a8caf6f2980beb52a695e6db13dc4edc2340d9793110d24f36794f80d&ipo=images",
+                            Image = "https://i.pinimg.com/originals/0b/82/60/0b8260c6a692955a75d048cf12e20164.jpg",
                             Name = "Character"
                         },
                         new
                         {
                             Id = 8,
-                            Image = "https://static.turbosquid.com/Preview/2019/07/17__13_46_54/Signature.jpgD810065D-0F62-4EBB-847C-AA57E3F7D50ADefault.jpg",
+                            Image = "https://i.pinimg.com/originals/0b/82/60/0b8260c6a692955a75d048cf12e20164.jpg",
                             Name = "Food"
                         },
                         new
                         {
                             Id = 9,
-                            Image = "https://static.turbosquid.com/Preview/2020/07/20__00_13_48/1f.pngFE53EBFF-5100-497F-8874-49F155AC925BDefault.jpg",
+                            Image = "https://i.pinimg.com/originals/0b/82/60/0b8260c6a692955a75d048cf12e20164.jpg",
                             Name = "Furniture"
                         },
                         new
                         {
                             Id = 10,
-                            Image = "https://www.renderhub.com/bsw2142/kitchen-appliances/kitchen-appliances.jpg",
+                            Image = "https://i.pinimg.com/originals/0b/82/60/0b8260c6a692955a75d048cf12e20164.jpg",
                             Name = "Household"
                         },
                         new
                         {
                             Id = 11,
-                            Image = "https://img2.cgtrader.com/items/1949905/2aef8f1d69/loom-machine-3d-model-max-fbx.jpg",
+                            Image = "https://i.pinimg.com/originals/0b/82/60/0b8260c6a692955a75d048cf12e20164.jpg",
                             Name = "Industrial"
                         },
                         new
                         {
                             Id = 12,
-                            Image = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2F736x%2Fee%2Fd1%2F33%2Feed133e60e4646d749c0a7e87da7f9e8.jpg&f=1&nofb=1&ipt=bc48b05a520757ee97c69e1e8c9f79e06ee8eae82203792e334bf3556edef1d1&ipo=images",
+                            Image = "https://i.pinimg.com/originals/0b/82/60/0b8260c6a692955a75d048cf12e20164.jpg",
                             Name = "Plant"
                         },
                         new
                         {
                             Id = 13,
-                            Image = "https://cdn.shopify.com/s/files/1/2191/8173/products/discovery-space-shuttle-nasa-3d-models-_3_1024x1024.jpg?v=1504007478",
+                            Image = "https://i.pinimg.com/originals/0b/82/60/0b8260c6a692955a75d048cf12e20164.jpg",
                             Name = "Space"
                         },
                         new
                         {
                             Id = 14,
-                            Image = "https://www.renderhub.com/sky3dstudios69/construction-vehicle-001/construction-vehicle-001.jpg",
+                            Image = "https://i.pinimg.com/originals/0b/82/60/0b8260c6a692955a75d048cf12e20164.jpg",
                             Name = "Vehicle"
                         },
                         new
                         {
                             Id = 15,
-                            Image = "https://3dlenta.com/components/com_virtuemart/shop_image/product/Watercraft_003_4ab8a73fa534b.jpg",
+                            Image = "https://i.pinimg.com/originals/0b/82/60/0b8260c6a692955a75d048cf12e20164.jpg",
                             Name = "Watercraft"
                         },
                         new
                         {
                             Id = 16,
-                            Image = "https://static.turbosquid.com/Preview/2014/05/16__03_52_30/MATV_Grad_Cam01.jpg217fdd9e-8a2c-49ba-9048-aeb9a1311120Zoom.jpg",
+                            Image = "https://i.pinimg.com/originals/0b/82/60/0b8260c6a692955a75d048cf12e20164.jpg",
                             Name = "Military"
                         });
                 });

@@ -1,0 +1,29 @@
+﻿@model IEnumerable<AssetViewModel>
+
+@{
+    ViewBag.Title = "All of the Assets";
+}
+
+<div class="container">
+    <h1>Assets</h1>
+
+    <div class="row">
+        @foreach (var asset in Model)
+        {
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top" src="~/Images/@asset.Thumbnail" alt="Thumbnail">
+                <div class="card-body">
+                    <h5 class="card-title">@asset.Title</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Price: @asset.Price</li>
+                    <li class="list-group-item">Uploaded By: @asset.Seller</li>
+                    <li class="list-group-item">Uploaded On: @asset.UploadDate.ToString("yyyy-MM-dd")</li>
+                </ul>
+                <div class="card-body">
+                    <a asp-controller="Asset" asp-action="Details"
+                       asp-route-id="@asset.Id" class="btn btn-info">View Details</a>
+                </div>
+            </div>
+        }
+    </div>

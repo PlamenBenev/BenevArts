@@ -4,6 +4,7 @@ using BenevArts.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BenevArts.Data.Migrations
 {
     [DbContext(typeof(BenevArtsDbContext))]
-    partial class BenevArtsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230722143252_ActualCategoryImages")]
+    partial class ActualCategoryImages
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -211,19 +214,19 @@ namespace BenevArts.Data.Migrations
                         new
                         {
                             Id = 2,
-                            Image = "https://360view.hum3d.com/zoom/Animals/Allosaurus_1000_0001.jpg",
+                            Image = "https://duckduckgo.com/?q=3d+animal+quad+resolution+image&iar=images&iax=images&ia=images&iai=https%3A%2F%2F360view.hum3d.com%2Fzoom%2FAnimals%2FAllosaurus_1000_0001.jpg",
                             Name = "Animals"
                         },
                         new
                         {
                             Id = 3,
-                            Image = "https://www.renderhub.com/zyed/container-office-building/container-office-building.jpg",
+                            Image = "https://1.bp.blogspot.com/-SWj-15zct78/UUNzgK9hqHI/AAAAAAAAAbs/xn0OfeGyNDw/s1600/3D+Architectural+Designs+(21)+HD+Latest+Pictures+Photos+Wallpapers.jpg",
                             Name = "Architectural"
                         },
                         new
                         {
                             Id = 4,
-                            Image = "https://www.renderhub.com/mm2endra/complete-house-exterior/complete-house-exterior.jpg",
+                            Image = "https://www.cleanpix.com.au/images/1751_EXT_Hero_View2_D.jpg",
                             Name = "Exterior"
                         },
                         new
@@ -259,13 +262,13 @@ namespace BenevArts.Data.Migrations
                         new
                         {
                             Id = 10,
-                            Image = "https://www.renderhub.com/bsw2142/kitchen-appliances/kitchen-appliances.jpg",
+                            Image = "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.3dvalley.com%2Fuser%2Fpages%2F02.3d-models%2F05.household%2Fbathtub.jpg&f=1&nofb=1&ipt=81746dee5b141a5068a68673f81ff7b8e3702e2250c7e3988666d26bd84d6e6f&ipo=images",
                             Name = "Household"
                         },
                         new
                         {
                             Id = 11,
-                            Image = "https://img2.cgtrader.com/items/1949905/2aef8f1d69/loom-machine-3d-model-max-fbx.jpg",
+                            Image = "https://duckduckgo.com/?q=Industrial+3d+model+1500x1500+resolution+image&iar=images&iax=images&ia=images&iai=https%3A%2F%2Fstatic.turbosquid.com%2FPreview%2F001237%2F427%2FDZ%2Fconstruction-building-industrial-3D-model_DHQ.jpg",
                             Name = "Industrial"
                         },
                         new
@@ -283,7 +286,7 @@ namespace BenevArts.Data.Migrations
                         new
                         {
                             Id = 14,
-                            Image = "https://www.renderhub.com/sky3dstudios69/construction-vehicle-001/construction-vehicle-001.jpg",
+                            Image = "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.m2models.hr%2FPictures%2Fgalerija%2FThumbnails%2FSlike%2FV43.JPG&f=1&nofb=1&ipt=9d73ada32b967c128a4595983059f033a9cfc364d2b1219d5cd358396a648637&ipo=images",
                             Name = "Vehicle"
                         },
                         new

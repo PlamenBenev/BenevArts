@@ -1,4 +1,5 @@
 ﻿using BenevArts.Services.Data.Interfaces;
+using BenevArts.Web.Infrastructure;
 using BenevArts.Web.ViewModels.Home;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,10 +29,12 @@ namespace BenevArts.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Assets(int categoryId)
         {
+            // Might add pagination in future
+
             IEnumerable<AssetViewModel> assets = await categoryService.
                 GetAssetsByCategoryIdAsync(categoryId);
 
-            return View("~/Views/Asset/All.cshtml", assets);
+            return View("~/Views/Category/AssetsInCategory.cshtml", assets);
         }
     }
 }
