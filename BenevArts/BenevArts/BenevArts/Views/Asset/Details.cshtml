@@ -31,7 +31,7 @@
 @*Likes*@
 <div class="mt-4">
 	<p>Likes: <span id="likeCount">@Model.Likes.Count()</span></p>
-	@if (User.Identity.IsAuthenticated)
+	@if (User.Identity?.IsAuthenticated ?? false)
 	{
 		<button class="btn btn-outline-primary"
 				id="likeButton"
@@ -54,16 +54,28 @@
 <div class="row mt-4">
 	<div class="col-md-2">
 		@* Download Button *@
-		@if (Model.Seller != User.Identity?.Name)
+		@if (User.Identity?.IsAuthenticated ?? false)
 		{
-			<a asp-controller="Asset" asp-action="Download"
-			   asp-route-assetId="@Model.Id" class="btn btn-primary btn-lg">Buy Asset</a>
+			@if (Model.Seller != User.Identity?.Name)
+			{
+				<a asp-controller="Asset" asp-action="Download"
+				asp-route-assetId="@Model.Id" class="btn btn-primary btn-lg">Buy Asset</a>
+			}
+			else
+			{
+				<a asp-controller="Asset" asp-action="Edit"
+				   asp-route-assetId="@Model.Id" class="btn btn-primary btn-lg">Edit Asset</a>
+			}
+		}
+		else
+		{
+			<a class="btn btn-primary btn-lg" asp-area="Identity" asp-page="/Account/Login">Buy Asset</a>
 		}
 	</div>
 
 	<div class="col-md-6">
 		@* Favorites Button *@
-		@if (Model.Seller != User.Identity?.Name && User.Identity.IsAuthenticated)
+		@if (Model.Seller != User.Identity?.Name && (User.Identity?.IsAuthenticated ?? false))
 		{
 			<button class="btn btn-outline-primary btn-lg"
 					id="favoriteButton"
@@ -75,8 +87,8 @@
 	</div>
 </div>
 
-	<!-- Comment Form -->
-@if (User.Identity.IsAuthenticated)
+<!-- Comment Form -->
+@if (User.Identity?.IsAuthenticated ?? false)
 {
 	<div class="mt-4">
 		<div class="form-group">
@@ -105,7 +117,7 @@
 						<h5 class="card-title">User: @comment.User</h5>
 						<p class="card-text">Comment: @comment.Content</p>
 						<p class="card-text">Posted on: @comment.PostedDate</p>
-						@if (User.Identity.IsAuthenticated && User.Identity.Name == comment.User)
+						@if ((User.Identity?.IsAuthenticated ?? false) && User.Identity.Name == comment.User)
 						{
 							<button type="button" class="btn btn-danger btn-sm" onclick="removeComment('@comment.Id')">Remove</button>
 						}

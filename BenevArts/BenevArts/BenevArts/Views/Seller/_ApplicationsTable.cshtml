@@ -1,39 +1,41 @@
 ﻿@model IEnumerable<SellerApplicationViewModel>
 
-@if (Model.Any())
-{
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Store Name</th>
-                <th>Store Email</th>
-                <th>Store Phone</th>
-                <th>Store Store Description</th>
-                <th>State</th>
-                <th>Details</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var application in Model)
-            {
+<div class="table-responsive">
+    @if (Model.Any())
+    {
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td>@application.Name</td>
-                    <td>@application.Email</td>
-                    <td>@application.Phone</td>
-                    <td>@application.StoreDescription</td>
-                    <td>@application.State</td>
-                    <td>
-                        <a class="btn-primary"
-                           asp-controller="Seller"
-                           asp-action="SingleApplication"
-                           asp-route-id="@application.Id">View Application</a>
-                    </td>
+                    <th>Store Name</th>
+                    <th>Store Email</th>
+                    <th>Store Phone</th>
+                    <th>Store Store Description</th>
+                    <th>State</th>
+                    <th>Details</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No applications found.</p>
-}
+            </thead>
+            <tbody>
+                @foreach (var application in Model)
+                {
+                    <tr>
+                        <td>@application.Name</td>
+                        <td>@application.Email</td>
+                        <td>@application.Phone</td>
+                        <td>@application.StoreDescription</td>
+                        <td>@application.State</td>
+                        <td>
+                            <a class="btn-primary"
+                               asp-controller="Seller"
+                               asp-action="SingleApplication"
+                               asp-route-id="@application.Id">View Application</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No applications found.</p>
+    }
+</div>

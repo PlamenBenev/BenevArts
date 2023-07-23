@@ -44,6 +44,8 @@ namespace BenevArts.Web.Controllers
             return View(model);
         }
 
+		[HttpGet]
+		[AllowAnonymous]
         public async Task<IActionResult> All(int page = 1, int itemsPerPage = 1)
         {
             IEnumerable<AssetViewModel> models = await assetService.GetAllAssetsAsync();
@@ -89,20 +91,17 @@ namespace BenevArts.Web.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "User,Seller,Admin")]
+        [AllowAnonymous]
         public async Task<IActionResult> Download(Guid assetId)
         {
+            if (!User.Identity?.IsAuthenticated ?? true)
+            {
+                return View("~/Areas/Identity/Pages/Account/Login.cshtml");
+            }
             AssetViewModel asset = await assetService.GetAssetByIdAsync(assetId, GetUserId());
-            if (asset == null)
-            {
-                return NotFound();
-            }
 
-            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ZipFiles", asset.ZipFileName);
-            if (!System.IO.File.Exists(filePath))
-            {
-                return NotFound();
-            }
+            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ZipFiles", asset.ZipFileName)
+                ?? throw new InvalidOperationException("The file was not found!");
 
             var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
             return File(fileStream, "application/zip", asset.ZipFileName);
