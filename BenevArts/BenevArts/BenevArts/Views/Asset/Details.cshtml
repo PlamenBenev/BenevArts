@@ -4,42 +4,63 @@
 	ViewBag.Title = "Details of the Asset";
 }
 
-<h1>Asset Details</h1>
+<h1> @Model.Title</h1>
 
-@*Information about the Asset*@
 <div class="card">
-	<div class="card-body">
-		<h3 class="card-title">Title: @Model.Title</h3>
-		<img class="card-img-top" style="width: 18rem;"
-			 src="~/Images/@Model.Thumbnail" alt="Thumbnail">
-		<p class="card-text">Description: @Model.Description</p>
-		<p class="card-text">Price: @Model.Price</p>
-		<p class="card-text">Category: @Model.Category</p>
-		<p class="card-text">Uploaded By: @Model.Seller</p>
-		<p class="card-text">Uploaded On: @Model.UploadDate.ToString("yyyy-MM-dd HH:mm:ss")</p>
-		<p class="card-text">CGI Model: @(Model.CGIModel ? "Yes" : "No")</p>
-		<p class="card-text">Textures: @(Model.Textures ? "Yes" : "No")</p>
-		<p class="card-text">Materials: @(Model.Materials ? "Yes" : "No")</p>
-		<p class="card-text">Animated: @(Model.Animated ? "Yes" : "No")</p>
-		<p class="card-text">Rigged: @(Model.Rigged ? "Yes" : "No")</p>
-		<p class="card-text">Low Poly: @(Model.LowPoly ? "Yes" : "No")</p>
-		<p class="card-text">PBR: @(Model.PBR ? "Yes" : "No")</p>
-		<p class="card-text">UV Unwrapped: @(Model.UVUnwrapped ? "Yes" : "No")</p>
-	</div>
-</div>
+	<div class="row">
+		<div class="col-md-8">
+			<img class="card-img-top" style="width: 100%;" src="~/Images/@Model.Thumbnail" alt="Thumbnail">
+		</div>
+		<div class="col-md-4">
+			<div class="col-md-6 mt-4">
+				<div class="row">
+					<div class="row">
+						<div class="col-md-12">
+							<!-- Price -->
+							<h3 class="card-text">$@Model.Price</h3>
+						</div>
+						<div class="col-md-12">
+							<!-- Download Button -->
+							@if (User.Identity?.IsAuthenticated ?? false)
+							{
+								@if (Model.Seller != User.Identity?.Name)
+								{
+									<a asp-controller="Asset" asp-action="Download" asp-route-assetId="@Model.Id" class="btn btn-primary btn-lg">Buy Asset</a>
+								}
+								else
+								{
+									<a asp-controller="Asset" asp-action="Edit" asp-route-assetId="@Model.Id" class="btn btn-primary btn-lg">Edit Asset</a>
+								}
+							}
+							else
+							{
+								<a class="btn btn-primary btn-lg" asp-area="Identity" asp-page="/Account/Login">Buy Asset</a>
+							}
+						</div>
+					</div>
+				</div>
 
-@*Likes*@
-<div class="mt-4">
-	<p>Likes: <span id="likeCount">@Model.Likes.Count()</span></p>
-	@if (User.Identity?.IsAuthenticated ?? false)
-	{
-		<button class="btn btn-outline-primary"
-				id="likeButton"
-				data-asset-id="@Model.Id"
-				data-liked="@Model.IsLikedByCurrentUser">
-			@(Model.IsLikedByCurrentUser ? "Unlike" : "Like")
-		</button>
-	}
+				<div class="card col-md-14 mt-4">
+					<h4>Details</h4>
+					<p class="card-text">Category: @Model.Category</p>
+					<p class="card-text">Uploaded By: @Model.Seller</p>
+					<p class="card-text">Uploaded On: @Model.UploadDate.ToString("yyyy-MM-dd HH:mm:ss")</p>
+					<p class="card-text">CGI Model: @(Model.CGIModel ? "Yes" : "No")</p>
+					<p class="card-text">Textures: @(Model.Textures ? "Yes" : "No")</p>
+					<p class="card-text">Materials: @(Model.Materials ? "Yes" : "No")</p>
+					<p class="card-text">Animated: @(Model.Animated ? "Yes" : "No")</p>
+					<p class="card-text">Rigged: @(Model.Rigged ? "Yes" : "No")</p>
+					<p class="card-text">Low Poly: @(Model.LowPoly ? "Yes" : "No")</p>
+					<p class="card-text">PBR: @(Model.PBR ? "Yes" : "No")</p>
+					<p class="card-text">UV Unwrapped: @(Model.UVUnwrapped ? "Yes" : "No")</p>
+				</div>
+			</div>
+		</div>
+		<div class="card-body">
+			<h4 class="card-title">Description</h4>
+			<p class="card-text">Description: @Model.Description</p>
+		</div>
+	</div>
 </div>
 
 @*Images*@
@@ -52,19 +73,17 @@
 </div>
 
 <div class="row mt-4">
-	<div class="col-md-2">
+	<div class="col-md-1">
 		@* Download Button *@
 		@if (User.Identity?.IsAuthenticated ?? false)
 		{
 			@if (Model.Seller != User.Identity?.Name)
 			{
-				<a asp-controller="Asset" asp-action="Download"
-				asp-route-assetId="@Model.Id" class="btn btn-primary btn-lg">Buy Asset</a>
+				<a asp-controller="Asset" asp-action="Download" asp-route-assetId="@Model.Id" class="btn btn-primary btn-lg">Buy Asset</a>
 			}
 			else
 			{
-				<a asp-controller="Asset" asp-action="Edit"
-				   asp-route-assetId="@Model.Id" class="btn btn-primary btn-lg">Edit Asset</a>
+				<a asp-controller="Asset" asp-action="Edit" asp-route-assetId="@Model.Id" class="btn btn-primary btn-lg">Edit Asset</a>
 			}
 		}
 		else
@@ -73,19 +92,35 @@
 		}
 	</div>
 
-	<div class="col-md-6">
+	<div class="col-md-2">
 		@* Favorites Button *@
 		@if (Model.Seller != User.Identity?.Name && (User.Identity?.IsAuthenticated ?? false))
 		{
-			<button class="btn btn-outline-primary btn-lg"
-					id="favoriteButton"
-					data-asset-id="@Model.Id"
-					data-liked="@Model.IsFavoritedByCurrentUser">
+			<button class="btn btn-outline-primary " id="favoriteButton" data-asset-id="@Model.Id" data-liked="@Model.IsFavoritedByCurrentUser">
 				@(Model.IsFavoritedByCurrentUser ? "Remove from Favorites" : "Add to Favorites")
 			</button>
 		}
 	</div>
+
+	@* Likes *@
+	<div class="col-md-6">
+		<div class="row">
+			<div class="col-md-2">
+				<p>Likes: <span id="likeCount">@Model.Likes.Count()</span></p>
+			</div>
+			<div class="col-md-1">
+				@if (User.Identity?.IsAuthenticated ?? false)
+				{
+					<button class="btn btn-outline-primary" id="likeButton" data-asset-id="@Model.Id" data-liked="@Model.IsLikedByCurrentUser">
+						@(Model.IsLikedByCurrentUser ? "Unlike" : "Like")
+					</button>
+				}
+			</div>
+		</div>
+	</div>
+
 </div>
+
 
 <!-- Comment Form -->
 @if (User.Identity?.IsAuthenticated ?? false)
@@ -127,7 +162,11 @@
 		}
 		else
 		{
-			<p id="writeComment">Write the first comment!</p>
+			if (User.Identity?.IsAuthenticated ?? false)
+			{
+				<p id="writeComment">Write the first comment!</p>
+
+			}
 		}
 	</div>
 </div>
