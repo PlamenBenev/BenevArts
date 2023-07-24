@@ -27,6 +27,8 @@
             </div>
         }
     </div>
+
+    <!-- Pagination links -->
     <div class="row m-4">
         <div class="col-md-12">
             <nav aria-label="Page navigation">
@@ -34,11 +36,11 @@
                     @if (Model.CurrentPage > 1)
                     {
                         <li class="page-item">
-                            <a class="page-link" asp-action="Assets" asp-route-categoryId="@Model.CategoryId"
+                            <a class="page-link" asp-action="Search" asp-route-query="@Model.Query"
                                asp-route-page="1" asp-route-itemsPerPage="@Model.ItemsPerPage">First</a>
                         </li>
                         <li class="page-item">
-                            <a class="page-link" asp-action="Assets" asp-route-categoryId="@Model.CategoryId"
+                            <a class="page-link" asp-action="Search" asp-route-query="@Model.Query"
                                asp-route-page="@Model.CurrentPage - 1" asp-route-itemsPerPage="@Model.ItemsPerPage">Previous</a>
                         </li>
                     }
@@ -46,7 +48,7 @@
                     @for (int i = 1; i <= Math.Ceiling((double)Model.TotalItems / Model.ItemsPerPage); i++)
                     {
                         <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
-                            <a class="page-link" asp-action="Assets" asp-route-categoryId="@Model.CategoryId"
+                            <a class="page-link" asp-action="Search" asp-route-query="@Model.Query"
                                asp-route-page="@i" asp-route-itemsPerPage="@Model.ItemsPerPage">@i</a>
                         </li>
                     }
@@ -54,11 +56,11 @@
                     @if (Model.CurrentPage < Math.Ceiling((double)Model.TotalItems / Model.ItemsPerPage))
                     {
                         <li class="page-item">
-                            <a class="page-link" asp-action="Assets" asp-route-categoryId="@Model.CategoryId"
+                            <a class="page-link" asp-action="Search" asp-route-query="@Model.Query"
                                asp-route-page="@Model.CurrentPage + 1" asp-route-itemsPerPage="@Model.ItemsPerPage">Next</a>
                         </li>
                         <li class="page-item">
-                            <a class="page-link" asp-action="Assets" asp-route-categoryId="@Model.CategoryId"
+                            <a class="page-link" asp-action="Search" asp-route-query="@Model.Query"
                                asp-route-page="@Math.Ceiling((double)Model.TotalItems / Model.ItemsPerPage)"
                                asp-route-itemsPerPage="@Model.ItemsPerPage">Last</a>
                         </li>
@@ -68,3 +70,7 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

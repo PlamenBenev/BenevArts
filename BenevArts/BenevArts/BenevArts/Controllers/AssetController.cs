@@ -44,13 +44,13 @@ namespace BenevArts.Web.Controllers
             return View(model);
         }
 
-		[HttpGet]
-		[AllowAnonymous]
+        [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> All(int page = 1, int itemsPerPage = 1)
         {
             IEnumerable<AssetViewModel> models = await assetService.GetAllAssetsAsync();
 
-            return View(Pagination.Paginator(models, page, itemsPerPage));
+            return View(Pagination.Paginator(models, null, -1, page, itemsPerPage));
         }
 
         [HttpGet]
@@ -59,7 +59,7 @@ namespace BenevArts.Web.Controllers
         {
             IEnumerable<AssetViewModel> models = await assetService.GetFavoritesAsync(GetUserId());
 
-            return View("~/Views/Asset/All.cshtml", Pagination.Paginator(models, page, itemsPerPage));
+            return View("~/Views/Asset/All.cshtml", Pagination.Paginator(models, null, -1, page, itemsPerPage));
 
         }
 
@@ -69,7 +69,7 @@ namespace BenevArts.Web.Controllers
         {
             IEnumerable<AssetViewModel> models = await assetService.GetMyStoreAsync(GetUserId());
 
-            return View("~/Views/Asset/All.cshtml", Pagination.Paginator(models, page, itemsPerPage));
+            return View("~/Views/Asset/All.cshtml", Pagination.Paginator(models,null, -1, page, itemsPerPage));
         }
 
         [HttpGet]
@@ -78,7 +78,7 @@ namespace BenevArts.Web.Controllers
         {
             IEnumerable<AssetViewModel> models = await assetService.GetSearchResultAsync(query);
 
-            return View("~/Views/Asset/All.cshtml", Pagination.Paginator(models, page, itemsPerPage));
+            return View(Pagination.Paginator(models, query,-1, page, itemsPerPage));
         }
 
         [HttpGet]
@@ -251,7 +251,7 @@ namespace BenevArts.Web.Controllers
                 }
 
             }
-                return View(model);
+            return View(model);
         }
     }
 }

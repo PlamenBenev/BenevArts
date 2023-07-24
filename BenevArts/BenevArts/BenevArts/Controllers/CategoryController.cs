@@ -27,14 +27,13 @@ namespace BenevArts.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Assets(int categoryId)
+        public async Task<IActionResult> Assets(int categoryId,int page = 1, int currentPage = 1)
         {
-            // Might add pagination in future
-
             IEnumerable<AssetViewModel> assets = await categoryService.
                 GetAssetsByCategoryIdAsync(categoryId);
 
-            return View("~/Views/Category/AssetsInCategory.cshtml", assets);
+            return View("~/Views/Category/AssetsInCategory.cshtml", 
+                Pagination.Paginator(assets,null,categoryId,page,currentPage));
         }
     }
 }

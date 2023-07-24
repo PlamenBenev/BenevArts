@@ -4,7 +4,7 @@ namespace BenevArts.Web.Infrastructure
 {
     public static class Pagination
     {
-        public static PaginatedAssetViewModel Paginator(IEnumerable<AssetViewModel> models, int page, int itemsPerPage)
+        public static PaginatedAssetViewModel Paginator(IEnumerable<AssetViewModel> models,string? query, int categoryId, int page, int itemsPerPage)
         {
             int totalItems = models.Count();
 
@@ -20,7 +20,9 @@ namespace BenevArts.Web.Infrastructure
                 Items = itemsForPage,
                 CurrentPage = page,
                 ItemsPerPage = itemsPerPage,
-                TotalItems = totalItems
+                TotalItems = totalItems,
+                Query = query,
+                CategoryId = categoryId
             };
 
             return paginatedViewModel;
