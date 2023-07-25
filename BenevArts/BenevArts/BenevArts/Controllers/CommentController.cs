@@ -1,9 +1,7 @@
-﻿using BenevArts.Data.Models;
-using BenevArts.Services.Data.Interfaces;
+﻿using BenevArts.Services.Data.Interfaces;
 using BenevArts.Web.ViewModels.Home;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 
 namespace BenevArts.Web.Controllers
 {
