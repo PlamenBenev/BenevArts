@@ -29,7 +29,7 @@ namespace BenevArts.Web.Controllers
         {
             AddAssetViewModel model = new AddAssetViewModel()
             {
-                Categories = await categoryService.GetCategoriesAsync(),
+                Categories = await categoryService.GetCategoriesViewAsync(),
             };
 
             return View(model);

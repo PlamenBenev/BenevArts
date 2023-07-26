@@ -36,7 +36,7 @@ namespace BenevArts.Web.ViewModels.Home
         [Range(typeof(decimal), "0.00", "10000.00", ConvertValueInInvariantCulture = true)]
         public decimal Price { get; set; }
 
-        public IEnumerable<Category> Categories { get; set; } = new List<Category>();
+        public IEnumerable<CategoryViewModel> Categories { get; set; } = new List<CategoryViewModel>();
         public IEnumerable<IFormFile> Images { get; set; } = new List<IFormFile>();
 
     }
