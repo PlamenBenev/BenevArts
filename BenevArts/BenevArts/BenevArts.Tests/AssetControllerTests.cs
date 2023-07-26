@@ -1,15 +1,12 @@
 ﻿using AutoMapper;
 using Moq;
 using NUnit.Framework;
-using Microsoft.EntityFrameworkCore;
-using BenevArts.Data.Models;
-using BenevArts.Data;
-using BenevArts.Services.Data;
+
 using BenevArts.Web.ViewModels.Home;
 using BenevArts.Services.Data.Interfaces;
 using BenevArts.Web.Controllers;
+
 using Microsoft.AspNetCore.Mvc;
-using BenevArts.Web.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
@@ -112,7 +109,7 @@ public class AssetControllerTests
 		// Verify that the correct data is passed to the view model
 		var viewModel = result.Model as AddAssetViewModel;
 		Assert.NotNull(viewModel);
-		CollectionAssert.AreEqual(mockCategories, viewModel.Categories);
+		CollectionAssert.AreEqual(mockCategories, viewModel!.Categories);
 		// You can check other properties of the view model as needed
 	}
 
@@ -168,7 +165,7 @@ public class AssetControllerTests
 		// Verify that the correct data is passed to the view model
 		var viewModel = result.Model as EditAssetViewModel;
 		Assert.NotNull(viewModel);
-		Assert.AreEqual(mockAssetData.Id, viewModel.Id);
+		Assert.AreEqual(mockAssetData.Id, viewModel!.Id);
 		Assert.AreEqual(mockAssetData.Title, viewModel.Title);
 		Assert.AreEqual(mockAssetData.Description, viewModel.Description);
 		Assert.AreEqual(mockAssetData.CGIModel, viewModel.CGIModel);
@@ -250,12 +247,12 @@ public class AssetControllerTests
 
 		// Assert
 		Assert.NotNull(result); // Check if the result is not null
-		Assert.AreEqual("~/Views/Asset/All.cshtml", result.ViewName); // Check if the correct view is returned
+		Assert.AreEqual("~/Views/Asset/All.cshtml", result!.ViewName); // Check if the correct view is returned
 
 		// Verify that the correct data is passed to the view model
 		var viewModel = result.Model as PaginatedAssetViewModel;
 		Assert.NotNull(viewModel);
-		Assert.AreEqual(page, viewModel.CurrentPage);
+		Assert.AreEqual(page, viewModel!.CurrentPage);
 		Assert.AreEqual(itemsPerPage, viewModel.ItemsPerPage);
 		Assert.AreEqual(mockFavoritesData.Count, viewModel.TotalItems);
 
@@ -263,6 +260,249 @@ public class AssetControllerTests
 		CollectionAssert.AreEqual(mockFavoritesData.Skip((page - 1) * itemsPerPage).Take(itemsPerPage).ToList(), viewModel.Items);
 
 		// Add other assertions for properties and lists as needed
+	}
+
+	[Test]
+	public async Task MyStore_ShouldReturnCorrectViewResult()
+	{
+		// Arrange
+		var page = 1;
+		var itemsPerPage = 1;
+		var userId = "sampleUserId"; // Replace with a sample user ID
+
+		// Mock the assetService
+		var mockCategoryService = new Mock<ICategoryService>();
+		var mockMapper = new Mock<IMapper>();
+		var mockAssetService = new Mock<IAssetService>();
+		var mockLikeService = new Mock<ILikeService>();
+		// Setup the behavior of GetMyStoreAsync() to return mock data
+		var mockMyStoreData = new List<AssetViewModel>
+		{
+			new AssetViewModel
+			{
+				Id = Guid.NewGuid(),
+				Title = "Asset 1",
+				Thumbnail = "thumbnail1.jpg",
+				Price = 100,
+				UploadDate = DateTime.UtcNow,
+				Seller = "Seller 1"
+			},
+			new AssetViewModel
+			{
+				Id = Guid.NewGuid(),
+				Title = "Asset 2",
+				Thumbnail = "thumbnail2.jpg",
+				Price = 200,
+				UploadDate = DateTime.UtcNow,
+				Seller = "Seller 2"
+			},
+		};
+		mockAssetService.Setup(service => service.GetMyStoreAsync(userId))
+						.ReturnsAsync(mockMyStoreData);
+
+		// Create the controller instance and pass the mock assetService
+		var controller = new AssetController(
+			mockAssetService.Object,
+			mockLikeService.Object,
+			mockCategoryService.Object);
+
+		var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+		{
+			new Claim(ClaimTypes.Name, "TestUser"), // Replace "TestUser" with the desired username
+            new Claim(ClaimTypes.NameIdentifier, userId),
+			new Claim(ClaimTypes.Role, "Seller") // Replace "Seller" with the user's role
+        }));
+
+		controller.ControllerContext = new ControllerContext
+		{
+			HttpContext = new DefaultHttpContext { User = user }
+		};
+
+		// Act
+		var result = await controller.MyStore(page, itemsPerPage) as ViewResult;
+
+		// Assert
+		Assert.NotNull(result); // Check if the result is not null
+		Assert.AreEqual("~/Views/Asset/All.cshtml", result!.ViewName); // Check if the correct view is returned
+
+		// Verify that the correct data is passed to the view model
+		var viewModel = result.Model as PaginatedAssetViewModel;
+		Assert.NotNull(viewModel);
+		Assert.AreEqual(page, viewModel!.CurrentPage);
+		Assert.AreEqual(itemsPerPage, viewModel.ItemsPerPage);
+		Assert.AreEqual(mockMyStoreData.Count, viewModel.TotalItems);
+
+		// Assert the MyStore list
+		CollectionAssert.AreEqual(mockMyStoreData.Skip((page - 1) * itemsPerPage).Take(itemsPerPage).ToList(), viewModel.Items);
+
+		// Add other assertions for properties and lists as needed
+	}
+
+	[Test]
+	public async Task Search_ShouldReturnCorrectViewResult()
+	{
+		// Arrange
+		var page = 1;
+		var itemsPerPage = 1;
+		var query = "sampleQuery"; // Replace with a sample search query
+
+		// Mock the assetService
+		var mockCategoryService = new Mock<ICategoryService>();
+		var mockMapper = new Mock<IMapper>();
+		var mockAssetService = new Mock<IAssetService>();
+		var mockLikeService = new Mock<ILikeService>();
+		// Setup the behavior of GetSearchResultAsync() to return mock data
+		var mockSearchResult = new List<AssetViewModel>
+		{
+			new AssetViewModel
+			{
+				Title = "Asset 1",
+				Thumbnail = "thumbnail1.jpg",
+				Price = 100,
+				UploadDate = DateTime.UtcNow,
+				Seller = "Seller 1"
+			},
+			new AssetViewModel
+			{
+				Title = "Asset 2",
+				Thumbnail = "thumbnail2.jpg",
+				Price = 200,
+				UploadDate = DateTime.UtcNow,
+				Seller = "Seller 2"
+			},
+		};
+		mockAssetService.Setup(service => service.GetSearchResultAsync(query))
+						.ReturnsAsync(mockSearchResult);
+
+		// Create the controller instance and pass the mock assetService
+		var controller = new AssetController(
+			mockAssetService.Object,
+			mockLikeService.Object,
+			mockCategoryService.Object);
+
+		// Act
+		var result = await controller.Search(query, page, itemsPerPage) as ViewResult;
+
+		// Assert
+		Assert.NotNull(result); // Check if the result is not null
+		Assert.True(string.IsNullOrEmpty(result!.ViewName), "View name should not be null or empty.");
+
+		// Verify that the correct data is passed to the view model
+		var viewModel = result.Model as PaginatedAssetViewModel;
+		Assert.NotNull(viewModel);
+		Assert.AreEqual(page, viewModel!.CurrentPage);
+		Assert.AreEqual(itemsPerPage, viewModel.ItemsPerPage);
+
+		// Assert the search result list
+		CollectionAssert.AreEqual(mockSearchResult.Skip((page - 1) * itemsPerPage).Take(itemsPerPage).ToList(), viewModel.Items);
+		Assert.AreEqual(mockSearchResult.Count, viewModel.TotalItems);
+
+		// Add other assertions for properties and lists as needed
+	}
+
+	[Test]
+	public async Task Details_ShouldReturnCorrectViewResult()
+	{
+		// Arrange
+		var assetId = Guid.NewGuid(); // Replace with a sample asset ID
+		var userId = "sampleUserId"; // Replace with a sample user ID
+
+		// Mock the assetService
+		var mockCategoryService = new Mock<ICategoryService>();
+		var mockMapper = new Mock<IMapper>();
+		var mockAssetService = new Mock<IAssetService>();
+		var mockLikeService = new Mock<ILikeService>();
+		// Setup the behavior of GetAssetByIdAsync() to return mock data
+		var mockAssetViewModel = new AssetViewModel
+		{
+			Id = assetId,
+			Title = "Sample Asset",
+			Thumbnail = "thumbnail.jpg",
+			Price = 100,
+			UploadDate = DateTime.UtcNow,
+			Seller = "Seller 1",
+			// Add other properties as needed
+		};
+		mockAssetService.Setup(service => service.GetAssetByIdAsync(assetId, userId))
+						.ReturnsAsync(mockAssetViewModel);
+
+		// Create the controller instance and pass the mock assetService
+		var controller = new AssetController(
+			mockAssetService.Object,
+			mockLikeService.Object,
+			mockCategoryService.Object);
+
+		var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+		{
+			new Claim(ClaimTypes.Name, "TestUser"), // Replace "TestUser" with the desired username
+			new Claim(ClaimTypes.NameIdentifier, userId),
+			new Claim(ClaimTypes.Role, "User") // Replace "User" with the user's role
+		}));
+
+		controller.ControllerContext = new ControllerContext
+		{
+			HttpContext = new DefaultHttpContext { User = user }
+		};
+		// Act
+		var result = await controller.Details(assetId) as ViewResult;
+
+		// Assert
+		Assert.NotNull(result); // Check if the result is not null
+		Assert.True(string.IsNullOrEmpty(result!.ViewName), "View name should not be null or empty.");
+
+		// Verify that the correct data is passed to the view model
+		var viewModel = result.Model as AssetViewModel;
+		Assert.NotNull(viewModel);
+		Assert.AreEqual(mockAssetViewModel.Id, viewModel!.Id);
+		Assert.AreEqual(mockAssetViewModel.Title, viewModel.Title);
+		Assert.AreEqual(mockAssetViewModel.Thumbnail, viewModel.Thumbnail);
+		Assert.AreEqual(mockAssetViewModel.Price, viewModel.Price);
+		Assert.AreEqual(mockAssetViewModel.UploadDate, viewModel.UploadDate);
+		Assert.AreEqual(mockAssetViewModel.Seller, viewModel.Seller);
+		// Add other assertions for properties as needed
+	}
+
+	[Test]
+	public async Task Download_ShouldReturnCorrectFileResult()
+	{
+		// Arrange
+		var assetId = Guid.NewGuid(); // Replace with a sample asset ID
+		var userId = "sampleUserId"; // Replace with a sample user ID
+
+		// Mock the assetService
+		var mockCategoryService = new Mock<ICategoryService>();
+		var mockMapper = new Mock<IMapper>();
+		var mockAssetService = new Mock<IAssetService>();
+		var mockLikeService = new Mock<ILikeService>();
+
+		// Setup the behavior of GetAssetByIdAsync() to return null for a specific assetId
+		mockAssetService.Setup(service => service.GetAssetByIdAsync(assetId, userId))
+							.Returns(Task.FromResult<AssetViewModel?>(null)!);
+
+		var controller = new AssetController(
+			mockAssetService.Object,
+			mockLikeService.Object,
+			mockCategoryService.Object);
+
+		// Create a mock ClaimsPrincipal to represent an authenticated user
+		var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+		{
+		new Claim(ClaimTypes.NameIdentifier, userId),
+		new Claim(ClaimTypes.Role, "User")
+		}));
+
+		controller.ControllerContext = new ControllerContext
+		{
+			HttpContext = new DefaultHttpContext { User = user }
+		};
+
+		// Act
+		var result = await controller.Download(assetId) as ViewResult;
+
+		// Assert
+		Assert.NotNull(result); // Check if the result is not null
+		Assert.AreEqual("~/Areas/Identity/Pages/Account/Login.cshtml", result.ViewName); // Check if the view name is correct
+																						 // Add other assertions as needed
 	}
 
 }
