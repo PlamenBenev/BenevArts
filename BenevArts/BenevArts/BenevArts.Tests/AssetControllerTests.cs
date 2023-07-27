@@ -110,7 +110,6 @@ public class AssetControllerTests
 		var viewModel = result.Model as AddAssetViewModel;
 		Assert.NotNull(viewModel);
 		CollectionAssert.AreEqual(mockCategories, viewModel!.Categories);
-		// You can check other properties of the view model as needed
 	}
 
 	[Test]
@@ -144,7 +143,6 @@ public class AssetControllerTests
 				new CategoryViewModel { Id = 1, Name = "Category 1" },
 				new CategoryViewModel { Id = 2, Name = "Category 2" },
 			},
-			// Add other properties as needed for the EditAssetViewModel
 		};
 		mockAssetService.Setup(service => service.GetEditByIdAsync(assetId))
 						.ReturnsAsync(mockAssetData);
@@ -182,8 +180,6 @@ public class AssetControllerTests
 		// Assert the categories list
 		Assert.NotNull(viewModel.Categories);
 		Assert.AreEqual(2, viewModel.Categories.Count());
-
-		// Add other assertions for properties and lists as needed
 	}
 
 	[Test]
@@ -192,7 +188,7 @@ public class AssetControllerTests
 		// Arrange
 		var page = 1;
 		var itemsPerPage = 1;
-		var userId = "sampleUserId"; // Replace with a sample user ID
+		var userId = "sampleUserId"; 
 
 		// Mock the assetService
 		var mockCategoryService = new Mock<ICategoryService>();
@@ -232,9 +228,9 @@ public class AssetControllerTests
 
 		var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
 		{
-		new Claim(ClaimTypes.Name, "TestUser"), // Replace "TestUser" with the desired username
+		new Claim(ClaimTypes.Name, "TestUser"), 
         new Claim(ClaimTypes.NameIdentifier, userId),
-		new Claim(ClaimTypes.Role, "User") // Replace "User" with the user's role
+		new Claim(ClaimTypes.Role, "User") 
 		}));
 
 		controller.ControllerContext = new ControllerContext
@@ -258,8 +254,6 @@ public class AssetControllerTests
 
 		// Assert the favorites list
 		CollectionAssert.AreEqual(mockFavoritesData.Skip((page - 1) * itemsPerPage).Take(itemsPerPage).ToList(), viewModel.Items);
-
-		// Add other assertions for properties and lists as needed
 	}
 
 	[Test]
@@ -268,7 +262,7 @@ public class AssetControllerTests
 		// Arrange
 		var page = 1;
 		var itemsPerPage = 1;
-		var userId = "sampleUserId"; // Replace with a sample user ID
+		var userId = "sampleUserId"; 
 
 		// Mock the assetService
 		var mockCategoryService = new Mock<ICategoryService>();
@@ -308,9 +302,9 @@ public class AssetControllerTests
 
 		var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
 		{
-			new Claim(ClaimTypes.Name, "TestUser"), // Replace "TestUser" with the desired username
+			new Claim(ClaimTypes.Name, "TestUser"), 
             new Claim(ClaimTypes.NameIdentifier, userId),
-			new Claim(ClaimTypes.Role, "Seller") // Replace "Seller" with the user's role
+			new Claim(ClaimTypes.Role, "Seller") 
         }));
 
 		controller.ControllerContext = new ControllerContext
@@ -334,8 +328,6 @@ public class AssetControllerTests
 
 		// Assert the MyStore list
 		CollectionAssert.AreEqual(mockMyStoreData.Skip((page - 1) * itemsPerPage).Take(itemsPerPage).ToList(), viewModel.Items);
-
-		// Add other assertions for properties and lists as needed
 	}
 
 	[Test]
@@ -344,7 +336,7 @@ public class AssetControllerTests
 		// Arrange
 		var page = 1;
 		var itemsPerPage = 1;
-		var query = "sampleQuery"; // Replace with a sample search query
+		var query = "sampleQuery"; 
 
 		// Mock the assetService
 		var mockCategoryService = new Mock<ICategoryService>();
@@ -396,16 +388,14 @@ public class AssetControllerTests
 		// Assert the search result list
 		CollectionAssert.AreEqual(mockSearchResult.Skip((page - 1) * itemsPerPage).Take(itemsPerPage).ToList(), viewModel.Items);
 		Assert.AreEqual(mockSearchResult.Count, viewModel.TotalItems);
-
-		// Add other assertions for properties and lists as needed
 	}
 
 	[Test]
 	public async Task Details_ShouldReturnCorrectViewResult()
 	{
 		// Arrange
-		var assetId = Guid.NewGuid(); // Replace with a sample asset ID
-		var userId = "sampleUserId"; // Replace with a sample user ID
+		var assetId = Guid.NewGuid();
+		var userId = "sampleUserId"; 
 
 		// Mock the assetService
 		var mockCategoryService = new Mock<ICategoryService>();
@@ -421,7 +411,6 @@ public class AssetControllerTests
 			Price = 100,
 			UploadDate = DateTime.UtcNow,
 			Seller = "Seller 1",
-			// Add other properties as needed
 		};
 		mockAssetService.Setup(service => service.GetAssetByIdAsync(assetId, userId))
 						.ReturnsAsync(mockAssetViewModel);
@@ -434,9 +423,9 @@ public class AssetControllerTests
 
 		var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
 		{
-			new Claim(ClaimTypes.Name, "TestUser"), // Replace "TestUser" with the desired username
+			new Claim(ClaimTypes.Name, "TestUser"),
 			new Claim(ClaimTypes.NameIdentifier, userId),
-			new Claim(ClaimTypes.Role, "User") // Replace "User" with the user's role
+			new Claim(ClaimTypes.Role, "User")
 		}));
 
 		controller.ControllerContext = new ControllerContext
@@ -459,15 +448,14 @@ public class AssetControllerTests
 		Assert.AreEqual(mockAssetViewModel.Price, viewModel.Price);
 		Assert.AreEqual(mockAssetViewModel.UploadDate, viewModel.UploadDate);
 		Assert.AreEqual(mockAssetViewModel.Seller, viewModel.Seller);
-		// Add other assertions for properties as needed
 	}
 
 	[Test]
 	public async Task Download_ShouldReturnCorrectFileResult()
 	{
 		// Arrange
-		var assetId = Guid.NewGuid(); // Replace with a sample asset ID
-		var userId = "sampleUserId"; // Replace with a sample user ID
+		var assetId = Guid.NewGuid();
+		var userId = "sampleUserId"; 
 
 		// Mock the assetService
 		var mockCategoryService = new Mock<ICategoryService>();
@@ -501,8 +489,250 @@ public class AssetControllerTests
 
 		// Assert
 		Assert.NotNull(result); // Check if the result is not null
-		Assert.AreEqual("~/Areas/Identity/Pages/Account/Login.cshtml", result.ViewName); // Check if the view name is correct
-																						 // Add other assertions as needed
+		Assert.AreEqual("~/Areas/Identity/Pages/Account/Login.cshtml", result!.ViewName); // Check if the view name is correct
 	}
 
+	[Test]
+	public async Task Add_ShouldRedirectToMyStoreWhenModelIsValid()
+	{
+		// Arrange
+		var userId = "sampleUserId";
+
+		// Mock the assetService
+		var mockCategoryService = new Mock<ICategoryService>();
+		var mockMapper = new Mock<IMapper>();
+		var mockAssetService = new Mock<IAssetService>();
+		var mockLikeService = new Mock<ILikeService>();
+
+		// Create the controller instance and pass the mock assetService
+		var controller = new AssetController(
+			mockAssetService.Object,
+			mockLikeService.Object,
+			mockCategoryService.Object);
+
+		var model = new AddAssetViewModel
+		{
+			Title = "Sample Asset",
+			ZipFileName = new FormFile(new MemoryStream(new byte[0]), 0, 0, "zipfile", "sample.zip"),
+			Thumbnail = new FormFile(new MemoryStream(new byte[0]), 0, 0, "thumbnail", "sample.jpg"),
+			Description = "This is a sample asset",
+		};
+
+		// Mock the HttpContext and User to represent an authenticated user
+		var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+		{
+		new Claim(ClaimTypes.NameIdentifier, userId),
+		new Claim(ClaimTypes.Role, "Seller") // Assuming the user has the "Seller" role
+		}));
+
+		controller.ControllerContext = new ControllerContext
+		{
+			HttpContext = new DefaultHttpContext { User = user }
+		};
+
+		// Set ModelState to be invalid to simulate an invalid model
+		controller.ModelState.AddModelError("Title", "Title is required");
+
+		// Act
+		var result = await controller.Add(model);
+
+		// Assert
+		Assert.NotNull(result); // Check if the result is not null
+		Assert.IsInstanceOf<ViewResult>(result); // Check if the result is a ViewResult
+	}
+
+	[Test]
+	public async Task Add_ShouldReturnViewWithModelWhenModelIsInvalid()
+	{
+		// Arrange
+		var userId = "sampleUserId"; 
+
+		// Mock the assetService
+		var mockCategoryService = new Mock<ICategoryService>();
+		var mockMapper = new Mock<IMapper>();
+		var mockAssetService = new Mock<IAssetService>();
+		var mockLikeService = new Mock<ILikeService>();
+
+		// Create the controller instance and pass the mock assetService
+		var controller = new AssetController(
+			mockAssetService.Object,
+			mockLikeService.Object,
+			mockCategoryService.Object);
+
+		// Simulate model state errors to make the model invalid
+		controller.ModelState.AddModelError("PropertyName", "Error Message");
+
+		var model = new AddAssetViewModel
+		{
+			Title = "Sample Asset",
+			ZipFileName = new FormFile(new MemoryStream(new byte[0]), 0, 0, "zipfile", "sample.zip"),
+			Thumbnail = new FormFile(new MemoryStream(new byte[0]), 0, 0, "thumbnail", "sample.jpg"),
+			Description = "This is a sample asset",
+		};
+
+		// Mock the HttpContext and User to represent an authenticated user
+		var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+		{
+		new Claim(ClaimTypes.NameIdentifier, userId),
+		new Claim(ClaimTypes.Role, "Seller") // Assuming the user has the "Seller" role
+		}));
+
+		controller.ControllerContext = new ControllerContext
+		{
+			HttpContext = new DefaultHttpContext { User = user }
+		};
+
+		// Act
+		var result = await controller.Add(model) as ViewResult;
+
+		// Assert
+		Assert.NotNull(result); // Check if the result is not null
+		Assert.AreEqual(model, result!.Model); // Check if the model is passed back to the view
+	}
+
+	[Test]
+	public async Task Edit_ShouldRedirectToDetailsWhenModelIsValid()
+	{
+		// Arrange
+		var userId = "sampleUserId"; 
+		var assetId = Guid.NewGuid();
+
+		// Mock the assetService
+		var mockCategoryService = new Mock<ICategoryService>();
+		var mockMapper = new Mock<IMapper>();
+		var mockAssetService = new Mock<IAssetService>();
+		var mockLikeService = new Mock<ILikeService>();
+
+		// Create the controller instance and pass the mock assetService
+		var controller = new AssetController(
+			mockAssetService.Object,
+			mockLikeService.Object,
+			mockCategoryService.Object);
+
+		var model = new EditAssetViewModel
+		{
+			Id = assetId,
+			Title = "Sample Asset",
+			ZipFile = new FormFile(new MemoryStream(new byte[0]), 0, 0, "zipfile", "sample.zip"),
+			ThumbnailFile = new FormFile(new MemoryStream(new byte[0]), 0, 0, "thumbnail", "sample.jpg"),
+			Description = "This is a sample asset",
+		};
+
+		// Mock the HttpContext and User to represent an authenticated user
+		var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+		{
+		new Claim(ClaimTypes.NameIdentifier, userId),
+		new Claim(ClaimTypes.Role, "Seller") // Assuming the user has the "Seller" role
+		}));
+
+		controller.ControllerContext = new ControllerContext
+		{
+			HttpContext = new DefaultHttpContext { User = user }
+		};
+
+		// Set ModelState to be valid to simulate a valid model
+		controller.ModelState.Clear();
+
+		// Act
+		var result = await controller.Edit(model, assetId);
+
+		// Assert
+		Assert.NotNull(result); // Check if the result is not null
+		Assert.IsInstanceOf<RedirectToActionResult>(result); // Check if the result is a RedirectToActionResult
+	}
+
+	[Test]
+	public async Task Edit_ShouldReturnViewResultWhenModelIsInvalid()
+	{
+		// Arrange
+		var userId = "sampleUserId"; 
+		var assetId = Guid.NewGuid();
+
+		// Mock the assetService
+		var mockCategoryService = new Mock<ICategoryService>();
+		var mockMapper = new Mock<IMapper>();
+		var mockAssetService = new Mock<IAssetService>();
+		var mockLikeService = new Mock<ILikeService>();
+
+		// Create the controller instance and pass the mock assetService
+		var controller = new AssetController(
+			mockAssetService.Object,
+			mockLikeService.Object,
+			mockCategoryService.Object);
+
+		var model = new EditAssetViewModel
+		{
+			Id = assetId,
+			Title = "Sample Asset", 
+									
+		};
+
+		// Mock the HttpContext and User to represent an authenticated user
+		var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+		{
+		new Claim(ClaimTypes.NameIdentifier, userId),
+		new Claim(ClaimTypes.Role, "Seller") // Assuming the user has the "Seller" role
+		}));
+
+		controller.ControllerContext = new ControllerContext
+		{
+			HttpContext = new DefaultHttpContext { User = user }
+		};
+
+		// Set ModelState to be invalid to simulate an invalid model
+		controller.ModelState.AddModelError("Title", "Title is required");
+
+		// Act
+		var result = await controller.Edit(model, assetId);
+
+		// Assert
+		Assert.NotNull(result); // Check if the result is not null
+		Assert.IsInstanceOf<ViewResult>(result); // Check if the result is a ViewResult
+	}
+
+	[Test]
+	public async Task Remove_ShouldRedirectToAllActionAfterSuccessfulRemoval()
+	{
+		// Arrange
+		var userId = "sampleUserId"; 
+		var assetId = Guid.NewGuid();
+
+		// Mock the assetService
+		var mockCategoryService = new Mock<ICategoryService>();
+		var mockMapper = new Mock<IMapper>();
+		var mockAssetService = new Mock<IAssetService>();
+		var mockLikeService = new Mock<ILikeService>();
+
+		// Create the controller instance and pass the mock assetService
+		var controller = new AssetController(
+			mockAssetService.Object,
+			mockLikeService.Object,
+			mockCategoryService.Object);
+
+		// Mock the HttpContext and User to represent an authenticated user
+		var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+		{
+		new Claim(ClaimTypes.NameIdentifier, userId),
+		new Claim(ClaimTypes.Role, "Seller") // Assuming the user has the "Seller" role
+		}));
+
+		controller.ControllerContext = new ControllerContext
+		{
+			HttpContext = new DefaultHttpContext { User = user }
+		};
+
+		// Act
+		var result = await controller.Remove(assetId);
+
+		// Assert
+		Assert.NotNull(result); // Check if the result is not null
+		Assert.IsInstanceOf<RedirectToActionResult>(result); // Check if the result is a RedirectToActionResult
+
+		// Assert the action name and controller name in the RedirectToActionResult
+		var redirectResult = (RedirectToActionResult)result;
+		Assert.AreEqual("All", redirectResult.ActionName); // Ensure it redirects to the "All" action
+		Assert.IsNull(redirectResult.ControllerName); // Ensure it stays in the current controller
+
+		mockAssetService.Verify(service => service.RemoveAssetAsync(assetId, userId), Times.Once);
+	}
 }
