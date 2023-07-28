@@ -79,29 +79,6 @@ namespace BenevArts.Services.Data
 			return true;
 		}
 
-		// POST
-		public async Task ApplyAsync(SellerApplicationViewModel application, string userId)
-		{
-			Seller? seller = await context.Sellers.FindAsync(Guid.Parse(userId));
-
-			if (!await CheckIfUserAppliedAsync(application.ApplicationUserId) && seller == null)
-			{
-				SellerApplication createApplication = new SellerApplication
-				{
-					StoreName = application.Name,
-					StoreEmail = application.Email,
-					StorePhone = application.Phone,
-					StoreDescription = application.StoreDescription,
-					ApplicationUserId = Guid.Parse(userId)
-				};
-
-				createApplication.State = "Pending";
-
-				await context.SellersApplications.AddAsync(createApplication);
-				await context.SaveChangesAsync();
-			}
-		}
-
 		public async Task ApproveApplicationAsync(int id)
 		{
 			// Check if the application exist
@@ -158,7 +135,28 @@ namespace BenevArts.Services.Data
 			await context.SaveChangesAsync();
 		}
 
-	}
+		// POST
+		public async Task ApplyAsync(SellerApplicationViewModel application, string userId)
+		{
+			Seller? seller = await context.Sellers.FindAsync(Guid.Parse(userId));
 
+			if (!await CheckIfUserAppliedAsync(application.ApplicationUserId) && seller == null)
+			{
+				SellerApplication createApplication = new SellerApplication
+				{
+					StoreName = application.Name,
+					StoreEmail = application.Email,
+					StorePhone = application.Phone,
+					StoreDescription = application.StoreDescription,
+					ApplicationUserId = Guid.Parse(userId)
+				};
+
+				createApplication.State = "Pending";
+
+				await context.SellersApplications.AddAsync(createApplication);
+				await context.SaveChangesAsync();
+			}
+		}
+	}
 }
 

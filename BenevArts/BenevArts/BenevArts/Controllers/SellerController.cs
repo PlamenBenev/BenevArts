@@ -43,6 +43,7 @@ namespace BenevArts.Web.Controllers
 		{
 			return View();
 		}
+
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AllApplications()
@@ -51,6 +52,7 @@ namespace BenevArts.Web.Controllers
 
             return View("~/Views/Seller/AllApplications.cshtml", models);
         }
+
         [HttpGet]
 		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> GetApplicationsByState(string state)
