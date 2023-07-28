@@ -3,6 +3,7 @@ using BenevArts.Data;
 using BenevArts.Data.Models;
 using BenevArts.Web;
 using BenevArts.Web.Infrastructure;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -43,9 +44,11 @@ builder.Services.Configure<IISServerOptions>(options =>
 	options.MaxRequestBodySize = int.MaxValue;
 });
 
-builder.Services.AddAuthentication()
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 	.AddCookie(options =>
 	{
+		options.LoginPath = "/Account/Login";
+		options.LogoutPath = "/Account/Logout";
 		options.ExpireTimeSpan = TimeSpan.FromDays(7);
 	});
 

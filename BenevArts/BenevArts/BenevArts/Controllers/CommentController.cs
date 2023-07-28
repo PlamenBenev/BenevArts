@@ -13,8 +13,8 @@ namespace BenevArts.Web.Controllers
 		{
 			commentService = _commentService;
 		}
-		// Post
 
+		// Post
 		[HttpPost]
 		[Authorize(Roles = "User,Seller,Admin")]
 		public async Task<IActionResult> PostComment(Guid assetId, string content)
