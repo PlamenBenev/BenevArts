@@ -17,7 +17,7 @@ namespace BenevArts.Data.Models
 		public string StoreEmail { get; set; } = null!;
 
 		[Phone]
-		public string StorePhone { get; set; } = null!;
+		public string? StorePhone { get; set; }
 
 		[StringLength(1000)]
 		public string StoreDescription { get; set; } = null!;

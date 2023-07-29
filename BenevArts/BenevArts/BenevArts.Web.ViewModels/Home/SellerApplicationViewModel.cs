@@ -15,13 +15,13 @@ namespace BenevArts.Web.ViewModels.Home
 		public string Email { get; set; } = null!;
 
 		[Phone]
-		public string Phone { get; set; } = null!;
+		public string? Phone { get; set; }
 
 		[Required]
 		[StringLength(1000)]
 		public string StoreDescription { get; set; } = null!;
 
-		public string State { get; set; } = null!;
+		public string State { get; set; } = "Pending";
 
 		public Guid ApplicationUserId { get; set; }
 	}

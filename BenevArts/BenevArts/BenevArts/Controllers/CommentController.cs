@@ -14,6 +14,7 @@ namespace BenevArts.Web.Controllers
 			commentService = _commentService;
 		}
 
+		// Posting a comment will be availible only for users who purchased the asset
 		// Post
 		[HttpPost]
 		[Authorize(Roles = "User,Seller,Admin")]

@@ -92,7 +92,7 @@ namespace BenevArts.Web.Controllers
 
 			// TO DO: Send Notification to the user
 
-			return RedirectToAction(nameof(GetApplicationsByState));
+			return RedirectToAction(nameof(AllApplications));
 		}
 
 		[HttpGet]
@@ -111,7 +111,7 @@ namespace BenevArts.Web.Controllers
 		[Authorize(Roles = "User,Admin")]
 		public async Task<IActionResult> Apply(SellerApplicationViewModel application)
 		{
-			application.State = "Pending";
+			//application.State = "Pending";
 			if (ModelState.IsValid &&
 				!await sellerService.CheckIfUserAppliedAsync(Guid.Parse(GetUserId())))
 			{
