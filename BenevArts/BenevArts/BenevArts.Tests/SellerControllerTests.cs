@@ -204,10 +204,10 @@ namespace BenevArts.Tests
 
 			// Assert
 			Assert.IsNotNull(result);
-			Assert.AreEqual("~/Views/Seller/SingleApplication.cshtml", result.ViewName);
+			Assert.AreEqual("~/Views/Seller/SingleApplication.cshtml", result!.ViewName);
 			Assert.IsInstanceOf<SellerApplicationViewModel>(result.Model);
 			var model = result.Model as SellerApplicationViewModel;
-			Assert.AreEqual(applicationId, model.Id);
+			Assert.AreEqual(applicationId, model!.Id);
 			Assert.AreEqual("Test Store", model.Name);
 			Assert.AreEqual("teststore@test.com", model.Email);
 			Assert.AreEqual("123456789", model.Phone);
@@ -279,7 +279,9 @@ namespace BenevArts.Tests
 			// Verify that the controller redirects to the correct action after declining the application
 			Assert.IsInstanceOf<RedirectToActionResult>(result);
 			var redirectResult = result as RedirectToActionResult;
-			Assert.AreEqual("GetApplicationsByState", redirectResult.ActionName);
+			Assert.AreEqual("GetApplicationsByState", redirectResult!.ActionName);
 		}
+
+
 	}
 }

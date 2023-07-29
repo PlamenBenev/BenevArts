@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BenevArts.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class SeedingRolesAndAdmin : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -58,7 +58,8 @@ namespace BenevArts.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -111,8 +112,8 @@ namespace BenevArts.Data.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -156,8 +157,8 @@ namespace BenevArts.Data.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -188,6 +189,30 @@ namespace BenevArts.Data.Migrations
                         column: x => x.ApplicationUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SellersApplications",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StoreName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    StoreEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StorePhone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StoreDescription = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    State = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ApplicationUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SellersApplications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SellersApplications_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -282,14 +307,14 @@ namespace BenevArts.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AssetId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Likes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Likes_AspNetUsers_UserID",
-                        column: x => x.UserID,
+                        name: "FK_Likes_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -327,27 +352,53 @@ namespace BenevArts.Data.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "UserFavorites",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AssetId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserFavorites", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserFavorites_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserFavorites_Assets_AssetId",
+                        column: x => x.AssetId,
+                        principalTable: "Assets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "Categories",
-                columns: new[] { "Id", "Name" },
+                columns: new[] { "Id", "Image", "Name" },
                 values: new object[,]
                 {
-                    { 1, "Aircraft" },
-                    { 2, "Animals" },
-                    { 3, "Architectural" },
-                    { 4, "Exterior" },
-                    { 5, "Interior" },
-                    { 6, "Car" },
-                    { 7, "Character" },
-                    { 8, "Food" },
-                    { 9, "Furniture" },
-                    { 10, "Household" },
-                    { 11, "Industrial" },
-                    { 12, "Plant" },
-                    { 13, "Space" },
-                    { 14, "Vehicle" },
-                    { 15, "Watercraft" },
-                    { 16, "Military" }
+                    { 1, "https://i.pinimg.com/originals/0b/82/60/0b8260c6a692955a75d048cf12e20164.jpg", "Aircraft" },
+                    { 2, "https://360view.hum3d.com/zoom/Animals/Allosaurus_1000_0001.jpg", "Animals" },
+                    { 3, "https://www.renderhub.com/zyed/container-office-building/container-office-building.jpg", "Architectural" },
+                    { 4, "https://www.renderhub.com/mm2endra/complete-house-exterior/complete-house-exterior.jpg", "Exterior" },
+                    { 5, "https://mir-s3-cdn-cf.behance.net/project_modules/1400/4eddca30402501.56210b527c788.jpg", "Interior" },
+                    { 6, "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fget.wallhere.com%2Fphoto%2F1500x1500-px-GT1-LE-lemans-mans-Nissan-R390-race-racing-supercar-1672607.jpg&f=1&nofb=1&ipt=62e16a3e4f3cfcf3ab999db9b598e17e6ce3a49cea0cbf88e375afbbba3206c1&ipo=images", "Car" },
+                    { 7, "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.zerochan.net%2FHrothgar.full.2600742.png&f=1&nofb=1&ipt=f36ae45a8caf6f2980beb52a695e6db13dc4edc2340d9793110d24f36794f80d&ipo=images", "Character" },
+                    { 8, "https://static.turbosquid.com/Preview/2019/07/17__13_46_54/Signature.jpgD810065D-0F62-4EBB-847C-AA57E3F7D50ADefault.jpg", "Food" },
+                    { 9, "https://static.turbosquid.com/Preview/2020/07/20__00_13_48/1f.pngFE53EBFF-5100-497F-8874-49F155AC925BDefault.jpg", "Furniture" },
+                    { 10, "https://www.renderhub.com/bsw2142/kitchen-appliances/kitchen-appliances.jpg", "Household" },
+                    { 11, "https://img2.cgtrader.com/items/1949905/2aef8f1d69/loom-machine-3d-model-max-fbx.jpg", "Industrial" },
+                    { 12, "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2F736x%2Fee%2Fd1%2F33%2Feed133e60e4646d749c0a7e87da7f9e8.jpg&f=1&nofb=1&ipt=bc48b05a520757ee97c69e1e8c9f79e06ee8eae82203792e334bf3556edef1d1&ipo=images", "Plant" },
+                    { 13, "https://cdn.shopify.com/s/files/1/2191/8173/products/discovery-space-shuttle-nasa-3d-models-_3_1024x1024.jpg?v=1504007478", "Space" },
+                    { 14, "https://www.renderhub.com/sky3dstudios69/construction-vehicle-001/construction-vehicle-001.jpg", "Vehicle" },
+                    { 15, "https://3dlenta.com/components/com_virtuemart/shop_image/product/Watercraft_003_4ab8a73fa534b.jpg", "Watercraft" },
+                    { 16, "https://static.turbosquid.com/Preview/2014/05/16__03_52_30/MATV_Grad_Cam01.jpg217fdd9e-8a2c-49ba-9048-aeb9a1311120Zoom.jpg", "Military" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -420,9 +471,9 @@ namespace BenevArts.Data.Migrations
                 column: "AssetId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Likes_UserID",
+                name: "IX_Likes_UserId",
                 table: "Likes",
-                column: "UserID");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Purchases_AssetID",
@@ -438,6 +489,21 @@ namespace BenevArts.Data.Migrations
                 name: "IX_Sellers_ApplicationUserId",
                 table: "Sellers",
                 column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SellersApplications_ApplicationUserId",
+                table: "SellersApplications",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserFavorites_AssetId",
+                table: "UserFavorites",
+                column: "AssetId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserFavorites_UserId",
+                table: "UserFavorites",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -469,6 +535,12 @@ namespace BenevArts.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Purchases");
+
+            migrationBuilder.DropTable(
+                name: "SellersApplications");
+
+            migrationBuilder.DropTable(
+                name: "UserFavorites");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

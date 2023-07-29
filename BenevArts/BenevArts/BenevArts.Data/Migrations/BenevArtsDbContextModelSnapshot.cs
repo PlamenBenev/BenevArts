@@ -154,7 +154,7 @@ namespace BenevArts.Data.Migrations
 
                     b.HasIndex("SellerId");
 
-                    b.ToTable("Assets");
+                    b.ToTable("Assets", (string)null);
                 });
 
             modelBuilder.Entity("BenevArts.Data.Models.AssetImage", b =>
@@ -177,7 +177,7 @@ namespace BenevArts.Data.Migrations
 
                     b.HasIndex("AssetId");
 
-                    b.ToTable("AssetImages");
+                    b.ToTable("AssetImages", (string)null);
                 });
 
             modelBuilder.Entity("BenevArts.Data.Models.Category", b =>
@@ -199,7 +199,7 @@ namespace BenevArts.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
 
                     b.HasData(
                         new
@@ -328,7 +328,7 @@ namespace BenevArts.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("BenevArts.Data.Models.Like", b =>
@@ -351,7 +351,7 @@ namespace BenevArts.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Likes");
+                    b.ToTable("Likes", (string)null);
                 });
 
             modelBuilder.Entity("BenevArts.Data.Models.Purchase", b =>
@@ -381,7 +381,7 @@ namespace BenevArts.Data.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Purchases");
+                    b.ToTable("Purchases", (string)null);
                 });
 
             modelBuilder.Entity("BenevArts.Data.Models.Seller", b =>
@@ -406,7 +406,7 @@ namespace BenevArts.Data.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("Sellers");
+                    b.ToTable("Sellers", (string)null);
                 });
 
             modelBuilder.Entity("BenevArts.Data.Models.SellerApplication", b =>
@@ -446,7 +446,7 @@ namespace BenevArts.Data.Migrations
 
                     b.HasIndex("ApplicationUserId");
 
-                    b.ToTable("SellersApplications");
+                    b.ToTable("SellersApplications", (string)null);
                 });
 
             modelBuilder.Entity("BenevArts.Data.Models.UserFavorites", b =>
@@ -469,7 +469,7 @@ namespace BenevArts.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserFavorites");
+                    b.ToTable("UserFavorites", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
