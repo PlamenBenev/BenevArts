@@ -84,7 +84,7 @@ namespace BenevArts.Tests
 				new SellerApplicationViewModel
 				{
 					Id = 1,
-					Name = "Store 1",
+					StoreName = "Store 1",
 					Email = "store1@test.com",
 					Phone = "123456789",
 					StoreDescription = "Test store 1",
@@ -94,7 +94,7 @@ namespace BenevArts.Tests
 				new SellerApplicationViewModel
 				{
 					Id = 2,
-					Name = "Store 2",
+					StoreName = "Store 2",
 					Email = "store2@test.com",
 					Phone = "987654321",
 					StoreDescription = "Test store 2",
@@ -119,7 +119,7 @@ namespace BenevArts.Tests
 			var firstItem = model!.FirstOrDefault();
 			Assert.IsNotNull(firstItem);
 			Assert.AreEqual(1, firstItem!.Id);
-			Assert.AreEqual("Store 1", firstItem.Name);
+			Assert.AreEqual("Store 1", firstItem.StoreName);
 			Assert.AreEqual("store1@test.com", firstItem.Email);
 			Assert.AreEqual("123456789", firstItem.Phone);
 			Assert.AreEqual("Test store 1", firstItem.StoreDescription);
@@ -137,7 +137,7 @@ namespace BenevArts.Tests
 				new SellerApplicationViewModel
 				{
 					Id = 1,
-					Name = "Store 1",
+					StoreName = "Store 1",
 					Email = "store1@test.com",
 					Phone = "123456789",
 					StoreDescription = "Test store 1",
@@ -147,7 +147,7 @@ namespace BenevArts.Tests
 				new SellerApplicationViewModel
 				{
 					Id = 2,
-					Name = "Store 2",
+					StoreName = "Store 2",
 					Email = "store2@test.com",
 					Phone = "987654321",
 					StoreDescription = "Test store 2",
@@ -172,7 +172,7 @@ namespace BenevArts.Tests
 			var firstItem = model!.FirstOrDefault();
 			Assert.IsNotNull(firstItem);
 			Assert.AreEqual(1, firstItem!.Id);
-			Assert.AreEqual("Store 1", firstItem.Name);
+			Assert.AreEqual("Store 1", firstItem.StoreName);
 			Assert.AreEqual("store1@test.com", firstItem.Email);
 			Assert.AreEqual("123456789", firstItem.Phone);
 			Assert.AreEqual("Test store 1", firstItem.StoreDescription);
@@ -189,7 +189,7 @@ namespace BenevArts.Tests
 			var fakeApplication = new SellerApplicationViewModel
 			{
 				Id = applicationId,
-				Name = "Test Store",
+				StoreName = "Test Store",
 				Email = "teststore@test.com",
 				Phone = "123456789",
 				StoreDescription = "This is a test store.",
@@ -208,7 +208,7 @@ namespace BenevArts.Tests
 			Assert.IsInstanceOf<SellerApplicationViewModel>(result.Model);
 			var model = result.Model as SellerApplicationViewModel;
 			Assert.AreEqual(applicationId, model!.Id);
-			Assert.AreEqual("Test Store", model.Name);
+			Assert.AreEqual("Test Store", model.StoreName);
 			Assert.AreEqual("teststore@test.com", model.Email);
 			Assert.AreEqual("123456789", model.Phone);
 			Assert.AreEqual("This is a test store.", model.StoreDescription);

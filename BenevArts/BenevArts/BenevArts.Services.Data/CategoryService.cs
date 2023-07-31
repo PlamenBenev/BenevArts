@@ -33,7 +33,7 @@ namespace BenevArts.Services.Data
                       Thumbnail = a.Thumbnail,
                       Price = a.Price,
                       UploadDate = a.UploadDate,
-                      Seller = a.Seller.Name
+                      Seller = a.Seller.SellerName
                   })
                   .ToListAsync();
         }

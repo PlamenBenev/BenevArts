@@ -29,7 +29,7 @@ namespace BenevArts.Services.Data
                     Thumbnail = a.Thumbnail,
                     Price = a.Price,
                     UploadDate = a.UploadDate,
-                    Seller = a.Seller.Name
+                    Seller = a.Seller.SellerName
                 })
                 .ToListAsync();
         }
@@ -44,7 +44,7 @@ namespace BenevArts.Services.Data
                     Thumbnail = a.Asset.Thumbnail,
                     Price = a.Asset.Price,
                     UploadDate = a.Asset.UploadDate,
-                    Seller = a.Asset.Seller.Name
+                    Seller = a.Asset.Seller.SellerName
                 })
                 .ToListAsync();
         }
@@ -58,7 +58,7 @@ namespace BenevArts.Services.Data
                     Thumbnail = a.Thumbnail,
                     Price = a.Price,
                     UploadDate = a.UploadDate,
-                    Seller = a.Seller.Name
+                    Seller = a.Seller.SellerName
                 })
                 .ToListAsync();
         }
@@ -73,8 +73,8 @@ namespace BenevArts.Services.Data
 					Thumbnail = a.Thumbnail,
 					Price = a.Price,
 					UploadDate = a.UploadDate,
-					Seller = a.Seller.Name
-				})
+					Seller = a.Seller.SellerName
+                })
 				.ToListAsync();
 		}
         public async Task<AssetViewModel> GetAssetByIdAsync(Guid id, string userId)

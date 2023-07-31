@@ -12,7 +12,11 @@ namespace BenevArts.Data.Models
 
         [Required]
         [StringLength(30)]
-        public string Name { get; set; } = null!;
+        public string SellerName { get; set; } = null!;
+
+        [Required]
+        [StringLength(30)]
+        public string StoreName { get; set; } = null!;
 
         [Required]
         [EmailAddress]

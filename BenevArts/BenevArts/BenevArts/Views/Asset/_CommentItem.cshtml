@@ -1,15 +1,15 @@
 ﻿@model CommentViewModel
 
 <div class="card mt-2">
-    <div data-comment-id="@Model.Id">
-        <h5 class="card-title">User: @Model.User</h5>
-        <p class="card-text">Comment: @Model.Content</p>
-        <p class="card-text">Posted on: @Model.PostedDate</p>
-        @if ((User.Identity?.IsAuthenticated ?? false) && User.Identity.Name == Model.User)
-        {
-            <button type="button" class="btn btn-danger btn-sm" onclick="removeComment('@Model.Id')">Remove</button>
-        }
-    </div>
+	<div data-comment-id="@Model.Id">
+		<h5 class="card-title">Writen by: @Model.User</h5>
+		<p class="card-text">@Model.Content</p>
+		<p class="card-text">Posted on: @Model.PostedDate.ToString("yyyy-MM-dd")</p>
+		@if ((User.Identity?.IsAuthenticated ?? false) && User.Identity.Name == Model.User)
+		{
+			<button type="button" class="btn btn-danger btn-sm" onclick="removeComment('@Model.Id')">Remove</button>
+		}
+	</div>
 </div>
 
 @section Scripts {

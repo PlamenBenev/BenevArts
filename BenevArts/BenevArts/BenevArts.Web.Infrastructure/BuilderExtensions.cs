@@ -1,11 +1,13 @@
 ﻿using BenevArts.Data.Models;
 using BenevArts.Services.Data;
 using BenevArts.Services.Data.Interfaces;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
+using System.Reflection;
 
 namespace BenevArts.Web.Infrastructure
 {
@@ -13,7 +15,8 @@ namespace BenevArts.Web.Infrastructure
 	{
 		public static void AddApplicationService(this IServiceCollection services)
 		{
-			services.AddScoped<IImageService, ImageService>();
+
+            services.AddScoped<IImageService, ImageService>();
 			services.AddScoped<IAssetService, AssetService>();
 			services.AddScoped<ICommentService, CommentService>();
 			services.AddScoped<ILikeService, LikeService>();

@@ -8,9 +8,14 @@ namespace BenevArts.Web.ViewModels.Home
 
 		[Required]
 		[StringLength(20)]
-		public string Name { get; set; } = null!;
+		public string UserName { get; set; } = null!;
 
-		[Required]
+        [Required]
+        [StringLength(20)]
+        public string StoreName { get; set; } = null!;
+
+
+        [Required]
 		[EmailAddress]
 		public string Email { get; set; } = null!;
 

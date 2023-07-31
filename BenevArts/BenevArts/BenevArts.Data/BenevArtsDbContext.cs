@@ -38,7 +38,7 @@ namespace BenevArts.Data
             builder.Entity<Purchase>()
                 .HasOne(p => p.Asset)
                 .WithMany(a => a.Purchases)
-                .HasForeignKey(p => p.AssetID)
+                .HasForeignKey(p => p.AssetId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<Asset>()

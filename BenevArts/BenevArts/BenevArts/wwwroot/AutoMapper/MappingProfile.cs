@@ -12,7 +12,7 @@ namespace BenevArts.Web
                  .ForMember(dest => dest.UploadDate,
                     opt => opt.MapFrom(src => DateTime.UtcNow))
                  .ForMember(dest => dest.Seller,
-                    opt => opt.MapFrom(src => src.Seller.Name))
+                    opt => opt.MapFrom(src => src.Seller.SellerName))
                  .ForMember(dest => dest.Category,
                     opt => opt.MapFrom(src => src.Category.Name));
 

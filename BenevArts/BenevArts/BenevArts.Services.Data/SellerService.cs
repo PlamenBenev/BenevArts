@@ -28,7 +28,8 @@ namespace BenevArts.Services.Data
 				.Select(ap => new SellerApplicationViewModel
 				{
 					Id = ap.Id,
-					Name = ap.StoreName,
+					StoreName = ap.StoreName,
+					UserName = ap.ApplicationUser.UserName,
 					Email = ap.StoreEmail,
 					Phone = ap.StorePhone,
 					StoreDescription = ap.StoreDescription,
@@ -43,7 +44,8 @@ namespace BenevArts.Services.Data
 				.Select(ap => new SellerApplicationViewModel
 				{
 					Id = ap.Id,
-					Name = ap.StoreName,
+					StoreName = ap.StoreName,
+					UserName = ap.ApplicationUser.UserName,
 					Email = ap.StoreEmail,
 					Phone = ap.StorePhone,
 					StoreDescription = ap.StoreDescription,
@@ -58,7 +60,8 @@ namespace BenevArts.Services.Data
 				.Select(ap => new SellerApplicationViewModel
 				{
 					Id = ap.Id,
-					Name = ap.StoreName,
+					StoreName = ap.StoreName,
+					UserName = ap.ApplicationUser.UserName,
 					Email = ap.StoreEmail,
 					Phone = ap.StorePhone,
 					StoreDescription = ap.StoreDescription,
@@ -98,7 +101,8 @@ namespace BenevArts.Services.Data
 				seller = new Seller
 				{
 					Id = application.ApplicationUserId,
-					Name = application.StoreName,
+					SellerName = user.UserName,
+					StoreName = application.StoreName,
 					Email = application.StoreEmail,
 				};
 
@@ -138,13 +142,17 @@ namespace BenevArts.Services.Data
 		// POST
 		public async Task ApplyAsync(SellerApplicationViewModel application, string userId)
 		{
+			ApplicationUser user = await context.Users.FindAsync(userId) 
+				?? throw new UserNullException();
+
 			Seller? seller = await context.Sellers.FindAsync(Guid.Parse(userId));
 
 			if (!await CheckIfUserAppliedAsync(application.ApplicationUserId) && seller == null)
 			{
 				SellerApplication createApplication = new SellerApplication
 				{
-					StoreName = application.Name,
+					ApplicationUser = user,
+					StoreName = application.StoreName,
 					StoreEmail = application.Email,
 					StorePhone = application.Phone,
 					StoreDescription = application.StoreDescription,
