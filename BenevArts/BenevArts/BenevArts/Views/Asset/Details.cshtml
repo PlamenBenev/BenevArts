@@ -14,33 +14,39 @@
 		</div>
 		<div class="col-md-4">
 			<div class="mt-4">
-				@*Like Button*@
-				<div class="col-md-12 mt-4">
-					@if (User.Identity?.IsAuthenticated ?? false)
-					{
-						if (User.Identity.Name != Model.Seller)
+				<div class="row">
+						<!-- Like Button -->
+					<div class="col-md-4">
+						@if (User.Identity?.IsAuthenticated ?? false)
 						{
-							<button class="btn btn-outline-primary" id="likeButton" data-asset-id="@Model.Id" data-liked="@Model.IsLikedByCurrentUser">
-								@(Model.IsLikedByCurrentUser ? "Unlike" : "Like")
-							</button>
+							if (User.Identity.Name != Model.Seller)
+							{
+								<button class="btn btn-outline-primary" id="likeButton" data-asset-id="@Model.Id" data-liked="@Model.IsLikedByCurrentUser"
+										style="width: 100px; height: 40px;">
+									@(Model.IsLikedByCurrentUser ? "Unlike" : "Like")
+								</button>
+							}
 						}
-					}
-					else
-					{
-						<a class="btn btn-outline-primary" asp-area="Identity" asp-page="/Account/Login">Like</a>
-					}
+						else
+						{
+							<a class="btn btn-outline-primary" asp-area="Identity" asp-page="/Account/Login" style="width: 100px; height: 40px;">Like</a>
+						}
+					</div>
+
+					<!-- Likes -->
+					<div class="col-md-3 mt-2">
+						<p>
+							<span class="material-symbols-outlined">
+								thumb_up
+							</span>
+							<span id="likeCount">
+								@Model.Likes.Count()
+							</span>
+						</p>
+					</div>
 				</div>
-				@*Likes*@
-				<div class="col-md-4">
-					<p>
-						<span class="material-symbols-outlined">
-							thumb_up
-						</span>
-						<span id="likeCount">
-							@Model.Likes.Count()
-						</span>
-					</p>
-				</div>
+
+
 				@*Details*@
 				<div class="card col-md-12">
 					<h4>Details</h4>
@@ -89,7 +95,8 @@
 					{
 						if (User.Identity.Name != Model.Seller)
 						{
-							<button class="btn btn-outline-primary btn" id="favoriteButton" data-asset-id="@Model.Id" data-liked="@Model.IsFavoritedByCurrentUser">
+							<button class="btn btn-outline-primary btn" id="favoriteButton" data-asset-id="@Model.Id" data-liked="@Model.IsFavoritedByCurrentUser"
+									style="width: 120px; height: 70px;">
 								@(Model.IsFavoritedByCurrentUser ? "Remove from Favorites" : "Add to Favorites")
 							</button>
 						}
@@ -97,22 +104,6 @@
 					else
 					{
 						<a class="btn btn-outline-primary" asp-area="Identity" asp-page="/Account/Login">Add to Favorites</a>
-					}
-				</div>
-				@*Like Button*@
-				<div class="col-md-12 mt-4">
-					@if (User.Identity?.IsAuthenticated ?? false)
-					{
-						if (User.Identity.Name != Model.Seller)
-						{
-							<button class="btn btn-outline-primary" id="likeButton" data-asset-id="@Model.Id" data-liked="@Model.IsLikedByCurrentUser">
-								@(Model.IsLikedByCurrentUser ? "Unlike" : "Like")
-							</button>
-						}
-					}
-					else
-					{
-						<a class="btn btn-outline-primary" asp-area="Identity" asp-page="/Account/Login">Like</a>
 					}
 				</div>
 			</div>
@@ -134,7 +125,7 @@
 	}
 </div>
 
-<!-- Comment Form will be availible only for users who purchused the asset-->
+<!-- TO DO: Comment Form will be availible as "Review Asset" only for users who purchused the asset-->
 @if (User.Identity?.IsAuthenticated ?? false)
 {
 	<div class="mt-4">
