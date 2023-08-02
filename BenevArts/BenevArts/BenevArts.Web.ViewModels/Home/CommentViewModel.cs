@@ -12,7 +12,8 @@ namespace BenevArts.Web.ViewModels.Home
 		public int Id { get; set; }
 
 		[Required]
-		[StringLength(10000)]
+		[StringLength(1000)]
+		[RegularExpression(@"^[A-Za-z0-9 ]+$", ErrorMessage = "Only letters, numbers, and spaces are allowed.")]
 		public string Content { get; set; } = null!;
 
 		[DataType(DataType.DateTime)]

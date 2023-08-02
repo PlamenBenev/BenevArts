@@ -111,7 +111,6 @@ namespace BenevArts.Web.Controllers
 		[Authorize(Roles = "User,Admin")]
 		public async Task<IActionResult> Apply(SellerApplicationViewModel application)
 		{
-			//application.State = "Pending";
 			if (ModelState.IsValid &&
 				!await sellerService.CheckIfUserAppliedAsync(Guid.Parse(GetUserId())))
 			{

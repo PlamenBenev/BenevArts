@@ -20,7 +20,9 @@ namespace BenevArts.Web.ViewModels.Home
         public IFormFile ThumbnailFile { get; set; } = null!;
 
         [Required]
-        public string Description { get; set; } = null!;
+		[RegularExpression(@"^[A-Za-z0-9 ]+$", ErrorMessage = "Only letters, numbers, and spaces are allowed.")]
+		[StringLength(1000)]
+		public string Description { get; set; } = null!;
 
         public bool CGIModel { get; set; }
         public bool Textures { get; set; }

@@ -3,6 +3,7 @@ using BenevArts.Web.Infrastructure;
 using BenevArts.Web.ViewModels.Home;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
 
 namespace BenevArts.Web.Controllers
 {
@@ -75,9 +76,21 @@ namespace BenevArts.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Search(string query, int page = 1, int itemsPerPage = 1)
         {
-            IEnumerable<AssetViewModel> models = await assetService.GetSearchResultAsync(query);
+			if (!IsValidQuery(query))
+			{
+				ViewData["InvalidInput"] = "Invalid input. Only letters and numbers are allowed.";
 
-            return View(Pagination.Paginator(models, query,-1, page, itemsPerPage));
+                return View();
+			}
+
+			IEnumerable<AssetViewModel> models = await assetService.GetSearchResultAsync(query);
+
+            if (models == null)
+            {
+				return View();
+			}
+
+			return View(Pagination.Paginator(models, query,-1, page, itemsPerPage));
         }
 
         [HttpGet]
@@ -168,28 +181,6 @@ namespace BenevArts.Web.Controllers
             return Json(new { success = true, isLiked = updatedIsLiked, likeCount = updatedLikeCount });
         }
 
-        //public PaginatedAssetViewModel Paginator(IEnumerable<AssetViewModel> models, int page, int itemsPerPage)
-        //{
-        //    int totalItems = models.Count();
-
-        //    // Calculate the number of assets to skip based on the current page and items per page
-        //    int skip = (page - 1) * itemsPerPage;
-
-        //    // Get the assets for the current page using Skip and Take LINQ methods
-        //    var assetsForPage = models.Skip(skip).Take(itemsPerPage).ToList();
-
-        //    // Create the view model for the current page of assets
-        //    var paginatedViewModel = new PaginatedAssetViewModel
-        //    {
-        //        Assets = assetsForPage,
-        //        CurrentPage = page,
-        //        ItemsPerPage = itemsPerPage,
-        //        TotalItems = totalItems
-        //    };
-
-        //    return paginatedViewModel;
-        //}
-
         private IActionResult CheckFormats(AddAssetViewModel model)
         {
             // Check if the thumbnail is in valid format
@@ -252,5 +243,10 @@ namespace BenevArts.Web.Controllers
             }
             return View(model);
         }
-    }
+		private bool IsValidQuery(string query)
+		{
+			string pattern = @"^[a-zA-Z0-9 ]+$";
+			return Regex.IsMatch(query, pattern);
+		}
+	}
 }

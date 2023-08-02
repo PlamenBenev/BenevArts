@@ -21,7 +21,9 @@ namespace BenevArts.Data.Models
         public string Thumbnail { get; set; } = null!;
 
         [Required]
-        public string Description { get; set; } = null!;
+		[StringLength(1000)]
+		[RegularExpression(@"^[A-Za-z0-9 ]+$", ErrorMessage = "Only letters, numbers, and spaces are allowed.")]
+		public string Description { get; set; } = null!;
 
         [Required]
         [ForeignKey(nameof(CategoryId))]
@@ -30,7 +32,7 @@ namespace BenevArts.Data.Models
         public int CategoryId { get; set; }
 
         [Required]
-        [Precision(18, 2)] //To add binding model
+        [Precision(18, 2)] 
         [Range(typeof(decimal), "0.00", "10000.00", ConvertValueInInvariantCulture = true)]
         public decimal Price { get; set; }
 

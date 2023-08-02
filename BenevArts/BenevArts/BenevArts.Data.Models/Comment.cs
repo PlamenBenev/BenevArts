@@ -11,7 +11,8 @@ namespace BenevArts.Data.Models
 
         [Required]
         [StringLength(10000)]
-        public string Content { get; set; } = null!;
+		[RegularExpression(@"^[A-Za-z0-9 ]+$", ErrorMessage = "Only letters, numbers, and spaces are allowed.")]
+		public string Content { get; set; } = null!;
 
         [Required]
         [DataType(DataType.DateTime)]

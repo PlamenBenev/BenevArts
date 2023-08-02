@@ -17,11 +17,14 @@ namespace BenevArts.Data.Models
 		public string StoreEmail { get; set; } = null!;
 
 		[Phone]
+		[RegularExpression(@"^[0-9]+$", ErrorMessage = "Only numbers are allowed.")]
 		public string? StorePhone { get; set; }
 
 		[StringLength(1000)]
+		[RegularExpression(@"^[A-Za-z0-9 ]+$", ErrorMessage = "Only letters, numbers, and spaces are allowed.")]
 		public string StoreDescription { get; set; } = null!;
 
+		[RegularExpression(@"^[A-Za-z0-9 ]+$", ErrorMessage = "Only letters, numbers, and spaces are allowed.")]
 		public string State { get; set; } = null!;
 
         [Required]

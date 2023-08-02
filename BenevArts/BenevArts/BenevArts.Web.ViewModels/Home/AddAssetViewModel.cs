@@ -8,7 +8,8 @@ namespace BenevArts.Web.ViewModels.Home
     {
         [Required]
         [StringLength(100)]
-        public string Title { get; set; } = null!;
+		[RegularExpression(@"^[A-Za-z0-9 ]+$", ErrorMessage = "Only letters, numbers, and spaces are allowed.")]
+		public string Title { get; set; } = null!;
 
         [Required]
         public IFormFile ZipFileName { get; set; } = null!;
@@ -17,7 +18,9 @@ namespace BenevArts.Web.ViewModels.Home
         public IFormFile Thumbnail { get; set; } = null!;
 
         [Required]
-        public string Description { get; set; } = null!;
+		[StringLength(1000)]
+		[RegularExpression(@"^[A-Za-z0-9 ]+$", ErrorMessage = "Only letters, numbers, and spaces are allowed.")]
+		public string Description { get; set; } = null!;
 
         public bool CGIModel { get; set; }
         public bool Textures { get; set; }
