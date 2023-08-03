@@ -10,6 +10,7 @@ namespace BenevArts.Data.Models
 
 		[Required]
 		[StringLength(20)]
+		[RegularExpression(@"^[A-Za-z0-9 ]+$", ErrorMessage = "Only letters, numbers, and spaces are allowed.")]
 		public string StoreName { get; set; } = null!;
 
 		[Required]

@@ -29,7 +29,6 @@ namespace BenevArts.Services.Data
 				{
 					Id = ap.Id,
 					StoreName = ap.StoreName,
-					UserName = ap.ApplicationUser.UserName,
 					Email = ap.StoreEmail,
 					Phone = ap.StorePhone,
 					StoreDescription = ap.StoreDescription,
@@ -45,7 +44,6 @@ namespace BenevArts.Services.Data
 				{
 					Id = ap.Id,
 					StoreName = ap.StoreName,
-					UserName = ap.ApplicationUser.UserName,
 					Email = ap.StoreEmail,
 					Phone = ap.StorePhone,
 					StoreDescription = ap.StoreDescription,
@@ -61,7 +59,6 @@ namespace BenevArts.Services.Data
 				{
 					Id = ap.Id,
 					StoreName = ap.StoreName,
-					UserName = ap.ApplicationUser.UserName,
 					Email = ap.StoreEmail,
 					Phone = ap.StorePhone,
 					StoreDescription = ap.StoreDescription,
@@ -142,7 +139,7 @@ namespace BenevArts.Services.Data
 		// POST
 		public async Task ApplyAsync(SellerApplicationViewModel application, string userId)
 		{
-			ApplicationUser user = await context.Users.FindAsync(userId) 
+			ApplicationUser user = await context.Users.FindAsync(Guid.Parse(userId)) 
 				?? throw new UserNullException();
 
 			Seller? seller = await context.Sellers.FindAsync(Guid.Parse(userId));

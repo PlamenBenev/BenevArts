@@ -76,6 +76,10 @@ namespace BenevArts.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Search(string query, int page = 1, int itemsPerPage = 1)
         {
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                return RedirectToAction(nameof(All));
+            }
 			if (!IsValidQuery(query))
 			{
 				ViewData["InvalidInput"] = "Invalid input. Only letters and numbers are allowed.";

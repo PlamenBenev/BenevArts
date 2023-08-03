@@ -13,6 +13,7 @@
     <div class="form-group">
         <label for="title">Title</label>
         <input type="text" class="form-control" id="title" name="Title" value="@Model.Title" required>
+        <span asp-validation-for="Title" class="text-danger"></span>
     </div>
 
     <div class="form-group">
@@ -33,6 +34,7 @@
     <div class="form-group">
         <label for="description">Description</label>
         <textarea class="form-control" id="description" name="Description" rows="4" required>@Model.Description</textarea>
+        <span asp-validation-for="Title" class="text-danger"></span>
     </div>
 
     <div class="form-group">

@@ -5,6 +5,7 @@
 		<h5 class="card-title">Writen by: @Model.User</h5>
 		<p class="card-text">@Model.Content</p>
 		<p class="card-text">Posted on: @Model.PostedDate.ToString("yyyy-MM-dd")</p>
+		<span asp-validation-for="Content" class="text-danger"></span>
 		@if ((User.Identity?.IsAuthenticated ?? false) && User.Identity.Name == Model.User)
 		{
 			<button type="button" class="btn btn-danger btn-sm" onclick="removeComment('@Model.Id')">Remove</button>

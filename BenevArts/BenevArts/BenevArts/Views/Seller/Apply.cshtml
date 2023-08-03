@@ -6,20 +6,24 @@
             <h2 class="mb-4">Become a Seller</h2>
             <form method="post" asp-controller="Seller" asp-action="Apply">
                 <div class="form-group">
-                    <label for="Name">Store Name</label>
-                    <input type="text" class="form-control" id="Name" name="Name" required>
+                    <label for="StoreName">Store Name</label>
+                    <input type="text" class="form-control" id="StoreName" name="StoreName" required>
+                    <span asp-validation-for="StoreName" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label for="Email">Store Email</label>
                     <input type="email" class="form-control" id="Email" name="Email" required>
+                    <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label for="Phone">Store Phone (optional)</label>
                     <input type="tel" class="form-control" id="Phone" name="Phone">
+                    <span asp-validation-for="Phone" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label for="StoreDescription">Store Description</label>
                     <textarea class="form-control" id="StoreDescription" name="StoreDescription" rows="4" required></textarea>
+                    <span asp-validation-for="StoreDescription" class="text-danger"></span>
                 </div>
                 <div class="text-center">
                     <button type="submit" class="btn btn-primary">Submit Application</button>

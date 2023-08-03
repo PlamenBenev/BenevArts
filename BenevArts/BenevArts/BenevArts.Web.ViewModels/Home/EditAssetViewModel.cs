@@ -8,19 +8,19 @@ namespace BenevArts.Web.ViewModels.Home
     {
         public Guid Id { get; set; }
 
-        [Required]
-        [StringLength(100)]
+        [Required(ErrorMessage = "Required field!")]
+        [StringLength(100, ErrorMessage = "The input is too long!")]
         public string Title { get; set; } = null!;
 
-        [Required]
+        [Required(ErrorMessage = "Required field!")]
         public IFormFile ZipFile { get; set; } = null!;
 
-        [Required]
+        [Required(ErrorMessage = "Required field!")]
         [Display(Name = "Thumbnail")]
         public IFormFile ThumbnailFile { get; set; } = null!;
 
-        [Required]
-		[RegularExpression(@"^[A-Za-z0-9 ]+$", ErrorMessage = "Only letters, numbers, and spaces are allowed.")]
+        [Required(ErrorMessage = "Required field!")]
+        [RegularExpression(@"^[A-Za-z0-9 ]+$", ErrorMessage = "Only letters, numbers, and spaces are allowed.")]
 		[StringLength(1000)]
 		public string Description { get; set; } = null!;
 
@@ -37,7 +37,7 @@ namespace BenevArts.Web.ViewModels.Home
         public int CategoryId { get; set; }
 
         //To add binding model
-        [Required]
+        [Required(ErrorMessage = "Required field!")]
         [Range(typeof(decimal), "0.00", "10000.00", ConvertValueInInvariantCulture = true)]
         public decimal Price { get; set; }
 

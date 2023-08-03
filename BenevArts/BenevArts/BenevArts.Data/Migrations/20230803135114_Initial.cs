@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BenevArts.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class SeedingRolesAndAdmin : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -177,7 +177,8 @@ namespace BenevArts.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    SellerName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    StoreName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ApplicationUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
@@ -199,7 +200,7 @@ namespace BenevArts.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StoreName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     StoreEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StorePhone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StorePhone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StoreDescription = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
                     State = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ApplicationUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
@@ -223,7 +224,7 @@ namespace BenevArts.Data.Migrations
                     Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     ZipFileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Thumbnail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     UploadDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -331,8 +332,8 @@ namespace BenevArts.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AssetID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AssetId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PurchaseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false)
                 },
@@ -340,14 +341,14 @@ namespace BenevArts.Data.Migrations
                 {
                     table.PrimaryKey("PK_Purchases", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Purchases_AspNetUsers_UserID",
-                        column: x => x.UserID,
+                        name: "FK_Purchases_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Purchases_Assets_AssetID",
-                        column: x => x.AssetID,
+                        name: "FK_Purchases_Assets_AssetId",
+                        column: x => x.AssetId,
                         principalTable: "Assets",
                         principalColumn: "Id");
                 });
@@ -476,14 +477,14 @@ namespace BenevArts.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Purchases_AssetID",
+                name: "IX_Purchases_AssetId",
                 table: "Purchases",
-                column: "AssetID");
+                column: "AssetId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Purchases_UserID",
+                name: "IX_Purchases_UserId",
                 table: "Purchases",
-                column: "UserID");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Sellers_ApplicationUserId",

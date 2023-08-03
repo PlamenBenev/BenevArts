@@ -54,6 +54,7 @@ namespace BenevArts.Services.Data
                 .Where(a => a.Title.Contains(query) || a.Description.Contains(query))
                 .Select(a => new AssetViewModel
                 {
+                    Id = a.Id,
                     Title = a.Title,
                     Thumbnail = a.Thumbnail,
                     Price = a.Price,
