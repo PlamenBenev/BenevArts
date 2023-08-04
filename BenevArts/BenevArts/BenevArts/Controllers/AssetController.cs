@@ -38,6 +38,7 @@ namespace BenevArts.Web.Controllers
 		[AllowAnonymous]
 		public async Task<IActionResult> Search(string sortOrder,string query, int page = 1, int itemsPerPage = 1)
 		{
+			// Check the query
 			if (string.IsNullOrWhiteSpace(query))
 			{
 				return RedirectToAction(nameof(All));
@@ -49,6 +50,8 @@ namespace BenevArts.Web.Controllers
 				return View();
 			}
 
+			ViewData["CurrentSortOrder"] = sortOrder;
+
 			IEnumerable<AssetViewModel> models = await assetService.GetSearchResultAsync(query);
 
 			if (models == null)
@@ -56,7 +59,7 @@ namespace BenevArts.Web.Controllers
 				return View();
 			}
 
-			return View(Pagination.Paginator(models, query, -1, page, itemsPerPage, sortOrder));
+			return View("~/Views/Asset/All.cshtml", Pagination.Paginator(models, query, -1, page, itemsPerPage, sortOrder));
 		}
 
 		[HttpGet]

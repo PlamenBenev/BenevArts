@@ -21,6 +21,8 @@ namespace BenevArts.Web.Controllers
 		{
 			IEnumerable<AssetViewModel> models = await favoriteService.GetFavoritesAsync(GetUserId());
 
+			ViewData["CurrentSortOrder"] = sortOrder;
+
 			return View("~/Views/Asset/All.cshtml", Pagination.Paginator(models, null, -1, page, itemsPerPage, sortOrder));
 
 		}
