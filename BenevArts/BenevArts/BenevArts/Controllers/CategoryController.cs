@@ -33,7 +33,9 @@ namespace BenevArts.Web.Controllers
             IEnumerable<AssetViewModel> assets = await categoryService.
                 GetAssetsByCategoryIdAsync(categoryId);
 
-            return View("~/Views/Category/AssetsInCategory.cshtml", 
+			ViewData["CurrentSortOrder"] = sortOrder;
+
+			return View("~/Views/Asset/All.cshtml", 
                 Pagination.Paginator(assets,null,categoryId,page,currentPage, sortOrder));
         }
     }

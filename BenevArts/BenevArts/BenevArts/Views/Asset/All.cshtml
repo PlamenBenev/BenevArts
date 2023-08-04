@@ -29,6 +29,7 @@
 			   asp-controller="@ViewContext.RouteData.Values["controller"]"
 			   asp-action="@ViewContext.RouteData.Values["action"]"
 			   asp-route-query="@Model.Query"
+			   asp-route-categoryId="@Model.CategoryId"
 			   asp-route-sortOrder="price">
 				Price
 			</a>
@@ -37,6 +38,7 @@
 			   asp-controller="@ViewContext.RouteData.Values["controller"]"
 			   asp-action="@ViewContext.RouteData.Values["action"]"
 			   asp-route-query="@Model.Query"
+			   asp-route-categoryId="@Model.CategoryId"
 			   asp-route-sortOrder="title">
 				Title
 			</a>
@@ -45,6 +47,7 @@
 			   asp-controller="@ViewContext.RouteData.Values["controller"]"
 			   asp-action="@ViewContext.RouteData.Values["action"]"
 			   asp-route-query="@Model.Query"
+			   asp-route-categoryId="@Model.CategoryId"
 			   asp-route-sortOrder="uploadDate">
 				Upload Date
 			</a>
@@ -92,7 +95,9 @@
 							   asp-route-sortOrder="@Model.CurrentSortOrder"
 							   asp-route-query="@Model.Query"
 							   asp-route-page="1"
-							   asp-route-itemsPerPage="@Model.ItemsPerPage">First</a>
+							   asp-route-categoryId="@Model.CategoryId"
+							   asp-route-itemsPerPage="@Model.ItemsPerPage">First
+						   </a>
 						</li>
 						<li class="page-item">
 							<a class="page-link" asp-controller="@ViewContext.RouteData.Values["controller"]"
@@ -100,7 +105,9 @@
 							   asp-route-sortOrder="@Model.CurrentSortOrder"
 							   asp-route-query="@Model.Query"
 							   asp-route-page="@Model.CurrentPage - 1"
-							   asp-route-itemsPerPage="@Model.ItemsPerPage">Previous</a>
+							   asp-route-categoryId="@Model.CategoryId"
+							   asp-route-itemsPerPage="@Model.ItemsPerPage">Previous
+						   </a>
 						</li>
 					}
 
@@ -112,7 +119,9 @@
 							   asp-route-sortOrder="@Model.CurrentSortOrder"
 							   asp-route-query="@Model.Query"
 							   asp-route-page="@i"
-							   asp-route-itemsPerPage="@Model.ItemsPerPage">@i</a>
+							   asp-route-categoryId="@Model.CategoryId"
+							   asp-route-itemsPerPage="@Model.ItemsPerPage">@i
+							   </a>
 						</li>
 					}
 
@@ -124,7 +133,9 @@
 							   asp-route-sortOrder="@Model.CurrentSortOrder"
 							   asp-route-query="@Model.Query"
 							   asp-route-page="@Model.CurrentPage + 1"
-							   asp-route-itemsPerPage="@Model.ItemsPerPage">Next</a>
+							   asp-route-categoryId="@Model.CategoryId"
+							   asp-route-itemsPerPage="@Model.ItemsPerPage">Next
+						   </a>
 						</li>
 						<li class="page-item">
 							<a class="page-link" asp-controller="@ViewContext.RouteData.Values["controller"]"
@@ -132,7 +143,9 @@
 							   asp-route-sortOrder="@Model.CurrentSortOrder"
 							   asp-route-query="@Model.Query"
 							   asp-route-page="@Math.Ceiling((double)Model.TotalItems / Model.ItemsPerPage)"
-							   asp-route-itemsPerPage="@Model.ItemsPerPage">Last</a>
+							   asp-route-categoryId="@Model.CategoryId"
+							   asp-route-itemsPerPage="@Model.ItemsPerPage">Last
+						   </a>
 						</li>
 					}
 				</ul>
