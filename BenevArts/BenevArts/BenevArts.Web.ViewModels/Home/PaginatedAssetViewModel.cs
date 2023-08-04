@@ -13,5 +13,7 @@ namespace BenevArts.Web.ViewModels.Home
 
 		[RegularExpression(@"^[A-Za-z0-9 ]+$", ErrorMessage = "Only letters, numbers, and spaces are allowed.")]
 		public string? Query { get; set; }
+
+		public string? CurrentSortOrder { get; set; }
 	}
 }

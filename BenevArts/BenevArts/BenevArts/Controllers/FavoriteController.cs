@@ -1,8 +1,8 @@
-﻿using BenevArts.Services.Data;
-using BenevArts.Services.Data.Interfaces;
+﻿using BenevArts.Services.Data.Interfaces;
+using BenevArts.Web.Infrastructure;
+using BenevArts.Web.ViewModels.Home;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 
 namespace BenevArts.Web.Controllers
 {
@@ -15,7 +15,17 @@ namespace BenevArts.Web.Controllers
             favoriteService = _favoriteService;
         }
 
-        [HttpPost]
+		[HttpGet]
+		[Authorize(Roles = "User,Seller,Admin")]
+		public async Task<IActionResult> Favorites(string sortOrder, int page = 1, int itemsPerPage = 1)
+		{
+			IEnumerable<AssetViewModel> models = await favoriteService.GetFavoritesAsync(GetUserId());
+
+			return View("~/Views/Asset/All.cshtml", Pagination.Paginator(models, null, -1, page, itemsPerPage, sortOrder));
+
+		}
+
+		[HttpPost]
 		[Authorize(Roles = "User,Seller,Admin")]
 		public async Task<IActionResult> ToggleFavorite(Guid assetId, bool isFavorited)
 		{

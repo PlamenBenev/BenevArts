@@ -2,6 +2,7 @@
 using BenevArts.Data;
 using BenevArts.Data.Models;
 using BenevArts.Services.Data.Interfaces;
+using BenevArts.Web.ViewModels.Home;
 using Microsoft.EntityFrameworkCore;
 
 namespace BenevArts.Services.Data
@@ -14,7 +15,21 @@ namespace BenevArts.Services.Data
 		{
 			context = _context;
 		}
-
+		public async Task<IEnumerable<AssetViewModel>> GetFavoritesAsync(string userId)
+		{
+			return await context.UserFavorites
+				.Where(f => f.UserId == Guid.Parse(userId))
+				.Select(a => new AssetViewModel
+				{
+					Id = a.Asset.Id,
+					Title = a.Asset.Title,
+					Thumbnail = a.Asset.Thumbnail,
+					Price = a.Asset.Price,
+					UploadDate = a.Asset.UploadDate,
+					Seller = a.Asset.Seller.SellerName
+				})
+				.ToListAsync();
+		}
 		public async Task AddToFavoriteAsync(Guid assetId, string userId)
 		{
 			ApplicationUser user = await context.Users
@@ -34,7 +49,6 @@ namespace BenevArts.Services.Data
 			context.UserFavorites.Add(favorite);
 			await context.SaveChangesAsync();
 		}
-
 		public async Task RemoveFromFavoriteAsync(Guid assetId, string userId)
 		{
 			UserFavorites favorite = await GetFavoriteByUserAsync(assetId, userId)

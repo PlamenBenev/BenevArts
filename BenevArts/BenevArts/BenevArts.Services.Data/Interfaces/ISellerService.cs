@@ -19,5 +19,6 @@ namespace BenevArts.Services.Data.Interfaces
 		// POST
 		Task ApplyAsync(SellerApplicationViewModel application, string userId);
 		Task DeclineApplicationAsync(int id);
+
 	}
 }

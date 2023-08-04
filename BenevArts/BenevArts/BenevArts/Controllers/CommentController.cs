@@ -1,5 +1,6 @@
 ﻿using BenevArts.Services.Data.Interfaces;
 using BenevArts.Web.ViewModels.Home;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

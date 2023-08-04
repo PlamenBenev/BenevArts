@@ -1,6 +1,7 @@
 ﻿using BenevArts.Services.Data.Interfaces;
 using BenevArts.Web.Infrastructure;
 using BenevArts.Web.ViewModels.Home;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,13 +28,13 @@ namespace BenevArts.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Assets(int categoryId,int page = 1, int currentPage = 1)
+        public async Task<IActionResult> Assets(string sortOrder, int categoryId,int page = 1, int currentPage = 1)
         {
             IEnumerable<AssetViewModel> assets = await categoryService.
                 GetAssetsByCategoryIdAsync(categoryId);
 
             return View("~/Views/Category/AssetsInCategory.cshtml", 
-                Pagination.Paginator(assets,null,categoryId,page,currentPage));
+                Pagination.Paginator(assets,null,categoryId,page,currentPage, sortOrder));
         }
     }
 }

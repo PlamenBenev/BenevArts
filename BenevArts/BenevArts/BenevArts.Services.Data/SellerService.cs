@@ -3,9 +3,9 @@ using BenevArts.Data;
 using BenevArts.Data.Models;
 using BenevArts.Services.Data.Interfaces;
 using BenevArts.Web.ViewModels.Home;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace BenevArts.Services.Data
 {
@@ -78,7 +78,6 @@ namespace BenevArts.Services.Data
 			}
 			return true;
 		}
-
 		public async Task ApproveApplicationAsync(int id)
 		{
 			// Check if the application exist
@@ -111,7 +110,6 @@ namespace BenevArts.Services.Data
 				await context.SaveChangesAsync();
 			}
 		}
-
 		public async Task DeclineApplicationAsync(int id)
 		{
 			// Check if the application exist

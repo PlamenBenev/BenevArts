@@ -1,11 +1,10 @@
-﻿using BenevArts.Data.Models;
-using BenevArts.Services.Data;
-using BenevArts.Services.Data.Interfaces;
+﻿using BenevArts.Services.Data.Interfaces;
+using BenevArts.Web.Infrastructure;
 using BenevArts.Web.ViewModels.Home;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
-using static System.Net.Mime.MediaTypeNames;
+
 
 namespace BenevArts.Web.Controllers
 {

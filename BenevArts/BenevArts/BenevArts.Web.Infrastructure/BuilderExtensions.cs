@@ -23,6 +23,7 @@ namespace BenevArts.Web.Infrastructure
 			services.AddScoped<IFavoriteService, FavoriteService>();
 			services.AddScoped<ICategoryService, CategoryService>();
 			services.AddScoped<ISellerService, SellerService>();
+			services.AddScoped<IStoreService, StoreService>();
 
 			services.AddScoped<DatabaseSeeder>();
 		}
