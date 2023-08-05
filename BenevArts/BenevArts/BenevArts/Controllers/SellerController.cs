@@ -1,4 +1,5 @@
-﻿using BenevArts.Services.Data.Interfaces;
+﻿using BenevArts.Common;
+using BenevArts.Services.Data.Interfaces;
 using BenevArts.Web.Infrastructure;
 using BenevArts.Web.ViewModels.Home;
 
@@ -59,10 +60,9 @@ namespace BenevArts.Web.Controllers
 			IEnumerable<SellerApplicationViewModel> applications;
 
 			// Retrieve applications based on the selected state
-			if (string.IsNullOrEmpty(state))
+			if (string.IsNullOrEmpty(state) || !Validations.IsValidQuery(state))
 			{
 				applications = await sellerService.GetAllApplicationsAsync();
-
 			}
 			else
 			{
@@ -91,7 +91,7 @@ namespace BenevArts.Web.Controllers
 
 			// TO DO: Send Notification to the user
 
-			return RedirectToAction(nameof(AllApplications));
+			return RedirectToAction(nameof(GetApplicationsByState));
 		}
 
 		[HttpGet]

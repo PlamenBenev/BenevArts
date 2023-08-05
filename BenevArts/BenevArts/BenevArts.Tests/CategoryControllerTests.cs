@@ -3,6 +3,7 @@ using BenevArts.Services.Data.Interfaces;
 using BenevArts.Web.Controllers;
 using BenevArts.Web.ViewModels.Home;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Moq;
 using NUnit.Framework;
 
@@ -43,6 +44,7 @@ namespace BenevArts.Tests
 		{
 			var assetId1 = Guid.NewGuid();
 			var assetId2 = Guid.NewGuid();
+			var sortOrder = "title";
 			// Arrange
 			int categoryId = 1;
 			var page = 1;
@@ -61,21 +63,40 @@ namespace BenevArts.Tests
 							   .ReturnsAsync(mockAssets);
 
 			// Act
-			var result = await controller.Assets(categoryId,page, itemsPerPage) as ViewResult;
+			var result = await controller.Assets(sortOrder, categoryId, page, itemsPerPage) as ViewResult;
 
 			// Assert
 			Assert.NotNull(result); // Check if the result is not null
-			Assert.AreEqual("~/Views/Category/AssetsInCategory.cshtml", result!.ViewName); // Check if the correct view is returned
+			Assert.AreEqual("~/Views/Asset/All.cshtml", result!.ViewName); // Check if the correct view is returned
 
 			// Verify that the correct data is passed to the view model
 			var viewModel = result.Model as PaginatedAssetViewModel;
 			Assert.NotNull(viewModel);
 			Assert.AreEqual(categoryId, viewModel!.CategoryId);
 
-			var expectedPaginatedData = mockAssets.Skip((page - 1) * itemsPerPage).Take(itemsPerPage);
+			// Verify that the correct data is paginated and sorted
+			var expectedPaginatedData = mockAssets
+			.Skip((page - 1) * itemsPerPage)
+			.Take(itemsPerPage)
+			.ToList(); // Convert to list before sorting
+
+			switch (sortOrder)
+			{
+				case "price":
+					expectedPaginatedData.Sort((asset1, asset2) => asset1.Price.CompareTo(asset2.Price));
+					break;
+				case "title":
+					expectedPaginatedData.Sort((asset1, asset2) => string.Compare(asset1.Title, asset2.Title, StringComparison.Ordinal));
+					break;
+				case "uploadDate":
+					expectedPaginatedData.Sort((asset1, asset2) => asset1.UploadDate.CompareTo(asset2.UploadDate));
+					break;
+					// Add more cases for other sorting orders if needed
+			}
+
 			CollectionAssert.AreEqual(expectedPaginatedData, viewModel.Items);
 		}
 	}
 
-	
+
 }

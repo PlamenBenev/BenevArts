@@ -8,6 +8,7 @@ using BenevArts.Web.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+
 using System.Security.Claims;
 
 [TestFixture]
@@ -20,6 +21,7 @@ public class AssetControllerTests
 		// Arrange
 		var page = 1;
 		var itemsPerPage = 1;
+		var sortOrder = "title";
 
 		var assetId1 = Guid.NewGuid();
 		var assetId2 = Guid.NewGuid();
@@ -30,35 +32,34 @@ public class AssetControllerTests
 		var mockCategoryService = new Mock<ICategoryService>();
 		// Setup the behavior of GetAllAssetsAsync() to return mock data
 		var mockData = new List<AssetViewModel>
-			{
-				new AssetViewModel
-				{
-					Id = Guid.NewGuid(),
-					Title = "Asset 1",
-					Thumbnail = "thumbnail1.jpg",
-					Price = 100,
-					UploadDate = DateTime.UtcNow,
-				},
-				new AssetViewModel
-				{
-					Id = Guid.NewGuid(),
-					Title = "Asset 2",
-					Thumbnail = "thumbnail2.jpg",
-					Price = 200,
-					UploadDate = DateTime.UtcNow,
-				},
-			};
+	{
+		new AssetViewModel
+		{
+			Id = Guid.NewGuid(),
+			Title = "Asset 1",
+			Thumbnail = "thumbnail1.jpg",
+			Price = 100,
+			UploadDate = DateTime.UtcNow,
+		},
+		new AssetViewModel
+		{
+			Id = Guid.NewGuid(),
+			Title = "Asset 2",
+			Thumbnail = "thumbnail2.jpg",
+			Price = 200,
+			UploadDate = DateTime.UtcNow,
+		},
+	};
 		mockAssetService.Setup(service => service.GetAllAssetsAsync())
 						.ReturnsAsync(mockData);
 
 		// Create the controller instance and pass the mock assetService
 		var controller = new AssetController(
 			mockAssetService.Object,
-			mockLikeService.Object,
-			mockCategoryService.Object);
+			mockLikeService.Object);
 
 		// Act
-		var result = await controller.All() as ViewResult;
+		var result = await controller.All(sortOrder, page, itemsPerPage) as ViewResult;
 
 		// Assert
 		Assert.NotNull(result); // Check if the result is not null
@@ -71,8 +72,26 @@ public class AssetControllerTests
 		Assert.AreEqual(itemsPerPage, viewModel.ItemsPerPage);
 		Assert.AreEqual(mockData.Count, viewModel.TotalItems);
 
-		// Verify that the correct data is paginated
-		var expectedPaginatedData = mockData.Skip((page - 1) * itemsPerPage).Take(itemsPerPage);
+		// Verify that the correct data is paginated and sorted
+		var expectedPaginatedData = mockData
+		.Skip((page - 1) * itemsPerPage)
+		.Take(itemsPerPage)
+		.ToList(); // Convert to list before sorting
+
+		switch (sortOrder)
+		{
+			case "price":
+				expectedPaginatedData.Sort((asset1, asset2) => asset1.Price.CompareTo(asset2.Price));
+				break;
+			case "title":
+				expectedPaginatedData.Sort((asset1, asset2) => string.Compare(asset1.Title, asset2.Title, StringComparison.Ordinal));
+				break;
+			case "uploadDate":
+				expectedPaginatedData.Sort((asset1, asset2) => asset1.UploadDate.CompareTo(asset2.UploadDate));
+				break;
+				// Add more cases for other sorting orders if needed
+		}
+
 		CollectionAssert.AreEqual(expectedPaginatedData, viewModel.Items);
 	}
 
@@ -80,10 +99,9 @@ public class AssetControllerTests
 	public async Task Add_ShouldReturnCorrectViewResult()
 	{
 		// Arrange
-		var mockCategoryService = new Mock<ICategoryService>();
 		var mockMapper = new Mock<IMapper>();
-		var mockAssetService = new Mock<IAssetService>();
-		var mockLikeService = new Mock<ILikeService>();
+		var mockStoreService = new Mock<IStoreService>();
+		var mockCategoryService = new Mock<ICategoryService>();
 
 		// Setup the behavior of GetCategoriesAsync() to return mock data
 		var mockCategories = new List<CategoryViewModel>
@@ -95,9 +113,8 @@ public class AssetControllerTests
 						   .ReturnsAsync(mockCategories);
 
 		// Create the controller instance and pass the mock services
-		var controller = new AssetController(
-			mockAssetService.Object,
-			mockLikeService.Object,
+		var controller = new StoreController(
+			mockStoreService.Object,
 			mockCategoryService.Object);
 		// Act
 		var result = await controller.Add() as ViewResult;
@@ -119,9 +136,8 @@ public class AssetControllerTests
 		var assetId = Guid.NewGuid();
 
 		var mockCategoryService = new Mock<ICategoryService>();
-		var mockMapper = new Mock<IMapper>();
-		var mockAssetService = new Mock<IAssetService>();
-		var mockLikeService = new Mock<ILikeService>();
+		var mockStoreService = new Mock<IStoreService>();
+
 		// Setup the behavior of GetEditByIdAsync() to return mock data
 		var mockAssetData = new EditAssetViewModel
 		{
@@ -144,13 +160,12 @@ public class AssetControllerTests
 				new CategoryViewModel { Id = 2, Name = "Category 2" },
 			},
 		};
-		mockAssetService.Setup(service => service.GetEditByIdAsync(assetId))
+		mockStoreService.Setup(service => service.GetEditByIdAsync(assetId))
 						.ReturnsAsync(mockAssetData);
 
 		// Create the controller instance and pass the mock assetService
-		var controller = new AssetController(
-			mockAssetService.Object,
-			mockLikeService.Object,
+		var controller = new StoreController(
+			mockStoreService.Object,
 			mockCategoryService.Object);
 
 		// Act
@@ -188,49 +203,45 @@ public class AssetControllerTests
 		// Arrange
 		var page = 1;
 		var itemsPerPage = 1;
-		var userId = "sampleUserId"; 
+		var userId = "sampleUserId";
+		var sortOrder = "title";
 
-		// Mock the assetService
-		var mockCategoryService = new Mock<ICategoryService>();
-		var mockMapper = new Mock<IMapper>();
-		var mockAssetService = new Mock<IAssetService>();
-		var mockLikeService = new Mock<ILikeService>();
+		// Mock the favoriteService
+		var mockFavoritesService = new Mock<IFavoriteService>();
 		// Setup the behavior of GetFavoritesAsync() to return mock data
 		var mockFavoritesData = new List<AssetViewModel>
-	{
-		new AssetViewModel
 		{
-			Id = Guid.NewGuid(),
-			Title = "Asset 1",
-			Thumbnail = "thumbnail1.jpg",
-			Price = 100,
-			UploadDate = DateTime.UtcNow,
-			Seller = "Seller 1"
-		},
-		new AssetViewModel
-		{
-			Id = Guid.NewGuid(),
-			Title = "Asset 2",
-			Thumbnail = "thumbnail2.jpg",
-			Price = 200,
-			UploadDate = DateTime.UtcNow,
-			Seller = "Seller 2"
-		},
-	};
-		mockAssetService.Setup(service => service.GetFavoritesAsync(userId))
+			new AssetViewModel
+			{
+				Id = Guid.NewGuid(),
+				Title = "Asset 1",
+				Thumbnail = "thumbnail1.jpg",
+				Price = 100,
+				UploadDate = DateTime.UtcNow,
+				Seller = "Seller 1"
+			},
+			new AssetViewModel
+			{
+				Id = Guid.NewGuid(),
+				Title = "Asset 2",
+				Thumbnail = "thumbnail2.jpg",
+				Price = 200,
+				UploadDate = DateTime.UtcNow,
+				Seller = "Seller 2"
+			},
+		};
+		mockFavoritesService.Setup(service => service.GetFavoritesAsync(userId))
 						.ReturnsAsync(mockFavoritesData);
 
 		// Create the controller instance and pass the mock assetService
-		var controller = new AssetController(
-			mockAssetService.Object,
-			mockLikeService.Object,
-			mockCategoryService.Object);
+		var controller = new FavoriteController(
+			mockFavoritesService.Object);
 
 		var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
 		{
-		new Claim(ClaimTypes.Name, "TestUser"), 
-        new Claim(ClaimTypes.NameIdentifier, userId),
-		new Claim(ClaimTypes.Role, "User") 
+		new Claim(ClaimTypes.Name, "TestUser"),
+		new Claim(ClaimTypes.NameIdentifier, userId),
+		new Claim(ClaimTypes.Role, "User")
 		}));
 
 		controller.ControllerContext = new ControllerContext
@@ -239,7 +250,7 @@ public class AssetControllerTests
 		};
 
 		// Act
-		var result = await controller.Favorites(page, itemsPerPage) as ViewResult;
+		var result = await controller.Favorites(sortOrder, page, itemsPerPage) as ViewResult;
 
 		// Assert
 		Assert.NotNull(result); // Check if the result is not null
@@ -252,8 +263,27 @@ public class AssetControllerTests
 		Assert.AreEqual(itemsPerPage, viewModel.ItemsPerPage);
 		Assert.AreEqual(mockFavoritesData.Count, viewModel.TotalItems);
 
-		// Assert the favorites list
-		CollectionAssert.AreEqual(mockFavoritesData.Skip((page - 1) * itemsPerPage).Take(itemsPerPage).ToList(), viewModel.Items);
+		// Verify that the correct data is paginated and sorted
+		var expectedPaginatedData = mockFavoritesData
+		.Skip((page - 1) * itemsPerPage)
+		.Take(itemsPerPage)
+		.ToList(); // Convert to list before sorting
+				   // Assert the favorites list
+		switch (sortOrder)
+		{
+			case "price":
+				expectedPaginatedData.Sort((asset1, asset2) => asset1.Price.CompareTo(asset2.Price));
+				break;
+			case "title":
+				expectedPaginatedData.Sort((asset1, asset2) => string.Compare(asset1.Title, asset2.Title, StringComparison.Ordinal));
+				break;
+			case "uploadDate":
+				expectedPaginatedData.Sort((asset1, asset2) => asset1.UploadDate.CompareTo(asset2.UploadDate));
+				break;
+				// Add more cases for other sorting orders if needed
+		}
+
+		CollectionAssert.AreEqual(expectedPaginatedData, viewModel.Items);
 	}
 
 	[Test]
@@ -262,13 +292,13 @@ public class AssetControllerTests
 		// Arrange
 		var page = 1;
 		var itemsPerPage = 1;
-		var userId = "sampleUserId"; 
+		var userId = "sampleUserId";
+		var sortOrder = "title";
 
-		// Mock the assetService
+		// Mock the storeService
 		var mockCategoryService = new Mock<ICategoryService>();
-		var mockMapper = new Mock<IMapper>();
-		var mockAssetService = new Mock<IAssetService>();
-		var mockLikeService = new Mock<ILikeService>();
+		var mockStoreService = new Mock<IStoreService>();
+
 		// Setup the behavior of GetMyStoreAsync() to return mock data
 		var mockMyStoreData = new List<AssetViewModel>
 		{
@@ -291,21 +321,20 @@ public class AssetControllerTests
 				Seller = "Seller 2"
 			},
 		};
-		mockAssetService.Setup(service => service.GetMyStoreAsync(userId))
+		mockStoreService.Setup(service => service.GetMyStoreAsync(userId))
 						.ReturnsAsync(mockMyStoreData);
 
-		// Create the controller instance and pass the mock assetService
-		var controller = new AssetController(
-			mockAssetService.Object,
-			mockLikeService.Object,
+		// Create the controller instance and pass the mock storeService
+		var controller = new StoreController(
+			mockStoreService.Object,
 			mockCategoryService.Object);
 
 		var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
 		{
-			new Claim(ClaimTypes.Name, "TestUser"), 
-            new Claim(ClaimTypes.NameIdentifier, userId),
-			new Claim(ClaimTypes.Role, "Seller") 
-        }));
+			new Claim(ClaimTypes.Name, "TestUser"),
+			new Claim(ClaimTypes.NameIdentifier, userId),
+			new Claim(ClaimTypes.Role, "Seller")
+		}));
 
 		controller.ControllerContext = new ControllerContext
 		{
@@ -313,7 +342,7 @@ public class AssetControllerTests
 		};
 
 		// Act
-		var result = await controller.MyStore(page, itemsPerPage) as ViewResult;
+		var result = await controller.MyStore(sortOrder, page, itemsPerPage) as ViewResult;
 
 		// Assert
 		Assert.NotNull(result); // Check if the result is not null
@@ -327,7 +356,26 @@ public class AssetControllerTests
 		Assert.AreEqual(mockMyStoreData.Count, viewModel.TotalItems);
 
 		// Assert the MyStore list
-		CollectionAssert.AreEqual(mockMyStoreData.Skip((page - 1) * itemsPerPage).Take(itemsPerPage).ToList(), viewModel.Items);
+		var expectedPaginatedData = mockMyStoreData
+				.Skip((page - 1) * itemsPerPage)
+				.Take(itemsPerPage)
+				.ToList(); // Convert to list before sorting
+
+		switch (sortOrder)
+		{
+			case "price":
+				expectedPaginatedData.Sort((asset1, asset2) => asset1.Price.CompareTo(asset2.Price));
+				break;
+			case "title":
+				expectedPaginatedData.Sort((asset1, asset2) => string.Compare(asset1.Title, asset2.Title, StringComparison.Ordinal));
+				break;
+			case "uploadDate":
+				expectedPaginatedData.Sort((asset1, asset2) => asset1.UploadDate.CompareTo(asset2.UploadDate));
+				break;
+				// Add more cases for other sorting orders if needed
+		}
+
+		CollectionAssert.AreEqual(expectedPaginatedData, viewModel.Items);
 	}
 
 	[Test]
@@ -336,54 +384,54 @@ public class AssetControllerTests
 		// Arrange
 		var page = 1;
 		var itemsPerPage = 1;
-		var query = "sampleQuery"; 
+		var query = "sampleQuery";
+		var sortOrder = "price"; // Set the desired sorting order
 
 		// Mock the assetService
-		var mockCategoryService = new Mock<ICategoryService>();
-		var mockMapper = new Mock<IMapper>();
 		var mockAssetService = new Mock<IAssetService>();
 		var mockLikeService = new Mock<ILikeService>();
+
 		// Setup the behavior of GetSearchResultAsync() to return mock data
 		var mockSearchResult = new List<AssetViewModel>
+	{
+		new AssetViewModel
 		{
-			new AssetViewModel
-			{
-				Title = "Asset 1",
-				Thumbnail = "thumbnail1.jpg",
-				Price = 100,
-				UploadDate = DateTime.UtcNow,
-				Seller = "Seller 1"
-			},
-			new AssetViewModel
-			{
-				Title = "Asset 2",
-				Thumbnail = "thumbnail2.jpg",
-				Price = 200,
-				UploadDate = DateTime.UtcNow,
-				Seller = "Seller 2"
-			},
-		};
+			Title = "Asset 1",
+			Thumbnail = "thumbnail1.jpg",
+			Price = 100,
+			UploadDate = DateTime.UtcNow,
+			Seller = "Seller 1"
+		},
+		new AssetViewModel
+		{
+			Title = "Asset 2",
+			Thumbnail = "thumbnail2.jpg",
+			Price = 200,
+			UploadDate = DateTime.UtcNow,
+			Seller = "Seller 2"
+		},
+	};
 		mockAssetService.Setup(service => service.GetSearchResultAsync(query))
 						.ReturnsAsync(mockSearchResult);
 
 		// Create the controller instance and pass the mock assetService
 		var controller = new AssetController(
 			mockAssetService.Object,
-			mockLikeService.Object,
-			mockCategoryService.Object);
+			mockLikeService.Object);
 
 		// Act
-		var result = await controller.Search(query, page, itemsPerPage) as ViewResult;
+		var result = await controller.Search(sortOrder, query, page, itemsPerPage) as ViewResult;
 
 		// Assert
 		Assert.NotNull(result); // Check if the result is not null
-		Assert.True(string.IsNullOrEmpty(result!.ViewName), "View name should not be null or empty.");
+		Assert.AreEqual("~/Views/Asset/All.cshtml", result!.ViewName); // Check if the correct view is returned
 
 		// Verify that the correct data is passed to the view model
 		var viewModel = result.Model as PaginatedAssetViewModel;
 		Assert.NotNull(viewModel);
 		Assert.AreEqual(page, viewModel!.CurrentPage);
 		Assert.AreEqual(itemsPerPage, viewModel.ItemsPerPage);
+		Assert.AreEqual(sortOrder, result.ViewData["CurrentSortOrder"]); // Verify the sorting order is set
 
 		// Assert the search result list
 		CollectionAssert.AreEqual(mockSearchResult.Skip((page - 1) * itemsPerPage).Take(itemsPerPage).ToList(), viewModel.Items);
@@ -395,10 +443,9 @@ public class AssetControllerTests
 	{
 		// Arrange
 		var assetId = Guid.NewGuid();
-		var userId = "sampleUserId"; 
+		var userId = "sampleUserId";
 
 		// Mock the assetService
-		var mockCategoryService = new Mock<ICategoryService>();
 		var mockMapper = new Mock<IMapper>();
 		var mockAssetService = new Mock<IAssetService>();
 		var mockLikeService = new Mock<ILikeService>();
@@ -418,8 +465,7 @@ public class AssetControllerTests
 		// Create the controller instance and pass the mock assetService
 		var controller = new AssetController(
 			mockAssetService.Object,
-			mockLikeService.Object,
-			mockCategoryService.Object);
+			mockLikeService.Object);
 
 		var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
 		{
@@ -455,10 +501,9 @@ public class AssetControllerTests
 	{
 		// Arrange
 		var assetId = Guid.NewGuid();
-		var userId = "sampleUserId"; 
+		var userId = "sampleUserId";
 
 		// Mock the assetService
-		var mockCategoryService = new Mock<ICategoryService>();
 		var mockMapper = new Mock<IMapper>();
 		var mockAssetService = new Mock<IAssetService>();
 		var mockLikeService = new Mock<ILikeService>();
@@ -469,8 +514,7 @@ public class AssetControllerTests
 
 		var controller = new AssetController(
 			mockAssetService.Object,
-			mockLikeService.Object,
-			mockCategoryService.Object);
+			mockLikeService.Object);
 
 		// Create a mock ClaimsPrincipal to represent an authenticated user
 		var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -500,14 +544,11 @@ public class AssetControllerTests
 
 		// Mock the assetService
 		var mockCategoryService = new Mock<ICategoryService>();
-		var mockMapper = new Mock<IMapper>();
-		var mockAssetService = new Mock<IAssetService>();
-		var mockLikeService = new Mock<ILikeService>();
+		var mockStoreService = new Mock<IStoreService>();
 
 		// Create the controller instance and pass the mock assetService
-		var controller = new AssetController(
-			mockAssetService.Object,
-			mockLikeService.Object,
+		var controller = new StoreController(
+			mockStoreService.Object,
 			mockCategoryService.Object);
 
 		var model = new AddAssetViewModel
@@ -545,18 +586,15 @@ public class AssetControllerTests
 	public async Task Add_ShouldReturnViewWithModelWhenModelIsInvalid()
 	{
 		// Arrange
-		var userId = "sampleUserId"; 
+		var userId = "sampleUserId";
 
 		// Mock the assetService
 		var mockCategoryService = new Mock<ICategoryService>();
-		var mockMapper = new Mock<IMapper>();
-		var mockAssetService = new Mock<IAssetService>();
-		var mockLikeService = new Mock<ILikeService>();
+		var mockStoreService = new Mock<IStoreService>();
 
 		// Create the controller instance and pass the mock assetService
-		var controller = new AssetController(
-			mockAssetService.Object,
-			mockLikeService.Object,
+		var controller = new StoreController(
+			mockStoreService.Object,
 			mockCategoryService.Object);
 
 		// Simulate model state errors to make the model invalid
@@ -594,19 +632,16 @@ public class AssetControllerTests
 	public async Task Edit_ShouldRedirectToDetailsWhenModelIsValid()
 	{
 		// Arrange
-		var userId = "sampleUserId"; 
+		var userId = "sampleUserId";
 		var assetId = Guid.NewGuid();
 
 		// Mock the assetService
 		var mockCategoryService = new Mock<ICategoryService>();
-		var mockMapper = new Mock<IMapper>();
-		var mockAssetService = new Mock<IAssetService>();
-		var mockLikeService = new Mock<ILikeService>();
+		var mockStoreService = new Mock<IStoreService>();
 
 		// Create the controller instance and pass the mock assetService
-		var controller = new AssetController(
-			mockAssetService.Object,
-			mockLikeService.Object,
+		var controller = new StoreController(
+			mockStoreService.Object,
 			mockCategoryService.Object);
 
 		var model = new EditAssetViewModel
@@ -645,26 +680,23 @@ public class AssetControllerTests
 	public async Task Edit_ShouldReturnViewResultWhenModelIsInvalid()
 	{
 		// Arrange
-		var userId = "sampleUserId"; 
+		var userId = "sampleUserId";
 		var assetId = Guid.NewGuid();
 
 		// Mock the assetService
 		var mockCategoryService = new Mock<ICategoryService>();
-		var mockMapper = new Mock<IMapper>();
-		var mockAssetService = new Mock<IAssetService>();
-		var mockLikeService = new Mock<ILikeService>();
+		var mockStoreService = new Mock<IStoreService>();
 
 		// Create the controller instance and pass the mock assetService
-		var controller = new AssetController(
-			mockAssetService.Object,
-			mockLikeService.Object,
+		var controller = new StoreController(
+			mockStoreService.Object,
 			mockCategoryService.Object);
 
 		var model = new EditAssetViewModel
 		{
 			Id = assetId,
-			Title = "Sample Asset", 
-									
+			Title = "Sample Asset",
+
 		};
 
 		// Mock the HttpContext and User to represent an authenticated user
@@ -694,19 +726,16 @@ public class AssetControllerTests
 	public async Task Remove_ShouldRedirectToAllActionAfterSuccessfulRemoval()
 	{
 		// Arrange
-		var userId = "sampleUserId"; 
+		var userId = "sampleUserId";
 		var assetId = Guid.NewGuid();
 
 		// Mock the assetService
 		var mockCategoryService = new Mock<ICategoryService>();
-		var mockMapper = new Mock<IMapper>();
-		var mockAssetService = new Mock<IAssetService>();
-		var mockLikeService = new Mock<ILikeService>();
+		var mockStoreService = new Mock<IStoreService>();
 
 		// Create the controller instance and pass the mock assetService
-		var controller = new AssetController(
-			mockAssetService.Object,
-			mockLikeService.Object,
+		var controller = new StoreController(
+			mockStoreService.Object,
 			mockCategoryService.Object);
 
 		// Mock the HttpContext and User to represent an authenticated user
@@ -731,8 +760,8 @@ public class AssetControllerTests
 		// Assert the action name and controller name in the RedirectToActionResult
 		var redirectResult = (RedirectToActionResult)result;
 		Assert.AreEqual("All", redirectResult.ActionName); // Ensure it redirects to the "All" action
-		Assert.IsNull(redirectResult.ControllerName); // Ensure it stays in the current controller
+		Assert.AreEqual("Asset",redirectResult.ControllerName); // Ensure it stays in the current controller
 
-		mockAssetService.Verify(service => service.RemoveAssetAsync(assetId, userId), Times.Once);
+		mockStoreService.Verify(service => service.RemoveAssetAsync(assetId, userId), Times.Once);
 	}
 }

@@ -215,6 +215,7 @@ namespace BenevArts.Tests
 			Assert.AreEqual("Pending", model.State);
 			Assert.AreNotEqual(Guid.Empty, model.ApplicationUserId);
 		}
+
 		[Test]
 		public async Task SingleApplication_ShouldReturnNotFoundForInvalidId()
 		{
@@ -281,7 +282,5 @@ namespace BenevArts.Tests
 			var redirectResult = result as RedirectToActionResult;
 			Assert.AreEqual("GetApplicationsByState", redirectResult!.ActionName);
 		}
-
-
 	}
 }
