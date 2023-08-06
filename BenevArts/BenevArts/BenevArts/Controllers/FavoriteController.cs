@@ -1,4 +1,5 @@
-﻿using BenevArts.Services.Data.Interfaces;
+﻿using BenevArts.Common;
+using BenevArts.Services.Data.Interfaces;
 using BenevArts.Web.Infrastructure;
 using BenevArts.Web.ViewModels.Home;
 using Microsoft.AspNetCore.Authorization;
@@ -19,6 +20,11 @@ namespace BenevArts.Web.Controllers
 		[Authorize(Roles = "User,Seller,Admin")]
 		public async Task<IActionResult> Favorites(string sortOrder, int page = 1, int itemsPerPage = 1)
 		{
+			if (!Validations.IsValidQuery(sortOrder))
+			{
+				return View();
+			}
+
 			IEnumerable<AssetViewModel> models = await favoriteService.GetFavoritesAsync(GetUserId());
 
 			ViewData["CurrentSortOrder"] = sortOrder;

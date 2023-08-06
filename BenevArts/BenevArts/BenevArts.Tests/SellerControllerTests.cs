@@ -1,15 +1,12 @@
-﻿
-
-using BenevArts.Data.Models;
-using BenevArts.Services.Data.Interfaces;
+﻿using BenevArts.Services.Data.Interfaces;
 using BenevArts.Web.Controllers;
 using BenevArts.Web.ViewModels.Home;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+
 using Moq;
 using NUnit.Framework;
-using System;
+
 using System.Security.Claims;
 
 namespace BenevArts.Tests
@@ -256,7 +253,7 @@ namespace BenevArts.Tests
 			// Verify that the controller redirects to the correct action after approving the application
 			Assert.IsInstanceOf<RedirectToActionResult>(result);
 			var redirectResult = result as RedirectToActionResult;
-			Assert.AreEqual("GetApplicationsByState", redirectResult!.ActionName);
+			Assert.AreEqual("AllApplications", redirectResult!.ActionName);
 		}
 
 		[Test]

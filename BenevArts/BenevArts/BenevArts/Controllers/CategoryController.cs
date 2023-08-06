@@ -1,4 +1,5 @@
-﻿using BenevArts.Services.Data.Interfaces;
+﻿using BenevArts.Common;
+using BenevArts.Services.Data.Interfaces;
 using BenevArts.Web.Infrastructure;
 using BenevArts.Web.ViewModels.Home;
 
@@ -30,7 +31,12 @@ namespace BenevArts.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Assets(string sortOrder, int categoryId,int page = 1, int currentPage = 1)
         {
-            IEnumerable<AssetViewModel> assets = await categoryService.
+			if (!Validations.IsValidQuery(sortOrder))
+			{
+				return View();
+			}
+
+			IEnumerable<AssetViewModel> assets = await categoryService.
                 GetAssetsByCategoryIdAsync(categoryId);
 
 			ViewData["CurrentSortOrder"] = sortOrder;

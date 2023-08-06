@@ -91,7 +91,7 @@ namespace BenevArts.Web.Controllers
 
 			// TO DO: Send Notification to the user
 
-			return RedirectToAction(nameof(GetApplicationsByState));
+			return RedirectToAction(nameof(AllApplications));
 		}
 
 		[HttpGet]

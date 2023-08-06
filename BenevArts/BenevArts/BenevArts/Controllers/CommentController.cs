@@ -1,8 +1,10 @@
-﻿using BenevArts.Services.Data.Interfaces;
+﻿using BenevArts.Common;
+using BenevArts.Services.Data.Interfaces;
 using BenevArts.Web.ViewModels.Home;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 
 namespace BenevArts.Web.Controllers
 {
@@ -21,6 +23,11 @@ namespace BenevArts.Web.Controllers
 		[Authorize(Roles = "User,Seller,Admin")]
 		public async Task<IActionResult> PostComment(Guid assetId, string content)
 		{
+			if (!Validations.IsValidQuery(content))
+			{
+				return View();
+			}
+
 			CommentViewModel comment = await commentService.AddCommentAsync(assetId,GetUserId(),content);
 
 			return PartialView("~/Views/Asset/_CommentItem.cshtml", comment);

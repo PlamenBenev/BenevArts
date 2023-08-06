@@ -1,4 +1,5 @@
-﻿using BenevArts.Services.Data;
+﻿using BenevArts.Common;
+using BenevArts.Services.Data;
 using BenevArts.Services.Data.Interfaces;
 using BenevArts.Web.Infrastructure;
 using BenevArts.Web.ViewModels.Home;
@@ -47,6 +48,11 @@ namespace BenevArts.Web.Controllers
 		[Authorize(Roles = "Seller,Admin")]
 		public async Task<IActionResult> MyStore(string sortOrder, int page = 1, int itemsPerPage = 1)
 		{
+			if (!Validations.IsValidQuery(sortOrder))
+			{
+				return View();
+			}
+
 			IEnumerable<AssetViewModel> models = await storeService.GetMyStoreAsync(GetUserId());
 
 			ViewData["CurrentSortOrder"] = sortOrder;

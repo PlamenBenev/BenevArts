@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+
 using BenevArts.Common.Exeptions;
 using BenevArts.Data;
 using BenevArts.Data.Models;
 using BenevArts.Services.Data.Interfaces;
 using BenevArts.Web.ViewModels.Home;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace BenevArts.Services.Data
