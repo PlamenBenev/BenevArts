@@ -62,16 +62,16 @@ namespace BenevArts.Web.Controllers
 				}
 
 				// Check the query
-				//if (string.IsNullOrWhiteSpace(query))
-				//{
-				//	return RedirectToAction(nameof(All));
-				//}
-				//if (!Validations.IsValidQuery(query))
-				//{
-				//	ViewData["InvalidInput"] = "Invalid input. Only letters and numbers are allowed.";
+				if (string.IsNullOrWhiteSpace(query))
+				{
+					return RedirectToAction(nameof(All));
+				}
+				if (!Validations.IsValidQuery(query))
+				{
+					ViewData["InvalidInput"] = "Invalid input. Only letters and numbers are allowed.";
 
-				//	return View();
-				//}
+					return View();
+				}
 
 				ViewData["CurrentSortOrder"] = sortOrder;
 
@@ -159,10 +159,9 @@ namespace BenevArts.Web.Controllers
 			}
 			catch (Exception ex)
 			{
-				logger.LogError(ex, "An exception occurred in the Details action.");
+				logger.LogError(ex, "An exception occurred in the ToggleLike action.");
 				return View("Error");
 			}
 		}
-
 	}
 }

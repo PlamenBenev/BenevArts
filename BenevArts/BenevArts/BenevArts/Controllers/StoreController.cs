@@ -1,11 +1,10 @@
 ﻿using BenevArts.Common;
-using BenevArts.Services.Data;
 using BenevArts.Services.Data.Interfaces;
 using BenevArts.Web.Infrastructure;
 using BenevArts.Web.ViewModels.Home;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 
 namespace BenevArts.Web.Controllers
 {
@@ -13,12 +12,15 @@ namespace BenevArts.Web.Controllers
 	{
 		private readonly IStoreService storeService;
 		private readonly ICategoryService categoryService;
+		private readonly ILogger<StoreController> logger;
 
 		public StoreController(IStoreService _storeService,
-			ICategoryService _categoryService)
+			ICategoryService _categoryService,
+			ILogger<StoreController> _logger)
 		{
 			storeService = _storeService;
 			categoryService = _categoryService;
+			logger = _logger;
 		}
 
 		// Get
@@ -27,37 +29,61 @@ namespace BenevArts.Web.Controllers
 		[Authorize(Roles = "Seller,Admin")]
 		public async Task<IActionResult> Add()
 		{
-			AddAssetViewModel model = new AddAssetViewModel()
+			try
 			{
-				Categories = await categoryService.GetCategoriesViewAsync(),
-			};
+				AddAssetViewModel model = new AddAssetViewModel()
+				{
+					Categories = await categoryService.GetCategoriesViewAsync(),
+				};
 
-			return View(model);
+				return View(model);
+			}
+			catch (Exception ex)
+			{
+				logger.LogError(ex, "An exception occurred in the Add (Get) action.");
+				return View("Error");
+			}
 		}
 
 		[HttpGet]
 		[Authorize(Roles = "Seller,Admin")]
 		public async Task<IActionResult> Edit(Guid assetId)
 		{
-			EditAssetViewModel model = await storeService.GetEditByIdAsync(assetId);
+			try
+			{
+				EditAssetViewModel model = await storeService.GetEditByIdAsync(assetId);
 
-			return View(model);
+				return View(model);
+			}
+			catch (Exception ex)
+			{
+				logger.LogError(ex, "An exception occurred in the Edit (Get) action.");
+				return View("Error");
+			}
 		}
 
 		[HttpGet]
 		[Authorize(Roles = "Seller,Admin")]
 		public async Task<IActionResult> MyStore(string sortOrder, int page = 1, int itemsPerPage = 1)
 		{
-			if (!Validations.IsValidQuery(sortOrder))
+			try
 			{
-				return View();
+				if (!Validations.IsValidQuery(sortOrder))
+				{
+					return View();
+				}
+
+				IEnumerable<AssetViewModel> models = await storeService.GetMyStoreAsync(GetUserId());
+
+				ViewData["CurrentSortOrder"] = sortOrder;
+
+				return View("~/Views/Asset/All.cshtml", Pagination.Paginator(models, null, -1, page, itemsPerPage, sortOrder));
 			}
-
-			IEnumerable<AssetViewModel> models = await storeService.GetMyStoreAsync(GetUserId());
-
-			ViewData["CurrentSortOrder"] = sortOrder;
-
-			return View("~/Views/Asset/All.cshtml", Pagination.Paginator(models, null, -1, page, itemsPerPage, sortOrder));
+			catch (Exception ex)
+			{
+				logger.LogError(ex, "An exception occurred in the MyStore action.");
+				return View("Error");
+			}
 		}
 
 		// Post
@@ -66,40 +92,64 @@ namespace BenevArts.Web.Controllers
 		[Authorize(Roles = "Seller,Admin")]
 		public async Task<IActionResult> Add(AddAssetViewModel model)
 		{
-			CheckFormats(model);
-
-			if (ModelState.IsValid)
+			try
 			{
-				await storeService.AddAssetAsync(model, GetUserId());
+				CheckFormats(model);
 
-				return RedirectToAction(nameof(MyStore));
+				if (ModelState.IsValid)
+				{
+					await storeService.AddAssetAsync(model, GetUserId());
+
+					return RedirectToAction(nameof(MyStore));
+				}
+
+				return View(model);
 			}
-
-			return View(model);
+			catch (Exception ex)
+			{
+				logger.LogError(ex, "An exception occurred in the Add (post) action.");
+				return View("Error");
+			}
 		}
 
 		[HttpPost]
 		[Authorize(Roles = "Seller,Admin")]
 		public async Task<IActionResult> Edit(EditAssetViewModel model, Guid assetId)
 		{
-			model.Id = assetId;
-			if (!ModelState.IsValid)
+			try
 			{
-				return View(model);
+				model.Id = assetId;
+				if (!ModelState.IsValid)
+				{
+					return View(model);
+				}
+
+				await storeService.EditAssetAsync(model);
+
+				return RedirectToAction("Details", "Asset", new { id = assetId });
 			}
-
-			await storeService.EditAssetAsync(model);
-
-			return RedirectToAction("Details", "Asset", new { id = assetId });
+			catch (Exception ex)
+			{
+				logger.LogError(ex, "An exception occurred in the Edit (post) action.");
+				return View("Error");
+			}
 		}
 
 		[HttpPost]
 		[Authorize(Roles = "Seller,Admin")]
 		public async Task<IActionResult> Remove(Guid id)
 		{
-			await storeService.RemoveAssetAsync(id, GetUserId());
+			try
+			{
+				await storeService.RemoveAssetAsync(id, GetUserId());
 
-			return RedirectToAction("All", "Asset");
+				return RedirectToAction("All", "Asset");
+			}
+			catch (Exception ex)
+			{
+				logger.LogError(ex, "An exception occurred in the Remove action.");
+				return View("Error");
+			}
 		}
 
 		private IActionResult CheckFormats(AddAssetViewModel model)

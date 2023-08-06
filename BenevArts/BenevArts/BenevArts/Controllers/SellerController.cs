@@ -1,10 +1,10 @@
 ﻿using BenevArts.Common;
 using BenevArts.Services.Data.Interfaces;
-using BenevArts.Web.Infrastructure;
 using BenevArts.Web.ViewModels.Home;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 
 namespace BenevArts.Web.Controllers
@@ -12,10 +12,12 @@ namespace BenevArts.Web.Controllers
 	public class SellerController : BaseController
 	{
 		private readonly ISellerService sellerService;
+		private readonly ILogger<SellerController> logger;
 
-		public SellerController(ISellerService _sellerService)
+		public SellerController(ISellerService _sellerService, ILogger<SellerController> _logger)
 		{
 			sellerService = _sellerService;
+			logger = _logger;
 		}
 
 		// GET
@@ -23,11 +25,19 @@ namespace BenevArts.Web.Controllers
 		[Authorize(Roles = "User,Admin")]
 		public async Task<IActionResult> Apply()
 		{
-			if (!await sellerService.CheckIfUserAppliedAsync(Guid.Parse(GetUserId())))
+			try
 			{
-				return View();
+				if (!await sellerService.CheckIfUserAppliedAsync(Guid.Parse(GetUserId())))
+				{
+					return View();
+				}
+				return RedirectToAction(nameof(StillReviewing));
 			}
-			return RedirectToAction(nameof(StillReviewing));
+			catch (Exception ex)
+			{
+				logger.LogError(ex, "An exception occurred in the Apply action.");
+				return View("Error");
+			}
 		}
 
 		[HttpGet]
@@ -44,65 +54,105 @@ namespace BenevArts.Web.Controllers
 			return View();
 		}
 
-        [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AllApplications()
-        {
-            IEnumerable<SellerApplicationViewModel> models = await sellerService.GetAllApplicationsAsync();
+		[HttpGet]
+		[Authorize(Roles = "Admin")]
+		public async Task<IActionResult> AllApplications()
+		{
+			try
+			{
+				IEnumerable<SellerApplicationViewModel> models = await sellerService.GetAllApplicationsAsync();
 
-            return View("~/Views/Seller/AllApplications.cshtml", models);
-        }
+				return View("~/Views/Seller/AllApplications.cshtml", models);
+			}
+			catch (Exception ex)
+			{
+				logger.LogError(ex, "An exception occurred in the AllApplications action.");
+				return View("Error");
+			}
+		}
 
-        [HttpGet]
+		[HttpGet]
 		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> GetApplicationsByState(string state)
 		{
-			IEnumerable<SellerApplicationViewModel> applications;
-
-			// Retrieve applications based on the selected state
-			if (string.IsNullOrEmpty(state) || !Validations.IsValidQuery(state))
+			try
 			{
-				applications = await sellerService.GetAllApplicationsAsync();
+				IEnumerable<SellerApplicationViewModel> applications;
+
+				// Retrieve applications based on the selected state
+				if (string.IsNullOrEmpty(state) || !Validations.IsValidQuery(state))
+				{
+					applications = await sellerService.GetAllApplicationsAsync();
+				}
+				else
+				{
+					applications = await sellerService.GetApplicationsByStateAsync(state);
+
+				}
+
+				// Return a partial view with the filtered applications data
+				return PartialView("_ApplicationsTable", applications);
 			}
-			else
+			catch (Exception ex)
 			{
-				applications = await sellerService.GetApplicationsByStateAsync(state);
-
+				logger.LogError(ex, "An exception occurred in the GetApplicationByState action.");
+				return View("Error");
 			}
-
-			// Return a partial view with the filtered applications data
-			return PartialView("_ApplicationsTable", applications);
 		}
 
 		[HttpGet]
 		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> SingleApplication(int id)
 		{
-			SellerApplicationViewModel model = await sellerService.GetSingleApplicationAsync(id);
+			try
+			{
+				SellerApplicationViewModel model = await sellerService.GetSingleApplicationAsync(id);
 
-			return View("~/Views/Seller/SingleApplication.cshtml", model);
+				return View("~/Views/Seller/SingleApplication.cshtml", model);
+			}
+			catch (Exception ex)
+			{
+				logger.LogError(ex, "An exception occurred in the SingleApplication action.");
+				return View("Error");
+			}
 		}
 
 		[HttpGet]
 		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> ApproveApplication(int id)
 		{
-			await sellerService.ApproveApplicationAsync(id);
+			try
+			{
+				await sellerService.ApproveApplicationAsync(id);
 
-			// TO DO: Send Notification to the user
+				// TO DO: Send Notification to the user
 
-			return RedirectToAction(nameof(AllApplications));
+				return RedirectToAction(nameof(AllApplications));
+			}
+			catch (Exception ex)
+			{
+				logger.LogError(ex, "An exception occurred in the ApproveApplication action.");
+				return View("Error");
+			}
 		}
 
 		[HttpGet]
 		[Authorize(Roles = "Admin")]
 		public async Task<IActionResult> DeclineApplication(int id)
 		{
-			await sellerService.DeclineApplicationAsync(id);
+			try
+			{
+				await sellerService.DeclineApplicationAsync(id);
 
-			// TO DO: Send Notification to the user
+				// TO DO: Send Notification to the user
 
-			return RedirectToAction(nameof(GetApplicationsByState));
+				return RedirectToAction(nameof(GetApplicationsByState));
+			}
+			catch (Exception ex)
+			{
+				logger.LogError(ex, "An exception occurred in the DeclineApplication action.");
+				return View("Error");
+			}
 		}
 
 		// POST
@@ -110,14 +160,21 @@ namespace BenevArts.Web.Controllers
 		[Authorize(Roles = "User,Admin")]
 		public async Task<IActionResult> Apply(SellerApplicationViewModel application)
 		{
-			if (ModelState.IsValid &&
-				!await sellerService.CheckIfUserAppliedAsync(Guid.Parse(GetUserId())))
+			try
 			{
-				await sellerService.ApplyAsync(application, GetUserId());
-				return RedirectToAction(nameof(ThankYou));
+				if (ModelState.IsValid &&
+					!await sellerService.CheckIfUserAppliedAsync(Guid.Parse(GetUserId())))
+				{
+					await sellerService.ApplyAsync(application, GetUserId());
+					return RedirectToAction(nameof(ThankYou));
+				}
+				return View();
 			}
-			return View();
+			catch (Exception ex)
+			{
+				logger.LogError(ex, "An exception occurred in the Details action.");
+				return View("Error");
+			}
 		}
-
 	}
 }

@@ -4,6 +4,7 @@ using BenevArts.Web.Controllers;
 using BenevArts.Web.ViewModels.Home;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 
@@ -17,7 +18,11 @@ namespace BenevArts.Tests
 		{
 			// Arrange
 			var mockCategoryService = new Mock<ICategoryService>();
-			var controller = new CategoryController(mockCategoryService.Object);
+			var mockLogger = new Mock<ILogger<CategoryController>>();
+
+			var controller = new CategoryController(
+				mockCategoryService.Object,
+				mockLogger.Object);
 
 			// Setup the behavior of GetCategoriesViewAsync() to return mock data
 			var mockCategories = new List<CategoryViewModel>
@@ -42,16 +47,20 @@ namespace BenevArts.Tests
 		[Test]
 		public async Task Assets_ShouldReturnCorrectViewResultWithAssets()
 		{
+			// Arrange
 			var assetId1 = Guid.NewGuid();
 			var assetId2 = Guid.NewGuid();
 			var sortOrder = "title";
-			// Arrange
 			int categoryId = 1;
 			var page = 1;
 			var itemsPerPage = 1;
 
 			var mockCategoryService = new Mock<ICategoryService>();
-			var controller = new CategoryController(mockCategoryService.Object);
+			var mockLogger = new Mock<ILogger<CategoryController>>();
+
+			var controller = new CategoryController(
+				mockCategoryService.Object, 
+				mockLogger.Object);
 
 			// Setup the behavior of GetAssetsByCategoryIdAsync() to return mock data
 			var mockAssets = new List<AssetViewModel>

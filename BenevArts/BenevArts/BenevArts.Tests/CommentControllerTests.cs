@@ -3,6 +3,7 @@ using BenevArts.Web.Controllers;
 using BenevArts.Web.ViewModels.Home;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using System.Security.Claims;
@@ -19,8 +20,11 @@ namespace BenevArts.Tests
 			var userId = "sampleUserId";
 			var assetId = Guid.NewGuid();
 			var content = "Test comment content";
+
 			var mockCommentService = new Mock<ICommentService>();
-			var controller = new CommentController(mockCommentService.Object);
+			var mockLogger = new Mock<ILogger<CommentController>>();
+
+			var controller = new CommentController(mockCommentService.Object, mockLogger.Object);
 
 			// Setup the behavior of AddCommentAsync() to return mock data
 			var mockComment = new CommentViewModel

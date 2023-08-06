@@ -3,7 +3,7 @@ using BenevArts.Web.Controllers;
 using BenevArts.Web.ViewModels.Home;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 
@@ -20,8 +20,13 @@ namespace BenevArts.Tests
 			// Arrange
 			string userId = Guid.NewGuid().ToString();	
 			var mockSellerService = new Mock<ISellerService>();
+			var mockLogger = new Mock<ILogger<SellerController>>();
+
 			mockSellerService.Setup(x => x.CheckIfUserAppliedAsync(It.IsAny<Guid>())).ReturnsAsync(false);
-			var controller = new SellerController(mockSellerService.Object);
+			
+			var controller = new SellerController(
+				mockSellerService.Object,
+				mockLogger.Object);
 
 			// Create a ClaimsPrincipal with the desired user ID
 			controller.ControllerContext = new ControllerContext
@@ -42,9 +47,15 @@ namespace BenevArts.Tests
 		{
 			// Arrange
 			string userId = Guid.NewGuid().ToString();
+
 			var mockSellerService = new Mock<ISellerService>();
+			var mockLogger = new Mock<ILogger<SellerController>>();
+
 			mockSellerService.Setup(x => x.CheckIfUserAppliedAsync(It.IsAny<Guid>())).ReturnsAsync(true);
-			var controller = new SellerController(mockSellerService.Object);
+			
+			var controller = new SellerController
+				(mockSellerService.Object, 
+				mockLogger.Object);
 
 			// Create a ClaimsPrincipal with the desired user ID
 			controller.ControllerContext = new ControllerContext
@@ -76,6 +87,8 @@ namespace BenevArts.Tests
 		{
 			// Arrange
 			var mockSellerService = new Mock<ISellerService>();
+			var mockLogger = new Mock<ILogger<SellerController>>();
+
 			var fakeApplications = new List<SellerApplicationViewModel>
 			{
 				new SellerApplicationViewModel
@@ -100,7 +113,9 @@ namespace BenevArts.Tests
 				}
 			};
 			mockSellerService.Setup(x => x.GetAllApplicationsAsync()).ReturnsAsync(fakeApplications);
-			var controller = new SellerController(mockSellerService.Object);
+			var controller = new SellerController(
+				mockSellerService.Object, 
+				mockLogger.Object);
 
 			// Act
 			var result = await controller.AllApplications() as ViewResult;
@@ -129,6 +144,8 @@ namespace BenevArts.Tests
 		{
 			// Arrange
 			var mockSellerService = new Mock<ISellerService>();
+			var mockLogger = new Mock<ILogger<SellerController>>();
+
 			var fakeApplications = new List<SellerApplicationViewModel>
 			{
 				new SellerApplicationViewModel
@@ -153,7 +170,9 @@ namespace BenevArts.Tests
 				}
 			};
 			mockSellerService.Setup(x => x.GetApplicationsByStateAsync(It.IsAny<string>())).ReturnsAsync(fakeApplications);
-			var controller = new SellerController(mockSellerService.Object);
+			var controller = new SellerController(
+				mockSellerService.Object,
+				mockLogger.Object);
 
 			// Act
 			var result = await controller.GetApplicationsByState("Pending") as PartialViewResult;
@@ -182,7 +201,10 @@ namespace BenevArts.Tests
 		{
 			// Arrange
 			int applicationId = 1;
+
 			var mockSellerService = new Mock<ISellerService>();
+			var mockLogger = new Mock<ILogger<SellerController>>();
+
 			var fakeApplication = new SellerApplicationViewModel
 			{
 				Id = applicationId,
@@ -194,7 +216,9 @@ namespace BenevArts.Tests
 				ApplicationUserId = Guid.NewGuid()
 			};
 			mockSellerService.Setup(x => x.GetSingleApplicationAsync(applicationId)).ReturnsAsync(fakeApplication);
-			var controller = new SellerController(mockSellerService.Object);
+			var controller = new SellerController(
+				mockSellerService.Object,
+				mockLogger.Object);
 
 			// Act
 			var result = await controller.SingleApplication(applicationId) as ViewResult;
@@ -218,11 +242,16 @@ namespace BenevArts.Tests
 		{
 			// Arrange
 			int applicationId = 100; // An invalid application ID
+
 			var mockSellerService = new Mock<ISellerService>();
+			var mockLogger = new Mock<ILogger<SellerController>>();
+
 			mockSellerService.Setup(x => x.GetSingleApplicationAsync(applicationId))
 							.ReturnsAsync(new SellerApplicationViewModel()); // Return a valid instance
 
-			var controller = new SellerController(mockSellerService.Object);
+			var controller = new SellerController(
+				mockSellerService.Object, 
+				mockLogger.Object);
 
 			// Act
 			var result = await controller.SingleApplication(applicationId);
@@ -236,9 +265,14 @@ namespace BenevArts.Tests
 		public async Task ApproveApplication_ShouldCallApproveApplicationAsync()
 		{
 			// Arrange
-			int applicationId = 123; // Replace with a valid applicationId
+			int applicationId = 123; 
+
 			var mockSellerService = new Mock<ISellerService>();
-			var controller = new SellerController(mockSellerService.Object);
+			var mockLogger = new Mock<ILogger<SellerController>>();
+
+			var controller = new SellerController(
+				mockSellerService.Object, 
+				mockLogger.Object);
 
 			// Mock the sellerService behavior
 			mockSellerService.Setup(x => x.ApproveApplicationAsync(applicationId)).Verifiable();
@@ -260,9 +294,14 @@ namespace BenevArts.Tests
 		public async Task DeclineApplication_ShouldCallDeclineApplicationAsync()
 		{
 			// Arrange
-			int applicationId = 123; // Replace with a valid applicationId
+			int applicationId = 123;
+
 			var mockSellerService = new Mock<ISellerService>();
-			var controller = new SellerController(mockSellerService.Object);
+			var mockLogger = new Mock<ILogger<SellerController>>();
+
+			var controller = new SellerController(
+				mockSellerService.Object, 
+				mockLogger.Object);
 
 			// Mock the sellerService behavior
 			mockSellerService.Setup(x => x.DeclineApplicationAsync(applicationId)).Verifiable();

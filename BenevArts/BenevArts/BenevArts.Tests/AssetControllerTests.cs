@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 
 using System.Security.Claims;
+using Castle.Core.Logging;
+using Microsoft.Extensions.Logging;
 
 [TestFixture]
 public class AssetControllerTests
@@ -30,6 +32,7 @@ public class AssetControllerTests
 		var mockAssetService = new Mock<IAssetService>();
 		var mockLikeService = new Mock<ILikeService>();
 		var mockCategoryService = new Mock<ICategoryService>();
+		var mockLogger = new Mock<ILogger<AssetController>>();
 		// Setup the behavior of GetAllAssetsAsync() to return mock data
 		var mockData = new List<AssetViewModel>
 	{
@@ -56,7 +59,8 @@ public class AssetControllerTests
 		// Create the controller instance and pass the mock assetService
 		var controller = new AssetController(
 			mockAssetService.Object,
-			mockLikeService.Object);
+			mockLikeService.Object,
+			mockLogger.Object);
 
 		// Act
 		var result = await controller.All(sortOrder, page, itemsPerPage) as ViewResult;
@@ -102,6 +106,7 @@ public class AssetControllerTests
 		var mockMapper = new Mock<IMapper>();
 		var mockStoreService = new Mock<IStoreService>();
 		var mockCategoryService = new Mock<ICategoryService>();
+		var mockLogger = new Mock<ILogger<StoreController>>();
 
 		// Setup the behavior of GetCategoriesAsync() to return mock data
 		var mockCategories = new List<CategoryViewModel>
@@ -115,7 +120,8 @@ public class AssetControllerTests
 		// Create the controller instance and pass the mock services
 		var controller = new StoreController(
 			mockStoreService.Object,
-			mockCategoryService.Object);
+			mockCategoryService.Object,
+			mockLogger.Object);
 		// Act
 		var result = await controller.Add() as ViewResult;
 
@@ -137,6 +143,7 @@ public class AssetControllerTests
 
 		var mockCategoryService = new Mock<ICategoryService>();
 		var mockStoreService = new Mock<IStoreService>();
+		var mockLogger = new Mock<ILogger<StoreController>>();
 
 		// Setup the behavior of GetEditByIdAsync() to return mock data
 		var mockAssetData = new EditAssetViewModel
@@ -166,7 +173,8 @@ public class AssetControllerTests
 		// Create the controller instance and pass the mock assetService
 		var controller = new StoreController(
 			mockStoreService.Object,
-			mockCategoryService.Object);
+			mockCategoryService.Object,
+			mockLogger.Object);
 
 		// Act
 		var result = await controller.Edit(assetId) as ViewResult;
@@ -208,6 +216,8 @@ public class AssetControllerTests
 
 		// Mock the favoriteService
 		var mockFavoritesService = new Mock<IFavoriteService>();
+		var mockLogger = new Mock<ILogger<FavoriteController>>();
+
 		// Setup the behavior of GetFavoritesAsync() to return mock data
 		var mockFavoritesData = new List<AssetViewModel>
 		{
@@ -235,7 +245,8 @@ public class AssetControllerTests
 
 		// Create the controller instance and pass the mock assetService
 		var controller = new FavoriteController(
-			mockFavoritesService.Object);
+			mockFavoritesService.Object,
+			mockLogger.Object);
 
 		var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
 		{
@@ -298,6 +309,7 @@ public class AssetControllerTests
 		// Mock the storeService
 		var mockCategoryService = new Mock<ICategoryService>();
 		var mockStoreService = new Mock<IStoreService>();
+		var mockLogger = new Mock<ILogger<StoreController>>();
 
 		// Setup the behavior of GetMyStoreAsync() to return mock data
 		var mockMyStoreData = new List<AssetViewModel>
@@ -327,7 +339,8 @@ public class AssetControllerTests
 		// Create the controller instance and pass the mock storeService
 		var controller = new StoreController(
 			mockStoreService.Object,
-			mockCategoryService.Object);
+			mockCategoryService.Object,
+			mockLogger.Object);
 
 		var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
 		{
@@ -390,6 +403,7 @@ public class AssetControllerTests
 		// Mock the assetService
 		var mockAssetService = new Mock<IAssetService>();
 		var mockLikeService = new Mock<ILikeService>();
+		var mockLogger = new Mock<ILogger<AssetController>>();
 
 		// Setup the behavior of GetSearchResultAsync() to return mock data
 		var mockSearchResult = new List<AssetViewModel>
@@ -417,7 +431,8 @@ public class AssetControllerTests
 		// Create the controller instance and pass the mock assetService
 		var controller = new AssetController(
 			mockAssetService.Object,
-			mockLikeService.Object);
+			mockLikeService.Object, 
+			mockLogger.Object);
 
 		// Act
 		var result = await controller.Search(sortOrder, query, page, itemsPerPage) as ViewResult;
@@ -449,6 +464,8 @@ public class AssetControllerTests
 		var mockMapper = new Mock<IMapper>();
 		var mockAssetService = new Mock<IAssetService>();
 		var mockLikeService = new Mock<ILikeService>();
+		var mockLogger = new Mock<ILogger<AssetController>>();
+
 		// Setup the behavior of GetAssetByIdAsync() to return mock data
 		var mockAssetViewModel = new AssetViewModel
 		{
@@ -465,7 +482,8 @@ public class AssetControllerTests
 		// Create the controller instance and pass the mock assetService
 		var controller = new AssetController(
 			mockAssetService.Object,
-			mockLikeService.Object);
+			mockLikeService.Object, 
+			mockLogger.Object);
 
 		var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
 		{
@@ -507,6 +525,7 @@ public class AssetControllerTests
 		var mockMapper = new Mock<IMapper>();
 		var mockAssetService = new Mock<IAssetService>();
 		var mockLikeService = new Mock<ILikeService>();
+		var mockLogger = new Mock<ILogger<AssetController>>();
 
 		// Setup the behavior of GetAssetByIdAsync() to return null for a specific assetId
 		mockAssetService.Setup(service => service.GetAssetByIdAsync(assetId, userId))
@@ -514,7 +533,8 @@ public class AssetControllerTests
 
 		var controller = new AssetController(
 			mockAssetService.Object,
-			mockLikeService.Object);
+			mockLikeService.Object, 
+			mockLogger.Object);
 
 		// Create a mock ClaimsPrincipal to represent an authenticated user
 		var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -545,11 +565,13 @@ public class AssetControllerTests
 		// Mock the assetService
 		var mockCategoryService = new Mock<ICategoryService>();
 		var mockStoreService = new Mock<IStoreService>();
+		var mockLogger = new Mock<ILogger<StoreController>>();
 
 		// Create the controller instance and pass the mock assetService
 		var controller = new StoreController(
 			mockStoreService.Object,
-			mockCategoryService.Object);
+			mockCategoryService.Object, 
+			mockLogger.Object);
 
 		var model = new AddAssetViewModel
 		{
@@ -591,11 +613,13 @@ public class AssetControllerTests
 		// Mock the assetService
 		var mockCategoryService = new Mock<ICategoryService>();
 		var mockStoreService = new Mock<IStoreService>();
+		var mockLogger = new Mock<ILogger<StoreController>>();
 
 		// Create the controller instance and pass the mock assetService
 		var controller = new StoreController(
 			mockStoreService.Object,
-			mockCategoryService.Object);
+			mockCategoryService.Object,
+			mockLogger.Object);
 
 		// Simulate model state errors to make the model invalid
 		controller.ModelState.AddModelError("PropertyName", "Error Message");
@@ -638,11 +662,13 @@ public class AssetControllerTests
 		// Mock the assetService
 		var mockCategoryService = new Mock<ICategoryService>();
 		var mockStoreService = new Mock<IStoreService>();
+		var mockLogger = new Mock<ILogger<StoreController>>();
 
 		// Create the controller instance and pass the mock assetService
 		var controller = new StoreController(
 			mockStoreService.Object,
-			mockCategoryService.Object);
+			mockCategoryService.Object,
+			mockLogger.Object);
 
 		var model = new EditAssetViewModel
 		{
@@ -686,11 +712,13 @@ public class AssetControllerTests
 		// Mock the assetService
 		var mockCategoryService = new Mock<ICategoryService>();
 		var mockStoreService = new Mock<IStoreService>();
+		var mockLogger = new Mock<ILogger<StoreController>>();
 
 		// Create the controller instance and pass the mock assetService
 		var controller = new StoreController(
 			mockStoreService.Object,
-			mockCategoryService.Object);
+			mockCategoryService.Object,
+			mockLogger.Object);
 
 		var model = new EditAssetViewModel
 		{
@@ -732,11 +760,13 @@ public class AssetControllerTests
 		// Mock the assetService
 		var mockCategoryService = new Mock<ICategoryService>();
 		var mockStoreService = new Mock<IStoreService>();
+		var mockLogger = new Mock<ILogger<StoreController>>();
 
 		// Create the controller instance and pass the mock assetService
 		var controller = new StoreController(
 			mockStoreService.Object,
-			mockCategoryService.Object);
+			mockCategoryService.Object,
+			mockLogger.Object);
 
 		// Mock the HttpContext and User to represent an authenticated user
 		var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
