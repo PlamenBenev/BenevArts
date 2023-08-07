@@ -15,7 +15,7 @@
 		<div class="col-md-4">
 			<div class="mt-4">
 				<div class="row">
-						<!-- Like Button -->
+					<!-- Like Button -->
 					<div class="col-md-4">
 						@if (User.Identity?.IsAuthenticated ?? false)
 						{
@@ -117,12 +117,32 @@
 </div>
 
 @*Images*@
-<div class="mt-4">
-	<h4>Images:</h4>
-	@foreach (var image in Model.Images)
-	{
-		<img src="~/Images/@image" alt="Asset Image" class="img-thumbnail">
-	}
+<div id="assetCarousel" class="carousel slide" data-ride="carousel">
+	<ol class="carousel-indicators">
+		@for (int i = 0; i < Model.Images.Count(); i++)
+		{
+			<li data-target="#carouselExampleIndicators" 
+			data-slide-to="@i" 
+			class=" @(i == 0 ? "active" : "")"></li>
+		}
+	</ol>
+	<div class="carousel-inner">
+		@foreach (var image in Model.Images)
+		{
+			var index = Model.Images.ToList().IndexOf(image);
+			<div class="carousel-item @(index == 0 ? "active" : "")">
+				<img class="d-block w-100" src="~/Images/@image" alt="Asset Image">
+			</div>
+		}
+	</div>
+	<a class="carousel-control-prev" href="#assetCarousel" role="button" data-slide="prev">
+		<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+		<span class="sr-only">Previous</span>
+	</a>
+	<a class="carousel-control-next" href="#assetCarousel" role="button" data-slide="next">
+		<span class="carousel-control-next-icon" aria-hidden="true"></span>
+		<span class="sr-only">Next</span>
+	</a>
 </div>
 
 <!-- TO DO: Comment Form will be availible as "Review Asset" only for users who purchused the asset-->
@@ -179,6 +199,8 @@
 
 @section Scripts {
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 	<script src="~/js/like.js"></script>
 	<script src="~/js/Comment.js"></script>
 	<script src="~/js/RemoveComment.js"></script>

@@ -8,10 +8,9 @@ using BenevArts.Web.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 using System.Security.Claims;
-using Castle.Core.Logging;
-using Microsoft.Extensions.Logging;
 
 [TestFixture]
 public class AssetControllerTests
