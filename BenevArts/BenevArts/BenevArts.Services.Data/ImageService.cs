@@ -47,8 +47,6 @@ namespace BenevArts.Services.Data
 				thumbnailImage.Save(filePath);
 			}
 
-
-
 			return fileName;
 		}
 	}

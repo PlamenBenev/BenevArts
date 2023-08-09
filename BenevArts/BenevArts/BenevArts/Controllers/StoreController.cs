@@ -119,6 +119,7 @@ namespace BenevArts.Web.Controllers
 			try
 			{
 				model.Id = assetId;
+
 				if (!ModelState.IsValid)
 				{
 					return View(model);

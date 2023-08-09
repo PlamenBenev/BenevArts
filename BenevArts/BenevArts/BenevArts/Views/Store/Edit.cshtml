@@ -2,91 +2,93 @@
 @using System.Globalization
 
 @{
-    ViewBag.Title = "Edit your art";
+	ViewBag.Title = "Edit your art";
 }
 @{
-    var decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+	var decimalSeparator = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
 }
 
 <form method="post" enctype="multipart/form-data">
-    <input type="hidden" name="Id" value="@Model.Id" />
-    <div class="form-group">
-        <label for="title">Title</label>
-        <input type="text" class="form-control" id="title" name="Title" value="@Model.Title" required>
-        <span asp-validation-for="Title" class="text-danger"></span>
-    </div>
+	<input type="hidden" name="assetId" value="@Model.Id" />
+	<div class="form-group">
+		<label for="title">Title</label>
+		<input type="text" class="form-control" id="title" name="Title" value="@Model.Title" required>
+		<span asp-validation-for="Title" class="text-danger"></span>
+	</div>
 
-    <div class="form-group">
-        <label for="Images">Images</label>
-        <input type="file" id="Images" name="ImagesFiles" multiple class="form-control-file" />
-    </div>
+	<div class="form-group">
+		<label for="Images">Images</label>
+		<input type="file" id="Images" name="ImagesFiles" multiple
+			   class="form-control-file" accept=".png, .jpeg, .jpg" required />
+	</div>
 
-    <div class="form-group">
-        <label for="thumbnail">Thumbnail</label>
-        <input type="file" class="form-control-file" id="thumbnail" name="ThumbnailFile" required>
-    </div>
+	<div class="form-group">
+		<label for="thumbnail">Thumbnail</label>
+		<input type="file" class="form-control-file" id="thumbnail"
+			   name="ThumbnailFile" accept=".png, .jpeg, .jpg" required>
+	</div>
 
-    <div class="form-group">
-        <label for="zipFile">Zip File</label>
-        <input type="file" class="form-control-file" id="zipFile" name="ZipFile" required>
-    </div>
+	<div class="form-group">
+		<label for="zipFile">Zip File</label>
+		<input type="file" class="form-control-file" id="zipFile" name="ZipFile" accept=".zip" required>
+	</div>
 
-    <div class="form-group">
-        <label for="description">Description</label>
-        <textarea class="form-control" id="description" name="Description" rows="4" required>@Model.Description</textarea>
-        <span asp-validation-for="Title" class="text-danger"></span>
-    </div>
+	<div class="form-group">
+		<label for="description">Description</label>
+		<textarea class="form-control" id="description" name="Description" rows="4" required>@Model.Description</textarea>
+		<span asp-validation-for="Title" class="text-danger"></span>
+	</div>
 
-    <div class="form-group">
-        <label>Technical Details</label>
-        <div class="btn-group-lg">
-            <label class="btn btn-secondary">
-                <input type="checkbox" name="CGIModel" value="true" @(Model.CGIModel ? "checked" : "")> CGIModel
-            </label>
-            <label class="btn btn-secondary">
-                <input type="checkbox" name="Textures" value="true" @(Model.Textures ? "checked" : "")> Textures
-            </label>
-            <label class="btn btn-secondary">
-                <input type="checkbox" name="Materials" value="true" @(Model.Materials ? "checked" : "")> Materials
-            </label>
-            <label class="btn btn-secondary">
-                <input type="checkbox" name="Animated" value="true" @(Model.Animated ? "checked" : "")> Animated
-            </label>
-            <label class="btn btn-secondary">
-                <input type="checkbox" name="Rigged" value="true" @(Model.Rigged ? "checked" : "")> Rigged
-            </label>
-            <label class="btn btn-secondary">
-                <input type="checkbox" name="LowPoly" value="true" @(Model.LowPoly ? "checked" : "")> Low Poly
-            </label>
-            <label class="btn btn-secondary">
-                <input type="checkbox" name="PBR" value="true" @(Model.PBR ? "checked" : "")> PBR
-            </label>
-            <label class="btn btn-secondary">
-                <input type="checkbox" name="UVUnwrapped" value="true" @(Model.UVUnwrapped ? "checked" : "")> UV Unwrapped
-            </label>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="categoryId">Category</label>
-        <select class="form-control" id="categoryId" name="CategoryId" required>
-            @foreach (var category in Model.Categories)
-            {
-                <option value="@category.Id" selected="@(category.Id == Model.CategoryId)">@category.Name</option>
-            }
-        </select>
-    </div>
-
-
+	<div class="form-group">
+		<label>Technical Details</label>
+		<div class="btn-group-lg">
+			<label class="btn btn-secondary">
+				<input type="checkbox" name="CGIModel" value="true" @(Model.CGIModel ? "checked" : "")> CGIModel
+			</label>
+			<label class="btn btn-secondary">
+				<input type="checkbox" name="Textures" value="true" @(Model.Textures ? "checked" : "")> Textures
+			</label>
+			<label class="btn btn-secondary">
+				<input type="checkbox" name="Materials" value="true" @(Model.Materials ? "checked" : "")> Materials
+			</label>
+			<label class="btn btn-secondary">
+				<input type="checkbox" name="Animated" value="true" @(Model.Animated ? "checked" : "")> Animated
+			</label>
+			<label class="btn btn-secondary">
+				<input type="checkbox" name="Rigged" value="true" @(Model.Rigged ? "checked" : "")> Rigged
+			</label>
+			<label class="btn btn-secondary">
+				<input type="checkbox" name="LowPoly" value="true" @(Model.LowPoly ? "checked" : "")> Low Poly
+			</label>
+			<label class="btn btn-secondary">
+				<input type="checkbox" name="PBR" value="true" @(Model.PBR ? "checked" : "")> PBR
+			</label>
+			<label class="btn btn-secondary">
+				<input type="checkbox" name="UVUnwrapped" value="true" @(Model.UVUnwrapped ? "checked" : "")> UV Unwrapped
+			</label>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="categoryId">Category</label>
+		<select class="form-control" id="categoryId" name="CategoryId" required>
+			@foreach (var category in Model.Categories)
+			{
+				<option value="@category.Id" selected="@(category.Id == Model.CategoryId)">@category.Name</option>
+			}
+		</select>
+	</div>
 
 
-    <div class="form-group">
-        <label for="price">Price</label>
-        <input type="number" class="form-control" id="price" name="Price" step="0@decimalSeparator}01" value="@Model.Price" required>
-    </div>
 
-    <button type="submit" class="btn btn-primary">Save Changes</button>
+
+	<div class="form-group">
+		<label for="price">Price</label>
+		<input type="number" class="form-control" id="price" name="Price" step="0@decimalSeparator}01" value="@Model.Price" required>
+	</div>
+
+	<button type="submit" class="btn btn-primary">Save Changes</button>
 </form>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+	<partial name="_ValidationScriptsPartial" />
 }

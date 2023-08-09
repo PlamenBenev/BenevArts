@@ -56,6 +56,7 @@ namespace BenevArts.Services.Data
 			model.Categories = categories;
 			return model;
 		}
+
 		// Post
 		public async Task AddAssetAsync(AddAssetViewModel model, string userId)
 		{
@@ -100,11 +101,48 @@ namespace BenevArts.Services.Data
 		}
 		public async Task<bool> EditAssetAsync(EditAssetViewModel modelInputs)
 		{
-			Asset model = await context.Assets.FindAsync(modelInputs.Id)
+			Asset asset = await context.Assets.FindAsync(modelInputs.Id) 
 				?? throw new AssetNullException();
 
-			mapper.Map(modelInputs, model);
+			// Delete existing images
+			List<AssetImage> images = await context.AssetImages.Where(a => a.AssetId == modelInputs.Id)
+				.ToListAsync();
+			var uploadFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images");
 
+			for (int i = images.Count - 1; i >= 0; i--)
+			{
+				var image = images[i];
+			    uploadFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images",image.ImageName);
+
+				if (File.Exists(uploadFolderPath))
+				{
+					File.Delete(uploadFolderPath);
+				}
+				images.Remove(image);
+			}
+
+			// Set the path for the images
+			ImageService imageService = new ImageService(uploadFolderPath);
+
+			// Add the Thumbnail
+			string thumbName = await imageService.SaveThumbnailAsync(modelInputs.ThumbnailFile);
+			asset.Thumbnail = thumbName;
+
+			await context.SaveChangesAsync();
+
+			// Add all preview images
+			foreach (var imageFile in modelInputs.ImagesFiles)
+			{
+				string imageName = await imageService.SaveImageAsync(imageFile);
+
+				AssetImage image = new AssetImage
+				{
+					ImageName = imageName,
+					AssetId = asset.Id,
+				};
+
+				asset.Images.Add(image);
+			}
 			await context.SaveChangesAsync();
 
 			return true;

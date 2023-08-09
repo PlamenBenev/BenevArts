@@ -11,13 +11,13 @@
 			@switch (ViewData["CurrentSortOrder"] as string)
 			{
 				case "price":
-					<text>Price</text>
+					<text>Price (Ascending)</text>
 					break;
 				case "title":
-					<text>Title</text>
+					<text>Title (Alphabetic)</text>
 					break;
 				case "uploadDate":
-					<text>Upload Date</text>
+					<text>Upload Date (Newest)</text>
 					break;
 				default:
 					<text>Sort By</text>
@@ -31,7 +31,7 @@
 			   asp-route-query="@Model.Query"
 			   asp-route-categoryId="@Model.CategoryId"
 			   asp-route-sortOrder="price">
-				Price
+				Price (Ascending)
 			</a>
 
 			<a class="dropdown-item"
@@ -40,7 +40,7 @@
 			   asp-route-query="@Model.Query"
 			   asp-route-categoryId="@Model.CategoryId"
 			   asp-route-sortOrder="title">
-				Title
+				Title (Alphabetic)
 			</a>
 
 			<a class="dropdown-item"
@@ -49,7 +49,7 @@
 			   asp-route-query="@Model.Query"
 			   asp-route-categoryId="@Model.CategoryId"
 			   asp-route-sortOrder="uploadDate">
-				Upload Date
+				Upload Date (Newest)
 			</a>
 		</div>
 	</div>
