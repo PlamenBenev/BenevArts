@@ -11,11 +11,11 @@ namespace BenevArts.Services.Data.Interfaces
 	{
 		// Get
 		Task<IEnumerable<AssetViewModel>> GetMyStoreAsync(string userId);
-		Task<EditAssetViewModel> GetEditByIdAsync(Guid id);
+		Task<EditAssetViewModel> GetEditByIdAsync(Guid id, string userId);
 
 		// Post
 		Task AddAssetAsync(AddAssetViewModel model, string userId);
 		Task RemoveAssetAsync(Guid assetId, string userId);
-		Task<bool> EditAssetAsync(EditAssetViewModel model);
+		Task EditAssetAsync(EditAssetViewModel model, string userId);
 	}
 }

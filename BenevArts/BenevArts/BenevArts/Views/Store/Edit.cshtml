@@ -18,25 +18,25 @@
 
 	<div class="form-group">
 		<label for="Images">Images</label>
-		<input type="file" id="Images" name="ImagesFiles" multiple
+		<input type="file" id="Images" name="Images" multiple
 			   class="form-control-file" accept=".png, .jpeg, .jpg" required />
 	</div>
 
 	<div class="form-group">
 		<label for="thumbnail">Thumbnail</label>
 		<input type="file" class="form-control-file" id="thumbnail"
-			   name="ThumbnailFile" accept=".png, .jpeg, .jpg" required>
+			   name="Thumbnail" accept=".png, .jpeg, .jpg" required>
 	</div>
 
 	<div class="form-group">
 		<label for="zipFile">Zip File</label>
-		<input type="file" class="form-control-file" id="zipFile" name="ZipFile" accept=".zip" required>
+		<input type="file" class="form-control-file" id="zipFile" name="ZipFileName" accept=".zip" required>
 	</div>
 
 	<div class="form-group">
 		<label for="description">Description</label>
 		<textarea class="form-control" id="description" name="Description" rows="4" required>@Model.Description</textarea>
-		<span asp-validation-for="Title" class="text-danger"></span>
+		<span asp-validation-for="Description" class="text-danger"></span>
 	</div>
 
 	<div class="form-group">
@@ -77,9 +77,6 @@
 			}
 		</select>
 	</div>
-
-
-
 
 	<div class="form-group">
 		<label for="price">Price</label>

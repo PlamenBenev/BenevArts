@@ -51,7 +51,7 @@ namespace BenevArts.Web.Controllers
 		{
 			try
 			{
-				EditAssetViewModel model = await storeService.GetEditByIdAsync(assetId);
+				EditAssetViewModel model = await storeService.GetEditByIdAsync(assetId,GetUserId());
 
 				return View(model);
 			}
@@ -125,7 +125,7 @@ namespace BenevArts.Web.Controllers
 					return View(model);
 				}
 
-				await storeService.EditAssetAsync(model);
+				await storeService.EditAssetAsync(model,GetUserId());
 
 				return RedirectToAction("Details", "Asset", new { id = assetId });
 			}
@@ -138,13 +138,13 @@ namespace BenevArts.Web.Controllers
 
 		[HttpPost]
 		[Authorize(Roles = "Seller,Admin")]
-		public async Task<IActionResult> Remove(Guid id)
+		public async Task<IActionResult> Remove(Guid assetId)
 		{
 			try
 			{
-				await storeService.RemoveAssetAsync(id, GetUserId());
-
-				return RedirectToAction("All", "Asset");
+				await storeService.RemoveAssetAsync(assetId, GetUserId());
+				
+				return RedirectToAction(nameof(MyStore));
 			}
 			catch (Exception ex)
 			{

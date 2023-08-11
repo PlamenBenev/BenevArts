@@ -39,11 +39,15 @@ namespace BenevArts.Services.Data
 				})
 				.ToListAsync();
 		}
-		public async Task<EditAssetViewModel> GetEditByIdAsync(Guid id)
+		public async Task<EditAssetViewModel> GetEditByIdAsync(Guid id, string userId)
 		{
-
 			Asset asset = await context.Assets.Where(a => a.Id == id).FirstOrDefaultAsync()
 				?? throw new AssetNullException();
+
+			if (asset.SellerId != Guid.Parse(userId))
+			{
+				throw new InvalidOperationException("The User does not own the Asset");
+			}
 
 			IEnumerable<CategoryViewModel> categories = await context.Categories
 				.Select(ct => new CategoryViewModel
@@ -60,92 +64,58 @@ namespace BenevArts.Services.Data
 		// Post
 		public async Task AddAssetAsync(AddAssetViewModel model, string userId)
 		{
-			// Uploading the Zip file
-			var fileName = Path.GetFileName(model.ZipFileName.FileName);
-			var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ZipFiles", fileName);
-
-			using (var fileStream = new FileStream(filePath, FileMode.Create))
-			{
-				await model.ZipFileName.CopyToAsync(fileStream);
-			}
-
 			// Map the Asset
 			Asset asset = mapper.Map<Asset>(model);
 			asset.SellerId = Guid.Parse(userId);
 			asset.UploadDate = DateTime.UtcNow;
 
-			// Set the path for the images
-			var uploadFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images");
-			ImageService imageService = new ImageService(uploadFolderPath);
-
-			// Add the Thumbnail
-			string thumbName = await imageService.SaveThumbnailAsync(model.Thumbnail);
-			asset.Thumbnail = thumbName;
-
-			// Add all preview images
-			foreach (var imageFile in model.Images)
-			{
-				string imageName = await imageService.SaveImageAsync(imageFile);
-
-				AssetImage image = new AssetImage
-				{
-					ImageName = imageName,
-					AssetId = asset.Id,
-				};
-
-				asset.Images.Add(image);
-			}
+			await UploadFilesAsync(asset, model);
 
 			await context.Assets.AddAsync(asset);
 			await context.SaveChangesAsync();
 		}
-		public async Task<bool> EditAssetAsync(EditAssetViewModel modelInputs)
+		public async Task EditAssetAsync(EditAssetViewModel modelInputs, string userId)
 		{
-			Asset asset = await context.Assets.FindAsync(modelInputs.Id) 
+			Asset asset = await context.Assets.FindAsync(modelInputs.Id)
 				?? throw new AssetNullException();
+
+			// Check if the user owns the Asset
+			if (asset.SellerId != Guid.Parse(userId))
+			{
+				throw new InvalidOperationException("The User does not own the Asset");
+			}
 
 			// Delete existing images
 			List<AssetImage> images = await context.AssetImages.Where(a => a.AssetId == modelInputs.Id)
 				.ToListAsync();
-			var uploadFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images");
 
 			for (int i = images.Count - 1; i >= 0; i--)
 			{
-				var image = images[i];
-			    uploadFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images",image.ImageName);
+				AssetImage image = images[i];
+				string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", image.ImageName);
 
-				if (File.Exists(uploadFolderPath))
+				if (File.Exists(folderPath))
 				{
-					File.Delete(uploadFolderPath);
+					File.Delete(folderPath);
 				}
-				images.Remove(image);
+				context.AssetImages.Remove(image);
 			}
 
-			// Set the path for the images
-			ImageService imageService = new ImageService(uploadFolderPath);
+			asset.Title = modelInputs.Title;
+			asset.Description = modelInputs.Description;
+			asset.CGIModel = modelInputs.CGIModel;
+			asset.Animated = modelInputs.Animated;
+			asset.CategoryId = modelInputs.CategoryId;
+			asset.LowPoly = modelInputs.LowPoly;
+			asset.Materials = modelInputs.Materials;
+			asset.PBR = modelInputs.PBR;
+			asset.Price = modelInputs.Price;
+			asset.Rigged = modelInputs.Rigged;
+			asset.Textures = modelInputs.Textures;
+			asset.UVUnwrapped = modelInputs.UVUnwrapped;
 
-			// Add the Thumbnail
-			string thumbName = await imageService.SaveThumbnailAsync(modelInputs.ThumbnailFile);
-			asset.Thumbnail = thumbName;
-
+			await UploadFilesAsync(asset, modelInputs);
 			await context.SaveChangesAsync();
-
-			// Add all preview images
-			foreach (var imageFile in modelInputs.ImagesFiles)
-			{
-				string imageName = await imageService.SaveImageAsync(imageFile);
-
-				AssetImage image = new AssetImage
-				{
-					ImageName = imageName,
-					AssetId = asset.Id,
-				};
-
-				asset.Images.Add(image);
-			}
-			await context.SaveChangesAsync();
-
-			return true;
 		}
 		public async Task RemoveAssetAsync(Guid assetId, string userId)
 		{
@@ -157,9 +127,48 @@ namespace BenevArts.Services.Data
 			Asset asset = await context.Assets.FirstOrDefaultAsync(a => a.Id == assetId)
 				?? throw new AssetNullException();
 
-			context.Assets.Remove(asset!);
+			if (asset.SellerId == user.Id)
+			{
+				context.Assets.Remove(asset!);
+				await context.SaveChangesAsync();
+			}
+		}
+
+		private async Task UploadFilesAsync(Asset asset, BaseAssetViewModel modelInputs)
+		{
+			// Uploading the Zip file
+			var fileName = Path.GetFileName(modelInputs.ZipFileName.FileName);
+			var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ZipFiles", fileName);
+
+			using (var fileStream = new FileStream(filePath, FileMode.Create))
+			{
+				await modelInputs.ZipFileName.CopyToAsync(fileStream);
+			}
+
+			// Set the path for the images
+			string uploadFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images");
+			ImageService imageService = new ImageService(uploadFolderPath);
+
+			// Add the Thumbnail
+			string thumbName = await imageService.SaveThumbnailAsync(modelInputs.Thumbnail);
+			asset.Thumbnail = thumbName;
+
 			await context.SaveChangesAsync();
 
+			// Add all preview images
+			foreach (var imageFile in modelInputs.Images)
+			{
+				string imageName = await imageService.SaveImageAsync(imageFile);
+
+				AssetImage image = new AssetImage
+				{
+					ImageName = imageName,
+					AssetId = asset.Id,
+				};
+
+				asset.Images.Add(image);
+			}
+			await context.SaveChangesAsync();
 		}
 	}
 }

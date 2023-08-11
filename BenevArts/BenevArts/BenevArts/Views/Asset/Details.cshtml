@@ -109,6 +109,17 @@
 						<a class="btn btn-outline-primary" asp-area="Identity" asp-page="/Account/Login">Add to Favorites</a>
 					}
 				</div>
+				<div class="col-md-12 mt-4">
+					@* Remove Button *@
+					@if (User.IsInRole("Seller"))
+					{
+						<a asp-controller="Store"
+						   asp-action="Remove"
+						   asp-route-assetId="@Model.Id"
+						   class="btn btn-primary btn-lg"
+						   onclick="return confirm('Are you sure you want to remove this asset?');">Remove Asset</a>
+					}
+				</div>
 			</div>
 		</div>
 		@*Description*@
