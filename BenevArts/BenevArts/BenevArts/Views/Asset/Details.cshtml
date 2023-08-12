@@ -111,13 +111,18 @@
 				</div>
 				<div class="col-md-12 mt-4">
 					@* Remove Button *@
-					@if (User.IsInRole("Seller"))
+					@if (Model.Seller == User.Identity?.Name)
 					{
-						<a asp-controller="Store"
-						   asp-action="Remove"
-						   asp-route-assetId="@Model.Id"
-						   class="btn btn-primary btn-lg"
-						   onclick="return confirm('Are you sure you want to remove this asset?');">Remove Asset</a>
+						<form asp-controller="Store"
+							  asp-action="Remove" method="post">
+
+							<input type="hidden" name="assetId" value="@Model.Id" />
+
+							<button type="submit" class="btn btn-primary"
+									onclick="return confirm('Are you sure you want to remove this asset?');">
+								Remove Asset
+							</button>
+						</form>
 					}
 				</div>
 			</div>

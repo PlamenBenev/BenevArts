@@ -4,6 +4,8 @@ using BenevArts.Data.Models;
 using BenevArts.Web;
 using BenevArts.Web.Infrastructure;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,9 +41,21 @@ builder.Services.Configure<IdentityOptions>(
 
 builder.Services.AddApplicationService();
 
+// Set the maximum upload size to 50mb and the maximum size of single entry to 10mb.
 builder.Services.Configure<IISServerOptions>(options =>
 {
-	options.MaxRequestBodySize = int.MaxValue;
+	options.MaxRequestBodySize = 50 * 1024 * 1024;
+});
+
+builder.Services.Configure<FormOptions>(options =>
+{
+	options.MemoryBufferThreshold = 50 * 1024 * 1024;
+	options.ValueCountLimit = 10 * 1024 * 1024;
+});
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+	options.Limits.MaxRequestBodySize = 50 * 1024 * 1024;
 });
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

@@ -113,6 +113,9 @@ namespace BenevArts.Services.Data
 			asset.Rigged = modelInputs.Rigged;
 			asset.Textures = modelInputs.Textures;
 			asset.UVUnwrapped = modelInputs.UVUnwrapped;
+			asset.CategoryId = modelInputs.CategoryId;
+			asset.SellerId = Guid.Parse(userId);
+
 
 			await UploadFilesAsync(asset, modelInputs);
 			await context.SaveChangesAsync();
