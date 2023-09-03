@@ -33,7 +33,7 @@ namespace BenevArts.Web.Infrastructure
 				var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
 
 				DatabaseSeeder databaseSeeder = new DatabaseSeeder(userManager, roleManager, configuration);
-				databaseSeeder.SeedRolesAsync().Wait();
+				 databaseSeeder.SeedRolesAsync().Wait();
 			}
 		}
 	}

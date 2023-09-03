@@ -156,8 +156,9 @@ namespace BenevArts.Tests
 		{
 			// Arrange
 			var assetId = Guid.NewGuid();
+            var userId = "sample Id";
 
-			var mockCategoryService = new Mock<ICategoryService>();
+            var mockCategoryService = new Mock<ICategoryService>();
 			var mockStoreService = new Mock<IStoreService>();
 			var mockLogger = new Mock<ILogger<StoreController>>();
 
@@ -183,7 +184,7 @@ namespace BenevArts.Tests
 				new CategoryViewModel { Id = 2, Name = "Category 2" },
 			},
 			};
-			mockStoreService.Setup(service => service.GetEditByIdAsync(assetId))
+			mockStoreService.Setup(service => service.GetEditByIdAsync(assetId,userId))
 							.ReturnsAsync(mockAssetData);
 
 			// Create the controller instance and pass the mock assetService
@@ -243,8 +244,8 @@ namespace BenevArts.Tests
 			{
 				Id = assetId,
 				Title = "Sample Asset",
-				ZipFile = new FormFile(new MemoryStream(new byte[0]), 0, 0, "zipfile", "sample.zip"),
-				ThumbnailFile = new FormFile(new MemoryStream(new byte[0]), 0, 0, "thumbnail", "sample.jpg"),
+				ZipFileName = new FormFile(new MemoryStream(new byte[0]), 0, 0, "zipfile", "sample.zip"),
+				Thumbnail = new FormFile(new MemoryStream(new byte[0]), 0, 0, "thumbnail", "sample.jpg"),
 				Description = "This is a sample asset",
 			};
 

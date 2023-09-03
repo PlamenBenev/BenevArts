@@ -49,7 +49,7 @@ public class DatabaseSeeder
 			await userManager.CreateAsync(adminUser, adminPassword);
 
 			// Assign the "Admin" role to the user
-			await userManager.AddToRoleAsync(adminUser, adminUsername);
+			await userManager.AddToRoleAsync(adminUser, "Admin");
 		}
 	}
 }
