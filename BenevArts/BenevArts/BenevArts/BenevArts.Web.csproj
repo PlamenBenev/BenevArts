@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\AutoMapper\MappingProfile.cs" />
+    <Content Remove="wwwroot\js\firebase.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,6 +44,10 @@
   <ItemGroup>
     <Folder Include="wwwroot\Images\" />
     <Folder Include="wwwroot\ZipFiles\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\js\firebase.js" />
   </ItemGroup>
 
 </Project>
