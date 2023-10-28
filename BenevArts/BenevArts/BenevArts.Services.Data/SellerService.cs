@@ -97,7 +97,7 @@ namespace BenevArts.Services.Data
 				seller = new Seller
 				{
 					Id = application.ApplicationUserId,
-					SellerName = user.UserName,
+					SellerName = user.UserName!,
 					StoreName = application.StoreName,
 					Email = application.StoreEmail,
 				};
@@ -144,19 +144,18 @@ namespace BenevArts.Services.Data
 
 			if (!await CheckIfUserAppliedAsync(application.ApplicationUserId) && seller == null)
 			{
-				SellerApplication createApplication = new SellerApplication
-				{
-					ApplicationUser = user,
-					StoreName = application.StoreName,
-					StoreEmail = application.Email,
-					StorePhone = application.Phone,
-					StoreDescription = application.StoreDescription,
-					ApplicationUserId = Guid.Parse(userId)
-				};
+                SellerApplication createApplication = new()
+                {
+                    ApplicationUser = user,
+                    StoreName = application.StoreName,
+                    StoreEmail = application.Email,
+                    StorePhone = application.Phone,
+                    StoreDescription = application.StoreDescription,
+                    ApplicationUserId = Guid.Parse(userId),
+                    State = "Pending"
+                };
 
-				createApplication.State = "Pending";
-
-				await context.SellersApplications.AddAsync(createApplication);
+                await context.SellersApplications.AddAsync(createApplication);
 				await context.SaveChangesAsync();
 			}
 		}

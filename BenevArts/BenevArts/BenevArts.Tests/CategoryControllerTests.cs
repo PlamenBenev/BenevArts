@@ -1,9 +1,7 @@
-﻿using BenevArts.Controllers;
+﻿using BenevArts.Web.Controllers;
 using BenevArts.Services.Data.Interfaces;
-using BenevArts.Web.Controllers;
 using BenevArts.Web.ViewModels.Home;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;

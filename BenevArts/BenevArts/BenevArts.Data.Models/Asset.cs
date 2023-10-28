@@ -33,7 +33,7 @@ namespace BenevArts.Data.Models
 
         [Required]
         [Precision(18, 2)] 
-        [Range(typeof(decimal), "0.00", "10000.00", ConvertValueInInvariantCulture = true)]
+        // [Range(typeof(decimal), "0.00", "10000.00", ConvertValueInInvariantCulture = true)]
         public decimal Price { get; set; }
 
 

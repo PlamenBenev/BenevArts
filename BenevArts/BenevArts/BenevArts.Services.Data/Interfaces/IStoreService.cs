@@ -14,7 +14,7 @@ namespace BenevArts.Services.Data.Interfaces
 		Task<EditAssetViewModel> GetEditByIdAsync(Guid id, string userId);
 
 		// Post
-		Task AddAssetAsync(AddAssetViewModel model, string userId);
+		Task AddAssetAsync(BaseAssetViewModel model, string userId);
 		Task RemoveAssetAsync(Guid assetId, string userId);
 		Task EditAssetAsync(EditAssetViewModel model, string userId);
 	}

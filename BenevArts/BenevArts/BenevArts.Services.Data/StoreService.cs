@@ -62,7 +62,7 @@ namespace BenevArts.Services.Data
 		}
 
 		// Post
-		public async Task AddAssetAsync(AddAssetViewModel model, string userId)
+		public async Task AddAssetAsync(BaseAssetViewModel model, string userId)
 		{
 			// Map the Asset
 			Asset asset = mapper.Map<Asset>(model);

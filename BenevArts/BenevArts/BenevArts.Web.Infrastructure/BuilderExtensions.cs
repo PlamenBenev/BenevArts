@@ -1,7 +1,6 @@
 ﻿using BenevArts.Data.Models;
 using BenevArts.Services.Data;
 using BenevArts.Services.Data.Interfaces;
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -9,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BenevArts.Web.Infrastructure
 {
-	public static class BuilderExtensions
+    public static class BuilderExtensions
 	{
 		public static void AddApplicationService(this IServiceCollection services)
 		{
@@ -26,15 +25,14 @@ namespace BenevArts.Web.Infrastructure
 		}
 		public static void Configure(IApplicationBuilder app)
 		{
-			using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-			{
-				var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-				var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
-				var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+            using var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
+            var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
 
-				DatabaseSeeder databaseSeeder = new DatabaseSeeder(userManager, roleManager, configuration);
-				 databaseSeeder.SeedRolesAsync().Wait();
-			}
-		}
+            DatabaseSeeder databaseSeeder = new(userManager, roleManager, configuration);
+            databaseSeeder.SeedRolesAsync().Wait();
+        }
+
 	}
 }

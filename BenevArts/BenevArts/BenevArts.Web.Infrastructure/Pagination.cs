@@ -1,5 +1,4 @@
 ﻿using BenevArts.Web.ViewModels.Home;
-using Microsoft.Data.SqlClient;
 
 namespace BenevArts.Web.Infrastructure
 {

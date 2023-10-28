@@ -1,8 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using BenevArts.Data.Models;
-using Microsoft.AspNetCore.Http;
-
-namespace BenevArts.Web.ViewModels.Home
+﻿namespace BenevArts.Web.ViewModels.Home
 {
 	public class EditAssetViewModel : BaseAssetViewModel
 	{

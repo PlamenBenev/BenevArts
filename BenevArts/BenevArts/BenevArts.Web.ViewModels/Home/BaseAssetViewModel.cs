@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-
+﻿
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using System.ComponentModel.DataAnnotations;
-
 
 namespace BenevArts.Web.ViewModels.Home
 {
@@ -9,7 +10,7 @@ namespace BenevArts.Web.ViewModels.Home
 	{
 		[Required(ErrorMessage = "Required field!")]
 		[StringLength(100, ErrorMessage = "The input is too long!")]
-		[RegularExpression(@"^[A-Za-z0-9 ]+$", ErrorMessage = "Only letters, numbers, and spaces are allowed.")]
+		//[RegularExpression(@"^[A-Za-z0-9 ]+$", ErrorMessage = "Only letters, numbers, and spaces are allowed.")]
 		public string Title { get; set; } = null!;
 
 		[Required(ErrorMessage = "Required field!")]
@@ -20,7 +21,7 @@ namespace BenevArts.Web.ViewModels.Home
 
 		[Required(ErrorMessage = "Required field!")]
 		[StringLength(1000, ErrorMessage = "The input is too long!")]
-		[RegularExpression(@"^[A-Za-z0-9 ]+$", ErrorMessage = "Only letters, numbers, and spaces are allowed.")]
+		//[RegularExpression(@"^[A-Za-z0-9 ]+$", ErrorMessage = "Only letters, numbers, and spaces are allowed.")]
 		public string Description { get; set; } = null!;
 
 		public bool CGIModel { get; set; }
@@ -38,7 +39,8 @@ namespace BenevArts.Web.ViewModels.Home
 		//To add binding model
 		[Required(ErrorMessage = "Required field!")]
 		[Range(typeof(decimal), "0.00", "10000.00", ConvertValueInInvariantCulture = true)]
-		public decimal Price { get; set; }
+        [ModelBinder(BinderType = typeof(DecimalModelBinder))]
+        public decimal Price { get; set; }
 
 		public IEnumerable<CategoryViewModel> Categories { get; set; } = new List<CategoryViewModel>();
 		public IEnumerable<IFormFile> Images { get; set; } = new List<IFormFile>();
