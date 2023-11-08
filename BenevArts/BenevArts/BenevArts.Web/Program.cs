@@ -18,9 +18,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 //builder.Configuration.AddEnvironmentVariables(prefix: "POSTGRES_");
 
-//var connectionString = builder.Configuration["DB"] ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var user = builder.Configuration["POSTGRES_USER"] ?? throw new InvalidOperationException("User 'Postgres_User' is invalid!");
+var password = builder.Configuration["POSTGRES_PASSWORD"] ?? throw new InvalidOperationException("Password Postgres_Password is invalid!");
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found!");
 
 builder.Services.AddDbContext<BenevArtsDbContext>(options =>
     options.UseNpgsql(connectionString));
